@@ -34,18 +34,18 @@ public class ShowListPanel{
 		shows.add("Arrow");
 		shows.add("BigBangTheory");
 		shows.add("Elementary");
-//		shows.add("WalkingDead");
-//		shows.add("GameOfThrones");
-//		shows.add("Scorpion");
-//		shows.add("OrphanBlack");
-//		shows.add("OnceUponaTime");
-//		shows.add("AgentsofSHIELD");
-//		shows.add("Legends");
-//		shows.add("Defiance");
-//		shows.add("Homeland");
-//		shows.add("Gotham");
-//		shows.add("Hannibal");
-//		shows.add("Flash_2014");
+		shows.add("WalkingDead");
+		shows.add("GameOfThrones");
+		shows.add("Scorpion");
+		shows.add("OrphanBlack");
+		shows.add("OnceUponaTime");
+		shows.add("AgentsofSHIELD");
+		shows.add("Legends");
+		shows.add("Defiance");
+		shows.add("Homeland");
+		shows.add("Gotham");
+		shows.add("Hannibal");
+		shows.add("Flash_2014");
 	}
 	
 	public void setShowList(ArrayList<String> shows){

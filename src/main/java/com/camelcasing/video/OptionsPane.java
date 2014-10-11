@@ -20,7 +20,9 @@ public class OptionsPane {
 		useYesterday = new RadioButton("Use Yesterday");
 		getResults = new Button("Get Air Dates");
 		getResults.setOnAction(e -> {
-			AirDatesPanel.generateShowData(useYesterday.isSelected());
+			if(!AirDatesPanel.isUpdateing()){
+				AirDatesPanel.generateShowData(useYesterday.isSelected());
+			}
 		});
 		
 		pane.getChildren().add(useYesterday);

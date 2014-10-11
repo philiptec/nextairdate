@@ -15,6 +15,7 @@ public class AirDatesPanel {
 		private static GridPane pane;
 		private static ArrayList<String> shows;
 		private static int index = 0;
+		private static boolean isUpdating = false;
 		
 	public AirDatesPanel(ArrayList<String> shows){
 		AirDatesPanel.shows = shows;
@@ -29,7 +30,11 @@ public class AirDatesPanel {
 			protected Task<Text> createTask(){
 				return new Task<Text>(){
 					protected Text call(){
-						if(index > shows.size()) this.cancel();
+						isUpdating = true;
+						if(index > shows.size()){
+							isUpdating = false;
+							this.cancel();
+						}
 						LocalDate compareToDate = LocalDate.now();
 						if(useYesterday){
 							compareToDate = compareToDate.minusDays(1);
@@ -37,7 +42,7 @@ public class AirDatesPanel {
 						AirDateParser parser = new AirDateParser(compareToDate);
 						LocalDate next = parser.parse(shows.get(index)).getNextAirDate();
 						Text text = new Text();
-						GridPane.setMargin(text, new Insets(0, 0, 20, 0));
+						GridPane.setMargin(text, new Insets(0, 20, 20, 0));
 						text.setId("showText");
 							if(parser.isAiring()){
 								text.setText("TODAY!");
@@ -57,6 +62,10 @@ public class AirDatesPanel {
 			};
 		};
 		service.start();
+	}
+	
+	public static boolean isUpdateing(){
+		return isUpdating;
 	}
 	
 	public GridPane getAirDatePane(){

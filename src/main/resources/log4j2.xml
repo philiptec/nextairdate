@@ -3,6 +3,7 @@
     <Appenders>
        <Console name="console" target="SYSTEM_OUT">
            <PatternLayout pattern="%p from %C at %d{dd/MM/yyyy HH:mm:ss} -> %m%n"/>
+<!--            <PatternLayout pattern="%m%n"/> -->
        </Console> 
     </Appenders>
     <Loggers>

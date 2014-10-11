@@ -1,0 +1,17 @@
+.text{
+	-fx-font-size: 15;	
+}
+
+#showText{
+	-fx-font-size: 15;
+	-fx-fill: BLACK;
+}
+
+.scroll-pane{
+	-fx-background-color: transparent;
+}
+
+.button{
+	-fx-border-width: 2;
+	-fx-border-color: ORANGE;
+}

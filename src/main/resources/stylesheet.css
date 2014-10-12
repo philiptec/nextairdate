@@ -2,15 +2,30 @@
 	-fx-font-size: 15;	
 }
 
-#showText{
-	-fx-font-size: 15;
-	-fx-fill: BLACK;
-}
-
 .scroll-pane{
 	-fx-background-color: transparent;
 }
 
+.viewport{
+	-fx-background-color: transparent;
+}
+
 .button{
-	-fx-border-width: 2;
+	-fx-border-color: #FF7F24;
+	-fx-border-width: 1;
+	-fx-background-color: #8B4726;
+	-fx-text-fill: #FFD39B;
+}
+
+.radio-button{
+	-fx-focus-color: #FF7F24;
+}
+
+#pane{
+	-fx-background-color: #FFD39B;
+}
+
+#showText{
+	-fx-font-size: 15;
+	-fx-fill: BLACK;
 }

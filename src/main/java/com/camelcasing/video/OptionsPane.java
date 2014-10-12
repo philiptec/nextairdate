@@ -4,34 +4,41 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 public class OptionsPane {
 
 		private RadioButton useYesterday;
-		private HBox pane;
+		private BorderPane pane;
 		private Button getResults;
 		private AirDates airDatesPanel;
 		
 	public OptionsPane(AirDates adp){
 		this.airDatesPanel = adp;
-		pane = new HBox();
-		pane.setAlignment(Pos.CENTER);
+		pane = new BorderPane();
 		pane.setPadding(new Insets(20, 20, 20, 20));
-		pane.setSpacing(70);
+		
 		useYesterday = new RadioButton("Use Yesterday");
+		
 		getResults = new Button("Get Air Dates");
+		getResults.setOnMouseEntered(e -> {
+			getResults.setStyle("-fx-background-color: #905231");
+		});
+		getResults.setOnMouseExited(e -> {
+			getResults.setStyle("-fx-background-color: #8B4726");
+		});
 		getResults.setOnAction(e -> {
 			if(!airDatesPanel.isUpdateing()){
 				airDatesPanel.generateShowData(useYesterday.isSelected());
 			}
 		});
 		
-		pane.getChildren().add(useYesterday);
-		pane.getChildren().add(getResults);
+		pane.setLeft(useYesterday);
+		pane.setRight(getResults);
 	}
 	
-	public HBox getPanel(){
+	public BorderPane getPanel(){
 		return pane;
 	}
 	

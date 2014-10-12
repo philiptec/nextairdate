@@ -18,7 +18,7 @@ public class CLIController {
 					"NAME:\n    airdate\n\n"
 					+"SYNOPSIS:\n    airdate [options] <args>\n\n"
 					+"OPTIONS:\n    -y\n       Air dates found will be compare to yesterday\n\n"
-					+"AUTHOR\n    Philip Teclaff");
+					+"AUTHOR:\n    Philip Teclaff");
 			Platform.exit();
 			System.exit(0);
 		}

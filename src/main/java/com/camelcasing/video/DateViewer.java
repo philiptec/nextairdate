@@ -15,6 +15,7 @@ public class DateViewer {
 		pane.setPadding(new Insets(0, 10, 10, 10));
 		pane.setHgap(100);
 		pane.setVgap(10);
+		pane.setPrefWidth(350);
 		
 		scrollPane = new ScrollPane(pane);
 	}

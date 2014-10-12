@@ -3,5 +3,5 @@ package com.camelcasing.video;
 public interface ChangeController {
 
 	void addChangeListener(ChangeListener l);
-	void updateListeners();
+	void updateListeners(String show, String date);
 }

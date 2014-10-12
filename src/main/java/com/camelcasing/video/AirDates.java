@@ -4,35 +4,29 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
-public class AirDatesPanel {
+public class AirDates implements ChangeController{
 
-		private  GridPane pane;
+		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
+	
 		private  ArrayList<String> shows;
 		private  int index = 0;
 		private  boolean isUpdating = false;
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
-	public AirDatesPanel(ArrayList<String> shows){
+	public AirDates(ArrayList<String> shows){
 		this.shows = shows;
 		if(shows.get(0).equals("Problem reading shows.xml file")) isUpdating = true;
-		pane = new GridPane();
-		pane.setId("myhbox");
-		pane.setPadding(new Insets(20, 20, 0, 0));
 	}
 	
 	public void generateShowData(boolean useYesterday){
 		
-		ScheduledService<Text> service = new ScheduledService<Text>(){
-			protected Task<Text> createTask(){
-				return new Task<Text>(){
-					protected Text call(){
+		ScheduledService<String> service = new ScheduledService<String>(){
+			protected Task<String> createTask(){
+				return new Task<String>(){
+					protected String call(){
 						isUpdating = true;
 						if(index == shows.size()){
 							isUpdating = false;
@@ -43,26 +37,18 @@ public class AirDatesPanel {
 							compareToDate = compareToDate.minusDays(1);
 						}
 						AirDateParser parser = new AirDateParser(compareToDate);
-						LocalDate next = parser.parse(shows.get(index)).getNextAirDate();
-						Text text = new Text();
-						GridPane.setMargin(text, new Insets(0, 20, 20, 0));
-						text.setId("showText");
+						String show = shows.get(index);
+						LocalDate next = parser.parse(show).getNextAirDate();
+						String date;
 							if(parser.isAiring()){
-								text.setText("TODAY!");
+								date = "TODAY!";
 							}else if(next == null){
-								text.setText("TBA");
+								date = "TBA";
 							}else{
-								text.setText(englishDate(next));
+								date = englishDate(next);
 							}
-//						System.out.println(index);
 						index++;
-						Platform.runLater(() -> {
-							pane.add(text, 0, index);
-//							Text text = new Text("Place Holder");
-//							GridPane.setMargin(text, new Insets(0, 20, 20, 0));
-//							text.setId("showText");
-//							pane.add(text, 0, index);
-						});
+						updateListeners(show, date);
 						return null;
 					};
 				};
@@ -78,8 +64,14 @@ public class AirDatesPanel {
 	public boolean isUpdateing(){
 		return isUpdating;
 	}
-	
-	public GridPane getAirDatePane(){
-		return pane;
+
+	@Override
+	public void addChangeListener(ChangeListener l){
+		listeners.add(l);
+	}
+
+	@Override
+	public void updateListeners(String show, String date){
+		for(ChangeListener l : listeners) l.updateDate(show, date);
 	}
 }

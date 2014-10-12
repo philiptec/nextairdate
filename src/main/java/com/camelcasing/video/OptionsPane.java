@@ -11,9 +11,9 @@ public class OptionsPane {
 		private RadioButton useYesterday;
 		private HBox pane;
 		private Button getResults;
-		private AirDatesPanel airDatesPanel;
+		private AirDates airDatesPanel;
 		
-	public OptionsPane(AirDatesPanel adp){
+	public OptionsPane(AirDates adp){
 		this.airDatesPanel = adp;
 		pane = new HBox();
 		pane.setId("myhbox");

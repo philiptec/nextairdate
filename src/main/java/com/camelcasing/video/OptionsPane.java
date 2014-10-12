@@ -11,17 +11,20 @@ public class OptionsPane {
 		private RadioButton useYesterday;
 		private HBox pane;
 		private Button getResults;
+		private AirDatesPanel airDatesPanel;
 		
-	public OptionsPane(){
+	public OptionsPane(AirDatesPanel adp){
+		this.airDatesPanel = adp;
 		pane = new HBox();
+		pane.setId("myhbox");
 		pane.setAlignment(Pos.CENTER);
 		pane.setPadding(new Insets(20, 20, 20, 20));
 		pane.setSpacing(70);
 		useYesterday = new RadioButton("Use Yesterday");
 		getResults = new Button("Get Air Dates");
 		getResults.setOnAction(e -> {
-			if(!AirDatesPanel.isUpdateing()){
-				AirDatesPanel.generateShowData(useYesterday.isSelected());
+			if(!airDatesPanel.isUpdateing()){
+				airDatesPanel.generateShowData(useYesterday.isSelected());
 			}
 		});
 		

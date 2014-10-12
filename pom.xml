@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.camelcasing.video</groupId>
   <artifactId>AirDate</artifactId>
-  <version>0.1</version>
+  <version>0.8</version>
   <packaging>jar</packaging>
   <name>AirDate</name>
   <url>http://maven.apache.org</url>

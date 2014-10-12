@@ -14,6 +14,7 @@ public class ShowListPanel{
 	public ShowListPanel(){
 		createShowList();
 		pane = new GridPane();
+		pane.setId("myhbox");
 		pane.setPadding(new Insets(20, 0, 0, 20));
 		
 		for(int i = 0; i < shows.size(); i++){

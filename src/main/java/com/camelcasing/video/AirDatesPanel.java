@@ -21,6 +21,7 @@ public class AirDatesPanel {
 		
 	public AirDatesPanel(ArrayList<String> shows){
 		this.shows = shows;
+		if(shows.get(0).equals("Problem reading shows.xml file")) isUpdating = true;
 		pane = new GridPane();
 		pane.setId("myhbox");
 		pane.setPadding(new Insets(20, 20, 0, 0));
@@ -74,7 +75,7 @@ public class AirDatesPanel {
 		return DATE_FORMATTER.format(ld);
 	}
 	
-	public  boolean isUpdateing(){
+	public boolean isUpdateing(){
 		return isUpdating;
 	}
 	

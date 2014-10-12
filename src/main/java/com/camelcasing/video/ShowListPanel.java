@@ -11,11 +11,6 @@ import javafx.scene.text.Text;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,26 +46,21 @@ public class ShowListPanel{
 	}
 	
 	private void createShowList(){
+		shows = new ArrayList<String>(20);
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
-			XPath xpath = XPathFactory.newInstance().newXPath();
-			String xpathString = "shows/show";
-			XPathExpression xEpr = xpath.compile(xpathString);
-			NodeList results = (NodeList) xEpr.evaluate(doc, XPathConstants.NODESET);
-			shows = new ArrayList<String>(results.getLength());
+			NodeList results = doc.getElementsByTagName("show");
 				for(int i = 0; i < results.getLength(); i++){
 					shows.add(results.item(i).getTextContent());
 				}
-		
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");
+			shows.add("Problem reading shows.xml file");
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
-		} catch (XPathExpressionException e) {
-			logger.error("Problem reading shows.xml file");
+			shows.add("Problem reading shows.xml file");
 		}
-		
 	}
 	
 	public void setShowList(ArrayList<String> shows){

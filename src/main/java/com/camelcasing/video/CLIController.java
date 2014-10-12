@@ -13,6 +13,14 @@ public class CLIController {
 		if(args[0].equals("-y")){
 			i = 1;
 			compareToDate = compareToDate.minusDays(1);
+		}else if(args[0].equals("--help")){
+			System.out.println(
+					"NAME:\n    airdate\n\n"
+					+"SYNOPSIS:\n    airdate [options] <args>\n\n"
+					+"OPTIONS:\n    -y\n       Air dates found will be compare to yesterday\n\n"
+					+"AUTHOR\n    Philip Teclaff");
+			Platform.exit();
+			System.exit(0);
 		}
 		
 		for(; i < args.length; i++){
@@ -30,5 +38,6 @@ public class CLIController {
 			System.out.println(showName + ": " + date);
 		}
 		Platform.exit();
+		System.exit(0);
 	}
 }

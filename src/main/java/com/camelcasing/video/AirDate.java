@@ -21,6 +21,10 @@ public class AirDate extends Application{
 	}
 	
 	public static void main(String args[]){
+		if(args.length > 0){
+			new CLIController(args);
+		}else{
 			Application.launch(args);
+		}
 	}
 }

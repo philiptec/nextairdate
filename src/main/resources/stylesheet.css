@@ -7,11 +7,12 @@
 }
 
 .scroll-bar{
-	-fx-background-color: #8B4726;
+	-fx-background-color: #FFD39B;
 }
 
 .scroll-bar .thumb{
-	-fx-background-color: #FFD39B;
+
+	-fx-background-color: #8B4726;
 }
 
 .viewport{

@@ -45,10 +45,6 @@ public class ShowList{
 		}
 	}
 	
-	public void setShowList(ArrayList<String> shows){
-		this.shows = shows;
-	}
-	
 	public ArrayList<String> getShowList(){
 		return shows;
 	}

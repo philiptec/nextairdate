@@ -15,7 +15,6 @@ public class MasterControl implements ChangeListener{
 		root = new BorderPane();
 		root.setMaxWidth(660);
 		root.setMaxHeight(750);
-		root.setId("myhbox");
 		
 		ShowList showList = new ShowList();
 		shows = showList.getShowList();

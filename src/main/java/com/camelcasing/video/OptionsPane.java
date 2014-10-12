@@ -16,7 +16,6 @@ public class OptionsPane {
 	public OptionsPane(AirDates adp){
 		this.airDatesPanel = adp;
 		pane = new HBox();
-		pane.setId("myhbox");
 		pane.setAlignment(Pos.CENTER);
 		pane.setPadding(new Insets(20, 20, 20, 20));
 		pane.setSpacing(70);

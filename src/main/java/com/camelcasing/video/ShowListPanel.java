@@ -14,6 +14,7 @@ public class ShowListPanel{
 	public ShowListPanel(){
 		createShowList();
 		pane = new GridPane();
+		pane.setId("myhbox");
 		pane.setPadding(new Insets(20, 0, 0, 20));
 		
 		for(int i = 0; i < shows.size(); i++){
@@ -30,25 +31,6 @@ public class ShowListPanel{
 	
 	private void createShowList(){
 		shows = new ArrayList<String>();
-		shows.add("Reign");
-		shows.add("Arrow");
-		shows.add("BigBangTheory");
-		shows.add("Elementary");
-//      shows.add("WalkingDead");
-//      shows.add("GameOfThrones");
-//      shows.add("Scorpion");
-//      shows.add("OrphanBlack");
-//      shows.add("OnceUponaTime");
-//      shows.add("AgentsofSHIELD");
-		-//             shows.add("Legends");
-		-//             shows.add("Defiance");
-		-//             shows.add("Homeland");
-		-//             shows.add("Gotham");
-		-//             shows.add("Hannibal");
-		-//             shows.add("Flash_2014");
-		+
-
-
 	}
 	
 	public void setShowList(ArrayList<String> shows){

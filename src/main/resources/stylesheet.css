@@ -6,6 +6,14 @@
 	-fx-background-color: transparent;
 }
 
+.scroll-bar{
+	-fx-background-color: #8B4726;
+}
+
+.scroll-bar .thumb{
+	-fx-background-color: #FFD39B;
+}
+
 .viewport{
 	-fx-background-color: transparent;
 }
@@ -19,6 +27,7 @@
 
 .radio-button{
 	-fx-focus-color: #FF7F24;
+	-fx-mark-color: #8B4726;
 }
 
 #pane{

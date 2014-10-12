@@ -15,7 +15,6 @@ public class DateViewer {
 		pane.setPadding(new Insets(0, 10, 10, 10));
 		pane.setHgap(100);
 		pane.setVgap(10);
-		pane.setPrefWidth(350);
 		
 		scrollPane = new ScrollPane(pane);
 	}
@@ -34,7 +33,7 @@ public class DateViewer {
 	}
 	
 	public void addDate(String date, int row){
-		pane.add(getTextNode(date), 1, row);
+		pane.add(getTextNode("\t" + date), 1, row);
 	}
 	
 	private Text getTextNode(String value){

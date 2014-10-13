@@ -20,12 +20,6 @@ public class OptionsPane {
 		useYesterday = new RadioButton("Use Yesterday");
 		
 		getResults = new Button("Get Air Dates");
-		getResults.setOnMouseEntered(e -> {
-			getResults.setStyle("-fx-background-color: #905231");
-		});
-		getResults.setOnMouseExited(e -> {
-			getResults.setStyle("-fx-background-color: #8B4726");
-		});
 		getResults.setOnAction(e -> {
 			if(!airDatesPanel.isUpdateing()){
 				airDatesPanel.generateShowData(useYesterday.isSelected());

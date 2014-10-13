@@ -4,15 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Task;
-
 public class AirDates implements ChangeController{
 
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 	
 		private  ArrayList<String> shows;
-		private  int index = 0;
 		private  boolean isUpdating = false;
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
@@ -22,39 +18,29 @@ public class AirDates implements ChangeController{
 	}
 	
 	public void generateShowData(boolean useYesterday){
-		
-		ScheduledService<String> service = new ScheduledService<String>(){
-			protected Task<String> createTask(){
-				return new Task<String>(){
-					protected String call(){
-						isUpdating = true;
-						if(index == shows.size()){
-							isUpdating = false;
-							this.cancel();
+		Thread t = new Thread(() -> {
+			isUpdating = true;
+			LocalDate compareToDate = LocalDate.now();
+			if(useYesterday){
+				compareToDate = compareToDate.minusDays(1);
+			}
+				for(String s : shows){
+					AirDateParser parser = new AirDateParser(compareToDate);
+					String show = s;
+					LocalDate next = parser.parse(show).getNextAirDate();
+					String date;
+						if(parser.isAiring()){
+							date = "TODAY!";
+						}else if(next == null){
+							date = "TBA";
+						}else{
+							date = englishDate(next);
 						}
-						LocalDate compareToDate = LocalDate.now();
-						if(useYesterday){
-							compareToDate = compareToDate.minusDays(1);
-						}
-						AirDateParser parser = new AirDateParser(compareToDate);
-						String show = shows.get(index);
-						LocalDate next = parser.parse(show).getNextAirDate();
-						String date;
-							if(parser.isAiring()){
-								date = "TODAY!";
-							}else if(next == null){
-								date = "TBA";
-							}else{
-								date = englishDate(next);
-							}
-						index++;
-						updateListeners(show, date);
-						return null;
-					};
-				};
-			};
-		};
-		service.start();
+					updateListeners(show, date);
+				}
+		});
+		t.setDaemon(true);
+		t.start();
 	}
 	
 	public static String englishDate(LocalDate ld){

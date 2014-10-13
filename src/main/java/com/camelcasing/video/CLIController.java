@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import javafx.application.Platform;
 
-public class CLIController {
+public class CLIController{
 		
 	public CLIController(String[] args){
 		

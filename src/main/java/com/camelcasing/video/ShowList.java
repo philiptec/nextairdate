@@ -21,7 +21,7 @@ public class ShowList{
 		private final Logger logger = LogManager.getLogger(getClass());
 
 		private ArrayList<String> shows;
-		private File showsFile = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/.shows.xml");
+		private File showsFile = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/shows.xml");
 		
 	public ShowList(){
 		createShowList();

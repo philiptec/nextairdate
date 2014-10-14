@@ -38,10 +38,10 @@ public class ShowList{
 				}
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");
-			shows.add("Problem reading shows.xml file");
+			shows.add("Problem reading shows.xml file\n" + e.getMessage());
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
-			shows.add("Problem reading shows.xml file");
+			shows.add("Problem reading shows.xml file\n" + e.getMessage());
 		}
 	}
 	

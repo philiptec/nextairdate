@@ -33,6 +33,8 @@ public class AirDates implements ChangeController{
 							date = "TODAY!";
 						}else if(next == null){
 							date = "TBA";
+						}else if(next.compareTo(LocalDate.of(1970, 1, 1)) == 0){
+							date = "FAIL";
 						}else{
 							date = englishDate(next);
 						}

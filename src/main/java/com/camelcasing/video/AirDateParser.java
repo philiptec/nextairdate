@@ -89,6 +89,7 @@ public class AirDateParser{
 		try{
 			htmlPage = Jsoup.connect(BASE_URL + showName).get();
 		}catch(IOException e){
+			nextAirDate = LocalDate.of(1970, 1, 1);
 			logger.error("problem with " + showName);
 		}
 	}

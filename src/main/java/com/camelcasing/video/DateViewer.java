@@ -2,19 +2,17 @@ package com.camelcasing.video;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.VBox;
 
 public class DateViewer {
 	
-		private GridPane pane;
+		private VBox pane;
 		private ScrollPane scrollPane;
 		
 	public DateViewer(){
-		pane = new GridPane();
+		pane = new VBox();
 		pane.setPadding(new Insets(0, 10, 10, 10));
-		pane.setHgap(100);
-		pane.setVgap(10);
+		pane.setSpacing(10);
 		
 		scrollPane = new ScrollPane(pane);
 	}
@@ -24,21 +22,10 @@ public class DateViewer {
 	}
 	
 	public void addShowAndDate(String show, String date, int row){
-		pane.add(getTextNode(show), 0, row);
-		pane.add(getTextNode(date), 1, row);
+		pane.getChildren().add(new ShowAndDate(show, date));
 	}
 	
-	public void addShow(String show, int row){
-		pane.add(getTextNode(show), 0, row);
-	}
-	
-	public void addDate(String date, int row){
-		pane.add(getTextNode("\t" + date), 1, row);
-	}
-	
-	private Text getTextNode(String value){
-		Text text = new Text(value);
-		text.setId("showText");
-		return text;
+	public void updateDate(String date, int row){
+		((ShowAndDate)pane.getChildren().get(row)).setDate(date);
 	}
 }

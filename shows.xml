@@ -1,21 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-	
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <shows>
-	<show>Reign</show>		
-	<show>Arrow</show>		
-	<show>BigBangTheory</show>		
-	<show>Elementary</show>		
-	<show>WalkingDead</show>		
-	<show>GameOfThrones</show>		
-	<show>Scorpion</show>		
-	<show>Forever</show>
-	<show>OrphanBlack</show>				
-	<show>AgentsofSHIELD</show>		
-	<show>Defiance</show>		
-	<show>Homeland</show>		
-	<show>Gotham</show>		
-	<show>Hannibal</show>		
-	<show>Flash_2014</show>
-	<show>Legends</show>
-	<show>TheMentalist</show>
+	<show date="30/10/2014">Reign</show>		
+	<show date="29/10/2014">Arrow</show>		
+	<show date="30/10/2014">BigBangTheory</show>		
+	<show date="30/10/2014">Elementary</show>		
+	<show date="26/10/2014">WalkingDead</show>		
+	<show date="TBA">GameOfThrones</show>		
+	<show date="27/10/2014">Scorpion</show>		
+	<show date="29/10/2014">100</show>
+	<show date="TBA">FallingSkies</show>
+	<show date="TBA">DaVincisDemons</show>
+	<show date="TBA">Continuum</show>
+	<show date="28/10/2014">Forever</show>
+	<show date="TBA">OrphanBlack</show>				
+	<show date="28/10/2014">AgentsofSHIELD</show>		
+	<show date="TBA">Defiance</show>		
+	<show date="26/10/2014">Homeland</show>		
+	<show date="27/10/2014">Gotham</show>	
+	<show date="26/10/2014">OnceUponATime</show>	
+	<show date="TBA">Hannibal</show>		
+	<show date="28/10/2014">Flash_2014</show>
+	<show date="TBA">Legends</show>
+	<show date="TBA">Mentalist</show>
+	<show date="TBA">Vikings</show>
+	<show date="TBA">Suits</show>
 </shows>

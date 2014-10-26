@@ -1,13 +1,15 @@
 package com.camelcasing.video;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 
 public class OptionsPane {
 
-		private RadioButton useYesterday;
+		private CheckBox useYesterday, updateTBA, updateAll;
 		private BorderPane pane;
 		private Button getResults;
 		private AirDates airDatesPanel;
@@ -17,16 +19,23 @@ public class OptionsPane {
 		pane = new BorderPane();
 		pane.setPadding(new Insets(20, 20, 20, 20));
 		
-		useYesterday = new RadioButton("Use Yesterday");
+		useYesterday = new CheckBox("Use Yesterday");
+		updateTBA = new CheckBox("Update TBA");
+		updateAll = new CheckBox("Update All");
 		
 		getResults = new Button("Get Air Dates");
 		getResults.setOnAction(e -> {
 			if(!airDatesPanel.isUpdateing()){
-				airDatesPanel.generateShowData(useYesterday.isSelected());
+				airDatesPanel.generateShowData(useYesterday.isSelected(), updateTBA.isSelected(), updateAll.isSelected());
 			}
 		});
 		
-		pane.setLeft(useYesterday);
+		FlowPane options = new FlowPane();
+		options.setHgap(10);
+		options.getChildren().addAll(useYesterday, updateTBA, updateAll);
+		
+		pane.setLeft(options);
+		BorderPane.setAlignment(getResults, Pos.CENTER);
 		pane.setRight(getResults);
 	}
 	

@@ -32,10 +32,10 @@ public class CLIController{
 					date = "TODAY!";
 				}else if(next == null){
 					date = "TBA";
-				}else if(next.compareTo(LocalDate.of(1970, 1, 1)) == 0){
+				}else if(next.compareTo(AirDate.ERROR_DATE) == 0){
 					date = "Probelm connecting to site";
 				}else{
-					date = AirDates.englishDate(next);
+					date = AirDateUtils.englishDate(next);
 				}
 			System.out.println(showName + ": " + date);
 		}

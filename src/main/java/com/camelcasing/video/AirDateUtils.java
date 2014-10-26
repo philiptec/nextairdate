@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		public final static LocalDate TODAY = LocalDate.now();
 
 	public static LocalDate getDateFromString(String date){
 		if(date.equals("TBA")){

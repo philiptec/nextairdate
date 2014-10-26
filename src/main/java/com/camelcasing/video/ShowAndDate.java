@@ -1,5 +1,7 @@
 package com.camelcasing.video;
 
+import java.time.LocalDate;
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
@@ -10,12 +12,22 @@ public class ShowAndDate extends BorderPane{
 		
 	public ShowAndDate(String show, String date){
 		super();
+		date = checkForToday(date);
 		this.show = createTextNode(show);
 		this.date = createTextNode(date);
 		this.showName = show;
 		prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(50));
 		setLeft(this.show);
 		setRight(this.date);
+	}
+	
+	public String checkForToday(String date){
+		if(date.equals("TBA")) return date; 
+		LocalDate ld = AirDateUtils.getDateFromString(date);
+		if(ld.compareTo(AirDateUtils.TODAY) == 0){
+			return "TODAY";
+		}
+		return date;
 	}
 	
 	public Text createTextNode(String text){

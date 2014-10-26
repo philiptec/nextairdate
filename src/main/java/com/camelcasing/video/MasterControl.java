@@ -19,6 +19,7 @@ public class MasterControl implements ChangeListener{
 		private DateViewer view;
 		private ShowList showList;
 		private OptionsPane options;
+		private boolean changed = false;
 		
 	public MasterControl(){
 		
@@ -75,6 +76,7 @@ public class MasterControl implements ChangeListener{
 			}else if(date.equals("FAIL")){
 			}else{
 				dates.set(index, da);
+				changed = true;
 			}
 			dates.set(index, da);
 		});
@@ -82,7 +84,11 @@ public class MasterControl implements ChangeListener{
 
 	@Override
 	public void saveDates(){
-		showList.setDateList(dates);
-		showList.writeNewAirDates();
+		if(!changed){
+			logger.debug("Lists are the same"); 
+		}else{
+			showList.setDateList(dates);
+			showList.writeNewAirDates();
+		}
 	}
 }

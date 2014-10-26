@@ -30,7 +30,7 @@
 	-fx-background-color: linear-gradient(#AB6746, #CB8766);
 }
 
-.radio-button{
+.check-box{
 	-fx-focus-color: #FF7F24;
 	-fx-mark-color: #8B4726;
 }

@@ -37,7 +37,7 @@ public class AirDates implements ChangeController{
 					
 					if((d.equals("TBA")) && (!updateTBA && !updateAll)){
 						logger.debug("equal to null and not update");
-					}else if(AirDateUtils.getDateFromString(d).compareTo(compareToDate) > 0 && !updateAll){
+					}else if(AirDateUtils.getDateFromString(d).compareTo(compareToDate) >= 0 && !updateAll){
 						logger.debug("date greater and not updateAll");
 					}else{
 						logger.debug("updateing " + show);

@@ -24,10 +24,14 @@ public class ShowAndDate extends BorderPane{
 	public String checkForToday(String date){
 		if(date.equals("TBA")) return date; 
 		LocalDate ld = AirDateUtils.getDateFromString(date);
-		if(ld.compareTo(AirDateUtils.TODAY) == 0){
+		int diff = ld.compareTo(AirDateUtils.TODAY);
+		if(diff == 0){
 			return "TODAY";
+		}else if(diff < 0){
+			return "";
+		}else{
+			return date;
 		}
-		return date;
 	}
 	
 	public Text createTextNode(String text){

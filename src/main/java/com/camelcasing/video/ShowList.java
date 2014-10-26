@@ -67,7 +67,6 @@ public class ShowList{
 			for(int i = 0; i < showList.getLength(); i++){
 				Node n = showList.item(i);
 				n.getAttributes().item(0).setTextContent(dates.get(i).toString());
-//				if(n.hasAttributes()) logger.debug("HAS ATTRIBUTES!!");
 			}
 			
 			Transformer trans = TransformerFactory.newInstance().newTransformer();

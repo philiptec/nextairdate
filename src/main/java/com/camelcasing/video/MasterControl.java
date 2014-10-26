@@ -25,7 +25,7 @@ public class MasterControl implements ChangeListener{
 		AirDate.stage.setOnCloseRequest(we -> {
 			if(showList.isWriting()){
 				we.consume();
-				showWritingMessage();
+				logger.info("Writing to disk, exit consumed");
 			}
 		});
 		
@@ -57,10 +57,6 @@ public class MasterControl implements ChangeListener{
 		root.setCenter(view.getDisplayPane());
 	}
 	
-	public void showWritingMessage(){
-		
-	}
-	
 	public BorderPane getRootPane(){
 		return root;
 	}
@@ -81,10 +77,12 @@ public class MasterControl implements ChangeListener{
 				dates.set(index, da);
 			}
 			dates.set(index, da);
-			if(shows.indexOf(show) == shows.size() - 1){
-				showList.setDateList(dates);
-				showList.writeNewAirDates();
-			}
 		});
+	}
+
+	@Override
+	public void saveDates(){
+		showList.setDateList(dates);
+		showList.writeNewAirDates();
 	}
 }

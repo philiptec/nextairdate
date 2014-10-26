@@ -15,10 +15,13 @@ public class AirDates implements ChangeController{
 		private  ArrayList<String> dates;
 		private  boolean isUpdating = false;
 		private LocalDate compareToDate = LocalDate.now();
+		private final String lastShow;
 		
 	public AirDates(ArrayList<String> shows, ArrayList<String> dates){
 		this.shows = shows;
 		this.dates = dates;
+		lastShow = shows.get(shows.size() -1);
+		logger.debug("final show is " + lastShow);
 		if(shows.get(0).equals("Problem reading shows.xml file")) isUpdating = true;
 	}
 	
@@ -52,6 +55,7 @@ public class AirDates implements ChangeController{
 							}
 						updateListeners(show, date);
 					}
+					if(show.equals(lastShow)) signalLastShow();
 				}
 		});
 		t.setDaemon(true);
@@ -70,5 +74,9 @@ public class AirDates implements ChangeController{
 	@Override
 	public void updateListeners(String show, String date){
 		for(ChangeListener l : listeners) l.updateDate(show, date);
+	}
+	@Override
+	public void signalLastShow() {
+		for(ChangeListener l : listeners) l.saveDates();
 	}
 }

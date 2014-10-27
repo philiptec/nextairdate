@@ -31,7 +31,12 @@
 
 .check-box{
 	-fx-focus-color: #FF7F24;
-	-fx-mark-color: #8B4726;
+	-fx-mark-color: #6B2706;
+	-fx-padding: 1,1,1,1;
+}
+
+.check-box .box{
+	-fx-background-color: linear-gradient(#AB6746, #CB8766);
 }
 
 #pane{

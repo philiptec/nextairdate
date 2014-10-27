@@ -11,7 +11,7 @@
 }
 
 .scroll-bar .thumb{
-	-fx-background-color: #8B4726;
+	-fx-background-color: linear-gradient(#6B2706, #AB6746);
 }
 
 .viewport{

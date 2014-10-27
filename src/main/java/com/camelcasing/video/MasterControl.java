@@ -31,9 +31,8 @@ public class MasterControl implements ChangeListener{
 		});
 		
 		root = new BorderPane();
-		root.setMaxHeight(650);
-		root.setMinHeight(135);
-		root.setPrefWidth(400);
+		root.setMaxHeight(500);
+		root.setMaxWidth(350);
 		root.setId("pane");
 		
 		showList = new ShowList();
@@ -88,6 +87,7 @@ public class MasterControl implements ChangeListener{
 			logger.debug("Lists are the same"); 
 		}else{
 			showList.setDateList(dates);
+			changed = false;
 			showList.writeNewAirDates();
 		}
 	}

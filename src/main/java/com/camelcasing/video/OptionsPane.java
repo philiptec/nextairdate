@@ -1,5 +1,8 @@
 package com.camelcasing.video;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -8,6 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 
 public class OptionsPane {
+	
+		private Logger logger = LogManager.getLogger(getClass());
 
 		private CheckBox useYesterday, updateTBA, updateAll;
 		private BorderPane pane;
@@ -27,6 +32,8 @@ public class OptionsPane {
 		getResults.setOnAction(e -> {
 			if(!airDatesPanel.isUpdateing()){
 				airDatesPanel.generateShowData(useYesterday.isSelected(), updateTBA.isSelected(), updateAll.isSelected());
+			}else{
+				logger.debug("isUpdating");
 			}
 		});
 		
@@ -34,7 +41,7 @@ public class OptionsPane {
 		options.setHgap(10);
 		options.getChildren().addAll(useYesterday, updateTBA, updateAll);
 		
-		pane.setLeft(options);
+		pane.setCenter(options);
 		BorderPane.setAlignment(getResults, Pos.CENTER);
 		pane.setRight(getResults);
 	}

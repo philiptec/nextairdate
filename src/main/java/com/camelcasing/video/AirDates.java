@@ -36,9 +36,9 @@ public class AirDates implements ChangeController{
 					String d  = dates.get(i);
 					
 					if((d.equals("TBA")) && (!updateTBA && !updateAll)){
-						logger.debug("equal to null and not update");
+						logger.debug(show + " equal to null and not update");
 					}else if(AirDateUtils.getDateFromString(d).compareTo(compareToDate) >= 0 && !updateAll){
-						logger.debug("date greater and not updateAll");
+						logger.debug(show + " date greater and not updateAll");
 					}else{
 						logger.debug("updateing " + show);
 						AirDateParser parser = new AirDateParser(compareToDate);
@@ -57,6 +57,7 @@ public class AirDates implements ChangeController{
 					}
 					if(show.equals(lastShow)) signalLastShow();
 				}
+			isUpdating = false;
 		});
 		t.setDaemon(true);
 		t.start();

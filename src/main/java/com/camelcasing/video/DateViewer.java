@@ -11,6 +11,7 @@ public class DateViewer {
 		
 	public DateViewer(){
 		pane = new VBox();
+		pane.prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(20));
 		pane.setPadding(new Insets(0, 10, 10, 10));
 		pane.setSpacing(10);
 		

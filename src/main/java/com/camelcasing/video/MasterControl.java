@@ -31,7 +31,7 @@ public class MasterControl implements ChangeListener{
 		});
 		
 		root = new BorderPane();
-		root.setMaxHeight(500);
+		root.setMaxHeight(600);
 		root.setMaxWidth(350);
 		root.setId("pane");
 		

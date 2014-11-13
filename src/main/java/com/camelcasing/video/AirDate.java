@@ -19,8 +19,7 @@ public class AirDate extends Application{
 		Scene scene = new Scene(control.getRootPane());
 		scene.getStylesheets().add("stylesheet.css");
 		stage.setScene(scene);
-		LocalDate todaysDate = LocalDate.now();
-		stage.setTitle("Today's Date: " + AirDateUtils.englishDate(todaysDate));
+		stage.setTitle("Today's Date: " + AirDateUtils.englishDate(AirDateUtils.TODAY));
 		stage.show();
 	}
 	

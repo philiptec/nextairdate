@@ -81,7 +81,6 @@ public class ShowList{
 		}finally{
 			writing = false;
 		}
-		writing = false;
 		logger.debug("writing xml completed");
 		return true;
 	}

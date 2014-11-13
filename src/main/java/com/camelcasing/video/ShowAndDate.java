@@ -26,7 +26,7 @@ public class ShowAndDate extends BorderPane{
 		LocalDate ld = AirDateUtils.getDateFromString(date);
 		int diff = ld.compareTo(AirDateUtils.TODAY);
 		if(diff == 0){
-			return "TODAY";
+			return "TODAY!";
 		}else if(diff < 0){
 			return "";
 		}else{

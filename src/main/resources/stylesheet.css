@@ -37,6 +37,7 @@
 
 .check-box .box{
 	-fx-background-color: linear-gradient(#AB6746, #CB8766);
+	-fx-border-color: #ED9121;
 }
 
 #pane{

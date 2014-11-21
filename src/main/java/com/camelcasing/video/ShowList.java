@@ -66,7 +66,9 @@ public class ShowList{
 			NodeList showList = doc.getElementsByTagName("show");
 			for(int i = 0; i < showList.getLength(); i++){
 				Node n = showList.item(i);
-				n.getAttributes().item(0).setTextContent(dates.get(i).toString());
+				String date = dates.get(i);
+				if(date.equals("FAIL")) date = "01/01/1970";
+				n.getAttributes().item(0).setTextContent(date);
 			}
 			
 			Transformer trans = TransformerFactory.newInstance().newTransformer();

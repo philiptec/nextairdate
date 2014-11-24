@@ -1,8 +1,5 @@
 package com.camelcasing.video;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,39 +8,39 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 
 public class OptionsPane {
-	
-		private Logger logger = LogManager.getLogger(getClass());
 
 		private CheckBox useYesterday, updateTBA, updateAll;
 		private BorderPane pane;
 		private Button getResults;
-		private AirDates airDatesPanel;
 		
-	public OptionsPane(AirDates adp){
-		this.airDatesPanel = adp;
+	public OptionsPane(){
 		pane = new BorderPane();
 		pane.setPadding(new Insets(20, 20, 20, 20));
 		
-		useYesterday = new CheckBox("Use Yesterday");
 		updateTBA = new CheckBox("Update TBA");
 		updateAll = new CheckBox("Update All");
 		
 		getResults = new Button("Get Air Dates");
-		getResults.setOnAction(e -> {
-			if(!airDatesPanel.isUpdateing()){
-				airDatesPanel.generateShowData(useYesterday.isSelected(), updateTBA.isSelected(), updateAll.isSelected());
-			}else{
-				logger.debug("isUpdating");
-			}
-		});
 		
 		FlowPane options = new FlowPane();
 		options.setHgap(10);
-		options.getChildren().addAll(useYesterday, updateTBA, updateAll);
+		options.getChildren().addAll(updateTBA, updateAll);
 		
 		pane.setCenter(options);
 		BorderPane.setAlignment(getResults, Pos.CENTER);
 		pane.setRight(getResults);
+	}
+	
+	public Button getGoButton(){
+		return getResults;
+	}
+	
+	public boolean isUpdateTBA(){
+		return updateTBA.isSelected();
+	}
+	
+	public boolean isUpdateAll(){
+		return updateAll.isSelected();
 	}
 	
 	public BorderPane getPanel(){

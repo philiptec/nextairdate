@@ -20,6 +20,7 @@ public class MasterControl implements ChangeListener{
 		private ShowList showList;
 		private OptionsPane options;
 		private boolean changed = false;
+		private Progress progressPane;
 		
 	public MasterControl(){
 		
@@ -35,6 +36,8 @@ public class MasterControl implements ChangeListener{
 		root.setMaxWidth(350);
 		root.setId("pane");
 		
+		progressPane = new Progress();
+		
 		showList = new ShowList();
 		shows = showList.getShowList();
 		dates = showList.getDateList();
@@ -42,7 +45,15 @@ public class MasterControl implements ChangeListener{
 		AirDates airDates = new AirDates(shows, dates);
 		airDates.addChangeListener(this);
 		
-		options = new OptionsPane(airDates);
+		options = new OptionsPane();
+		options.getGoButton().setOnAction(e -> {
+			progressPane.addProgressBar();
+			if(!airDates.isUpdateing()){
+				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll());
+			}else{
+				logger.debug("isUpdating");
+			}
+		});
 		
 		view = new DateViewer();
 		for(int i = 0; i < shows.size(); i++){
@@ -55,6 +66,7 @@ public class MasterControl implements ChangeListener{
 		
 		root.setTop(options.getPanel());
 		root.setCenter(view.getDisplayPane());
+		root.setBottom(progressPane.getProgressPane());
 	}
 	
 	public BorderPane getRootPane(){
@@ -83,6 +95,9 @@ public class MasterControl implements ChangeListener{
 
 	@Override
 	public void saveDates(){
+		Platform.runLater(() -> {
+			progressPane.removeProgressBar();
+		});
 		if(!changed){
 			logger.debug("Lists are the same"); 
 		}else{

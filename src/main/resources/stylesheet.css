@@ -18,6 +18,18 @@
 	-fx-background-color: transparent;
 }
 
+.progress-bar .track{
+	-fx-background-color: #8B4726;
+}
+
+.progress-bar .bar{
+	-fx-accent: #FFD39B;
+}
+
+/* .progress-indicator{ */
+/* 	-fx-background-color: #FFD39B; */
+/* } */
+
 .button{
 	-fx-border-color: #ED9121;
 	-fx-border-width: 1;

@@ -25,12 +25,9 @@ public class AirDates implements ChangeController{
 		if(shows.get(0).equals("Problem reading shows.xml file")) isUpdating = true;
 	}
 	
-	public void generateShowData(boolean useYesterday, boolean updateTBA, boolean updateAll){
+	public void generateShowData(boolean updateTBA, boolean updateAll){
 		Thread t = new Thread(() -> {
 			isUpdating = true;
-			if(useYesterday){
-				compareToDate = compareToDate.minusDays(1);
-			}
 				for(int i = 0; i < shows.size(); i++){
 					String show = shows.get(i);
 					String d  = dates.get(i);

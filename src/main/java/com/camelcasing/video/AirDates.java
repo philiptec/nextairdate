@@ -28,6 +28,7 @@ public class AirDates implements ChangeController{
 	public void generateShowData(boolean updateTBA, boolean updateAll){
 		Thread t = new Thread(() -> {
 			isUpdating = true;
+			logger.debug("updating");
 				for(int i = 0; i < shows.size(); i++){
 					String show = shows.get(i);
 					String d  = dates.get(i);
@@ -51,10 +52,15 @@ public class AirDates implements ChangeController{
 								date = AirDateUtils.englishDate(next);
 							}
 						updateListeners(show, date);
+						logger.debug("update -> " + show + " " + date);
 					}
-					if(show.equals(lastShow)) signalLastShow();
+					if(show.equals(lastShow)){
+						logger.debug("last show signal");
+						signalLastShow();
+					}
 				}
 			isUpdating = false;
+			logger.debug("finished updating");
 		});
 		t.setDaemon(true);
 		t.start();

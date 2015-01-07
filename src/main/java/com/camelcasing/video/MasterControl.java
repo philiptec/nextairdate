@@ -1,5 +1,7 @@
 package com.camelcasing.video;
 
+import java.io.IOException;
+import java.net.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -11,16 +13,20 @@ import javafx.scene.layout.BorderPane;
 
 public class MasterControl implements ChangeListener{
 
-		private Logger logger = LogManager.getLogger(getClass());
+		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
 		private ArrayList<String> shows;
 		private ArrayList<String> dates;
 		private DateViewer view;
 		private ShowList showList;
+		private AirDates airDates;
 		private OptionsPane options;
 		private boolean changed = false;
 		private Progress progressPane;
+		
+		//private boolean isConnectedToInternet;
+		private static String testURL = "http://www.epguides.com";
 		
 	public MasterControl(){
 		
@@ -31,9 +37,11 @@ public class MasterControl implements ChangeListener{
 			}
 		});
 		
+		ShowAndDate.setMasterControl(this);
+		
 		root = new BorderPane();
 		root.setMaxHeight(600);
-		root.setMaxWidth(350);
+		root.setMaxWidth(400);
 		root.setId("pane");
 		
 		progressPane = new Progress();
@@ -42,14 +50,15 @@ public class MasterControl implements ChangeListener{
 		shows = showList.getShowList();
 		dates = showList.getDateList();
 		
-		AirDates airDates = new AirDates(shows, dates);
+		airDates = new AirDates(shows, dates);
 		airDates.addChangeListener(this);
 		
 		options = new OptionsPane();
 		options.getGoButton().setOnAction(e -> {
-			progressPane.addProgressBar();
 			if(!airDates.isUpdateing()){
 				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll());
+				progressPane.addProgressBar();
+				logger.debug(airDates.isUpdateing());
 			}else{
 				logger.debug("isUpdating");
 			}
@@ -67,6 +76,21 @@ public class MasterControl implements ChangeListener{
 		root.setTop(options.getPanel());
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
+		
+		testInternetConnection();
+	}
+	
+	public boolean testInternetConnection(){
+		try{
+			URLConnection urlC = new URL(testURL).openConnection();
+			urlC.getContent();
+		}catch(IOException e){
+			logger.info("is NOT connected to Internet");
+			return false;
+		}
+		logger.info("is connected to Internet");
+		airDates.generateShowData(false, false);
+		return true;
 	}
 	
 	public BorderPane getRootPane(){
@@ -93,17 +117,23 @@ public class MasterControl implements ChangeListener{
 		});
 	}
 
-	@Override
-	public void saveDates(){
+	
+	private void removeProgressBar(){
 		Platform.runLater(() -> {
 			progressPane.removeProgressBar();
 		});
+	}
+	
+	@Override
+	public void saveDates(){
 		if(!changed){
 			logger.debug("Lists are the same"); 
+			//removeProgressBar();
 		}else{
 			showList.setDateList(dates);
 			changed = false;
 			showList.writeNewAirDates();
+			//removeProgressBar();
 		}
 	}
 }

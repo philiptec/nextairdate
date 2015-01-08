@@ -16,7 +16,7 @@ public class AirDates implements ChangeController{
 		private  boolean isUpdating = false;
 		private LocalDate compareToDate = LocalDate.now();
 		private final String lastShow;
-		private boolean updated, lastshowUpdated;
+		private boolean updated, lastShowUpdated;
 		
 	public AirDates(List<String> shows, List<String> dates){
 		this.shows = shows;
@@ -53,12 +53,15 @@ public class AirDates implements ChangeController{
 							}else{
 								date = AirDateUtils.englishDate(next);
 							}
-						updateListeners(show, date, show.equals(lastShow));
+						lastShowUpdated = show.equalsIgnoreCase(lastShow);
+						updateListeners(show, date, lastShowUpdated);
 						logger.debug("update -> " + show + " " + date);
 					}
 				}
 			for(ChangeListener l : listeners){
-				l.saveDates();
+				if(!lastShowUpdated && updated){
+					l.saveDates();
+				}
 			}
 			isUpdating = false;
 			logger.debug("finished updating");

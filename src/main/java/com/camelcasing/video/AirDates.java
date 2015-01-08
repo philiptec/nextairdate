@@ -1,7 +1,7 @@
 package com.camelcasing.video;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,13 +11,14 @@ public class AirDates implements ChangeController{
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
-		private  ArrayList<String> shows;
-		private  ArrayList<String> dates;
+		private  List<String> shows;
+		private  List<String> dates;
 		private  boolean isUpdating = false;
 		private LocalDate compareToDate = LocalDate.now();
 		private final String lastShow;
+		private boolean updated, lastshowUpdated;
 		
-	public AirDates(ArrayList<String> shows, ArrayList<String> dates){
+	public AirDates(List<String> shows, List<String> dates){
 		this.shows = shows;
 		this.dates = dates;
 		lastShow = shows.get(shows.size() -1);
@@ -39,6 +40,7 @@ public class AirDates implements ChangeController{
 						logger.debug(show + " date greater and not updateAll");
 					}else{
 						logger.debug("updateing " + show);
+						updated = true;
 						AirDateParser parser = new AirDateParser(compareToDate);
 						LocalDate next = parser.parse(show).getNextAirDate();
 						String date;
@@ -51,14 +53,13 @@ public class AirDates implements ChangeController{
 							}else{
 								date = AirDateUtils.englishDate(next);
 							}
-						updateListeners(show, date);
+						updateListeners(show, date, show.equals(lastShow));
 						logger.debug("update -> " + show + " " + date);
 					}
-					if(show.equals(lastShow)){
-						logger.debug("last show signal");
-						signalLastShow();
-					}
 				}
+			for(ChangeListener l : listeners){
+				l.saveDates();
+			}
 			isUpdating = false;
 			logger.debug("finished updating");
 		});
@@ -76,11 +77,11 @@ public class AirDates implements ChangeController{
 	}
 
 	@Override
-	public void updateListeners(String show, String date){
-		for(ChangeListener l : listeners) l.updateDate(show, date);
-	}
-	@Override
-	public void signalLastShow() {
-		for(ChangeListener l : listeners) l.saveDates();
+	public void updateListeners(String show, String date, boolean lastShow){
+		if(lastShow){
+			updated = false;
+			logger.debug("lastShow Signal");
+		}
+		for(ChangeListener l : listeners) l.updateDate(show, date, lastShow);
 	}
 }

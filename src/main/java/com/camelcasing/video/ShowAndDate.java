@@ -2,9 +2,6 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -16,9 +13,6 @@ public class ShowAndDate extends BorderPane{
 		private Text show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
-		private static Logger logger = LogManager.getLogger(ShowAndDate.class);
-		
-		private static MasterControl mc = null;
 		
 	public ShowAndDate(String show, String date){
 		super();
@@ -30,25 +24,17 @@ public class ShowAndDate extends BorderPane{
 		setLeft(this.show);
 		setRight(this.date);
 		
-//		rightClickMenu = new ContextMenu();
-//		MenuItem updateMenuItem = new MenuItem("Update " + show);
-//		updateMenuItem.setOnAction(e -> {
-//			AirDateParser ap = new AirDateParser().parse(show);
-//			if(ap.isAiring()){
-//				this.date.setText("TODAY!");
-//				mc.saveDates();//                        <--------------------------------NullPointerException
-//			}else{
-//				this.date.setText(AirDateUtils.englishDate(ap.getNextAirDate()));
-//				mc.saveDates();//                        <--------------------------------NullPointerException
-//			}
-//		});
-//		rightClickMenu.getItems().add(updateMenuItem);
-//		
-//		this.setOnMouseClicked(e -> {
-//			if(e.getButton().equals(MouseButton.SECONDARY)){
-//				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());
-//			}
-//		});
+		rightClickMenu = new ContextMenu();
+		
+		this.setOnMouseClicked(e -> {
+			if(e.getButton().equals(MouseButton.SECONDARY)){
+				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());
+			}
+		});
+	}
+	
+	public void setRightClickMenuItem(MenuItem mi){
+		rightClickMenu.getItems().add(mi);
 	}
 	
 	public String checkForToday(String date){
@@ -70,6 +56,10 @@ public class ShowAndDate extends BorderPane{
 		return t;
 	}
 	
+	public String getDate(){
+		return this.date.getText();
+	}
+	
 	public String getShowName(){
 		return showName;
 	}
@@ -82,11 +72,5 @@ public class ShowAndDate extends BorderPane{
 	public void setDate(String date){
 		this.date.setText(date);
 		this.show.setText(show.getText() + " (updated)");
-	}
-	
-	public static boolean setMasterControl(MasterControl mc){
-		mc = ShowAndDate.mc;
-		logger.debug("MasterControl set!");
-		return true;
 	}
 }

@@ -91,6 +91,9 @@ public class AirDateParser{
 		}catch(IOException e){
 			nextAirDate = LocalDate.of(1970, 1, 1);
 			logger.error("problem with " + showName);
+			if(!MasterControl.isConnectedToInternet){
+				logger.error("Not Connected to Internet");
+			}
 		}
 	}
 	

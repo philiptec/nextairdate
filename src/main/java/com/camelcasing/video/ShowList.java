@@ -2,7 +2,7 @@ package com.camelcasing.video;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,10 +26,9 @@ public class ShowList{
 	
 		private final Logger logger = LogManager.getLogger(getClass());
 
-		private ArrayList<String> shows;
-		private ArrayList<String> dates;
+		private List<String> shows, dates;
 		private File showsFile = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/shows.xml");
-		private boolean writing = false;
+		private boolean writing;
 		
 	public ShowList(){
 		createShowList();
@@ -86,20 +85,38 @@ public class ShowList{
 		logger.debug("writing xml completed");
 		return true;
 	}
+
+	public String getDate(String show){
+		int index = shows.indexOf(show);
+		if(index == -1) return null;
+		return dates.get(index);
+	}
+	
+	public boolean updateDate(String show, String newDate){
+		int index = shows.indexOf(show);
+		if(index == -1) return false;
+		
+		dates.set(index, newDate);
+		return true;
+	}
+	
+	public void setXmlFile(File newFile){
+		showsFile = newFile;
+	}
 	
 	public boolean isWriting(){
 		return writing;
 	}
 	
-	public ArrayList<String> getShowList(){
+	public List<String> getShowList(){
 		return shows;
 	}
 	
-	public ArrayList<String> getDateList(){
+	public List<String> getDateList(){
 		return dates;
 	}
 	
-	public void setDateList(ArrayList<String> dates){
+	public void setDateList(List<String> dates){
 		this.dates = dates;
 	}
 	

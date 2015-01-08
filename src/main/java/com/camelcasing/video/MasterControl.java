@@ -1,14 +1,23 @@
 package com.camelcasing.video;
 
+/*TODO
+ * - no signal to save all if changed
+ * - Exception if right click update a second time
+ * - right click add "updated" even if nothing changes
+ * - drag and drop shows and dates to reorganise
+ */
+
 import java.io.IOException;
 import java.net.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDate;
+
 import javafx.application.Platform;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 
 public class MasterControl implements ChangeListener{
@@ -16,8 +25,8 @@ public class MasterControl implements ChangeListener{
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
-		private ArrayList<String> shows;
-		private ArrayList<String> dates;
+		private List<String> shows;
+		private List<String> dates;
 		private DateViewer view;
 		private ShowList showList;
 		private AirDates airDates;
@@ -25,8 +34,8 @@ public class MasterControl implements ChangeListener{
 		private boolean changed = false;
 		private Progress progressPane;
 		
-		//private boolean isConnectedToInternet;
-		private static String testURL = "http://www.epguides.com";
+		protected static boolean isConnectedToInternet;
+		protected static String testURL = "http://www.epguides.com";
 		
 	public MasterControl(){
 		
@@ -37,8 +46,6 @@ public class MasterControl implements ChangeListener{
 			}
 		});
 		
-		ShowAndDate.setMasterControl(this);
-		
 		root = new BorderPane();
 		root.setMaxHeight(600);
 		root.setMaxWidth(400);
@@ -48,6 +55,7 @@ public class MasterControl implements ChangeListener{
 		
 		showList = new ShowList();
 		shows = showList.getShowList();
+		logger.debug("shows.size() = " + shows.size());
 		dates = showList.getDateList();
 		
 		airDates = new AirDates(shows, dates);
@@ -65,12 +73,33 @@ public class MasterControl implements ChangeListener{
 		});
 		
 		view = new DateViewer();
-		for(int i = 0; i < shows.size(); i++){
+		if(shows.get(0).equals("Problem reading shows.xml file")){
+			view.addShowAndDate(new ShowAndDate("Problem reading shows.xml file", "01/01/1970"));
+		}
+		for(int i = 0; i < dates.size(); i++){
+			ShowAndDate sad;
+			String show = shows.get(i);
 			if(dates.get(i) != null){
-				view.addShowAndDate(shows.get(i), dates.get(i).toString(), i);
+				sad = new ShowAndDate(show, dates.get(i));
 			}else{
-				view.addShowAndDate(shows.get(i), "TBA", i);
+				sad = new ShowAndDate(show, "TBA");
 			}
+			MenuItem rightClickMenuItem = new MenuItem("Update " + show);
+			rightClickMenuItem.setOnAction(e -> {
+				AirDateParser ap = new AirDateParser().parse(sad.getShowName());
+				String newDate;
+				if(ap.isAiring()){
+					newDate = "TODAY!";
+				}else{
+					newDate = AirDateUtils.englishDate(ap.getNextAirDate());
+				}
+				if(newDate != sad.getDate() && !newDate.equals("01/01/1970")){
+					logger.debug("rightClick updating date");
+					updateDate(sad.getShowName(), newDate, true);
+				}
+			});
+			sad.setRightClickMenuItem(rightClickMenuItem);
+			view.addShowAndDate(sad);
 		}
 		
 		root.setTop(options.getPanel());
@@ -85,9 +114,10 @@ public class MasterControl implements ChangeListener{
 			URLConnection urlC = new URL(testURL).openConnection();
 			urlC.getContent();
 		}catch(IOException e){
-			logger.info("is NOT connected to Internet");
+			logger.info("not connected to Internet");
 			return false;
 		}
+		isConnectedToInternet = true;
 		logger.info("is connected to Internet");
 		airDates.generateShowData(false, false);
 		return true;
@@ -98,29 +128,42 @@ public class MasterControl implements ChangeListener{
 	}
 
 	@Override
-	public void updateDate(String show, String date) {
+	public void updateDate(String show, String date, boolean lastShow){
+		if(isConnectedToInternet == false){
+			removeProgressBar();
+			logger.error("failed to update as not connected to the Internet!\n"
+					+ "Check Connection and tru again");
+			return;
+		}
 		Platform.runLater(() ->{
 			String da = date;
 			int index = shows.indexOf(show);
-			view.updateDate(date, index);
-			if(date.equals("TODAY!")){
-				LocalDate d = LocalDate.now();
-				if(options.useYesterday()) d.minusDays(1);
-				da = AirDateUtils.englishDate(d);
-				dates.set(index, da);
-			}else if(date.equals("FAIL")){
+			String currentDate = view.getDate(index);
+			
+			if(!currentDate.equals(da)){
+				view.updateDate(date, index);
+				if(date.equals("TODAY!")){
+					LocalDate d = LocalDate.now();
+					da = AirDateUtils.englishDate(d);
+				};
+				if(!date.equals("FAIL")){
+					dates.set(index, da);
+					changed = true;
+				}
+				if(lastShow && changed) saveDates();
+				logger.debug("finished updating Date");
 			}else{
-				dates.set(index, da);
-				changed = true;
+				logger.debug("not updating (updateDate()) as shows are the same");
 			}
-			dates.set(index, da);
 		});
 	}
 
 	
 	private void removeProgressBar(){
 		Platform.runLater(() -> {
-			progressPane.removeProgressBar();
+			if(progressPane.hasProgressBar()){
+				progressPane.removeProgressBar();
+			}
 		});
 	}
 	
@@ -128,12 +171,12 @@ public class MasterControl implements ChangeListener{
 	public void saveDates(){
 		if(!changed){
 			logger.debug("Lists are the same"); 
-			//removeProgressBar();
+			removeProgressBar();
 		}else{
 			showList.setDateList(dates);
 			changed = false;
 			showList.writeNewAirDates();
-			//removeProgressBar();
+			removeProgressBar();
 		}
 	}
 }

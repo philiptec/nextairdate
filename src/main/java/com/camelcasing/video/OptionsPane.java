@@ -9,7 +9,7 @@ import javafx.scene.layout.FlowPane;
 
 public class OptionsPane {
 
-		private CheckBox useYesterday, updateTBA, updateAll;
+		private CheckBox updateTBA, updateAll;
 		private BorderPane pane;
 		private Button getResults;
 		
@@ -42,12 +42,8 @@ public class OptionsPane {
 	public boolean isUpdateAll(){
 		return updateAll.isSelected();
 	}
-	
+
 	public BorderPane getPanel(){
 		return pane;
-	}
-	
-	public boolean useYesterday(){
-		return useYesterday.isSelected();
 	}
 }

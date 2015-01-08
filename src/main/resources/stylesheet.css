@@ -18,6 +18,14 @@
 	-fx-background-color: transparent;
 }
 
+/* .menuItem{ */
+/* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* } */
+
+/* .contextMenu{ */
+/* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* } */
+
 .progress-bar .track{
 	-fx-background-color: linear-gradient(#6B2706, #AB6746);
 }

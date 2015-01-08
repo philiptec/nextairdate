@@ -20,6 +20,7 @@ public class AirDateUtils {
 	}
 	
 	public static String englishDate(LocalDate date){
+		if(date == null) return "TBA";
 		return DATE_FORMATTER.format(date);
 	}
 }

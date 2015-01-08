@@ -22,8 +22,12 @@ public class DateViewer {
 		return scrollPane;
 	}
 	
-	public void addShowAndDate(String show, String date, int row){
-		pane.getChildren().add(new ShowAndDate(show, date));
+	public void addShowAndDate(ShowAndDate sad){
+		pane.getChildren().add(sad);
+	}
+	
+	public String getDate(int index){
+		return ((ShowAndDate)pane.getChildren().get(index)).getDate();
 	}
 	
 	public void updateDate(String date, int row){

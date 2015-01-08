@@ -19,7 +19,13 @@ public class Progress {
 	}
 	
 	public void removeProgressBar(){
+		if(pane.getChildren().size() == 0) return;
 		pane.getChildren().remove(0);
+	}
+	
+	public boolean hasProgressBar(){
+		if(pane.getChildren().size() == 0) return false;
+		return true;
 	}
 	
 	public HBox getProgressPane(){

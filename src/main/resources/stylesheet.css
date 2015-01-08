@@ -6,59 +6,75 @@
 	-fx-background-color: transparent;
 }
 
-.scroll-bar{
-	-fx-background-color: #FFD39B;
-}
+/* .scroll-bar{ */
+/* 	-fx-background-color: #FFD39B; */
+/* } */
 
-.scroll-bar .thumb{
-	-fx-background-color: linear-gradient(#6B2706, #AB6746);
-}
-
-.viewport{
-	-fx-background-color: transparent;
-}
-
-/* .menuItem{ */
+/* .scroll-bar .thumb{ */
 /* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
 /* } */
 
-/* .contextMenu{ */
+/* .viewport{ */
+/* 	-fx-background-color: transparent; */
+/* } */
+
+/* #rightC{  */
+/*  	-fx-background-color: linear-gradient(#6B2706, #AB6746);  */
+/*  	-fx-font-fill: RED; */
+/*  } */
+ 
+/* .menu-item .label{ */
+/* 	-fx-font-fill: RED; */
 /* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
 /* } */
 
-.progress-bar .track{
-	-fx-background-color: linear-gradient(#6B2706, #AB6746);
-}
+/* .menu-item:focused{ */
+/* 	-fx-background-color: #AB6746; */
+/* 	-fx-border-width: 2; */
+/* 	-fx-font-fill: RED; */
+/* } */
 
-.progress-bar .bar{
-	-fx-accent: #FFD39B;
-}
+/* .menu-item:focused .label{ */
+/* 	-fx-font-fill: RED; */
+/* } */
 
-.button{
-	-fx-border-color: #ED9121;
-	-fx-border-width: 1;
-	-fx-background-color: linear-gradient(#6B2706, #AB6746);
-	-fx-text-fill: #FFD39B;
-}
+/* .context-menu{ */
+/* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* } */
+ 
+/* .progress-bar .track{ */
+/* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* } */
 
-.button:hover{
-	-fx-background-color: linear-gradient(#AB6746, #CB8766);
-}
+/* .progress-bar .bar{ */
+/* 	-fx-accent: #FFD39B; */
+/* } */
 
-.check-box{
-	-fx-focus-color: #FF7F24;
-	-fx-mark-color: #6B2706;
-	-fx-padding: 1,1,1,1;
-}
+/* .button{ */
+/* 	-fx-border-color: #ED9121; */
+/* 	-fx-border-width: 1; */
+/* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* 	-fx-text-fill: #FFD39B; */
+/* } */
 
-.check-box .box{
-	-fx-background-color: linear-gradient(#AB6746, #CB8766);
-	-fx-border-color: #ED9121;
-}
+/* .button:hover{ */
+/* 	-fx-background-color: linear-gradient(#AB6746, #CB8766); */
+/* } */
 
-#pane{
-	-fx-background-color: #FFD39B;
-}
+/* .check-box{ */
+/* 	-fx-focus-color: #FF7F24; */
+/* 	-fx-mark-color: #6B2706; */
+/* 	-fx-padding: 1,1,1,1; */
+/* } */
+
+/* .check-box .box{ */
+/* 	-fx-background-color: linear-gradient(#AB6746, #CB8766); */
+/* 	-fx-border-color: #ED9121; */
+/* } */
+
+/* #pane{ */
+/* 	-fx-background-color: #FFD39B; */
+/* } */
 
 #showText{
 	-fx-font-size: 15;

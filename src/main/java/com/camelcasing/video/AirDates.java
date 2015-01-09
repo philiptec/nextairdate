@@ -66,7 +66,6 @@ public class AirDates implements ChangeController{
 			isUpdating = false;
 			logger.debug("finished updating");
 		});
-		t.setDaemon(true);
 		t.start();
 	}
 	

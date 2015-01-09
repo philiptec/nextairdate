@@ -25,8 +25,6 @@ public class ShowAndDate extends BorderPane{
 		setRight(this.date);
 		
 		rightClickMenu = new ContextMenu();
-//		rightClickMenu.setId("rightC");
-		
 		this.setOnMouseClicked(e -> {
 			if(e.getButton().equals(MouseButton.SECONDARY)){
 				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());

@@ -85,7 +85,6 @@ public class MasterControl implements ChangeListener{
 				sad = new ShowAndDate(show, "TBA");
 			}
 			MenuItem rightClickMenuItem = new MenuItem("Update " + show);
-//			rightClickMenuItem.setId("rightC");
 			rightClickMenuItem.setOnAction(e -> {
 				AirDateParser ap = new AirDateParser().parse(sad.getShowName());
 				String newDate;

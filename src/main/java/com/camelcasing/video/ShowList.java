@@ -19,6 +19,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -28,7 +29,7 @@ public class ShowList{
 		private final Logger logger = LogManager.getLogger(getClass());
 
 		private List<String> shows, dates;
-		private File showsFile;// = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/shows.xml");
+		private File showsFile;
 		private boolean writing;
 		
 	public ShowList(){
@@ -54,7 +55,7 @@ public class ShowList{
 					dates.add(a.getTextContent());
 				}
 		} catch (IOException | ParserConfigurationException e) {
-			logger.error("Problem reading shows.xml file");
+			logger.error("Problem reading shows.xml file " + e.getMessage());
 			shows.add("Problem reading shows.xml file");
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
@@ -66,21 +67,21 @@ public class ShowList{
 			writing = true;
 			logger.debug("Writing to xml started");
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = docBuilder.parse(showsFile);
-			NodeList showList = doc.getElementsByTagName("show");
-			for(int i = 0; i < showList.getLength(); i++){
-				Node n = showList.item(i);
-				String date = dates.get(i);
-				if(date.equals("FAIL")) date = "01/01/1970";
-				n.getAttributes().item(0).setTextContent(date);
+			Document doc = docBuilder.newDocument();
+			Element root = doc.createElement("shows");
+			for(int i = 0; i < shows.size(); i++){
+				Element e = doc.createElement("show");
+				e.setTextContent(shows.get(i));
+				e.setAttribute("date", checkForFailCodes(dates.get(i)));
+				root.appendChild(e);
 			}
-			
+			doc.appendChild(root);
 			Transformer trans = TransformerFactory.newInstance().newTransformer();
 			trans.setOutputProperty(OutputKeys.INDENT, "yes");
 			trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			trans.transform(new DOMSource(doc), new StreamResult(showsFile));
 			
-		} catch (ParserConfigurationException | SAXException | IOException | TransformerFactoryConfigurationError | TransformerException e) {
+		} catch (ParserConfigurationException | TransformerFactoryConfigurationError | TransformerException e) {
 			logger.error("Failed to update xml");
 			writing = false;
 			return false;
@@ -89,6 +90,11 @@ public class ShowList{
 		}
 		logger.debug("writing xml completed");
 		return true;
+	}
+	
+	private String checkForFailCodes(String date){
+		if(date.equals("FAIL")) return "01/01/1970";
+		return date;
 	}
 
 	public String getDate(String show){
@@ -136,6 +142,25 @@ public class ShowList{
 		setXmlFileInPreferences(newFile);
 	}
 	
+	public void addShow(String showName){
+		addShowAndDate(showName, "01/01/1970");
+	}
+	
+	public void addShowAndDate(String showName, String dateValue){
+		if(!shows.contains(showName)){
+			shows.add(showName);
+			dates.add(dateValue);
+		}
+	}
+	
+	public void removeShow(String show){
+		if(shows.contains(show)){
+			int i = shows.indexOf(show);
+			shows.remove(i);
+			dates.remove(i);
+		}
+	}
+	
 	public boolean isWriting(){
 		return writing;
 	}
@@ -152,7 +177,7 @@ public class ShowList{
 		this.dates = dates;
 	}
 	
-	public void setShowDates(ArrayList<String> shows){
+	public void setShowList(List<String> shows){
 		this.shows = shows;
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <shows>
+  <show date="16/01/2015">Constantine</show>
   <show date="03/03/2015">AgentsofSHIELD</show>
   <show date="15/01/2015">Elementary</show>
   <show date="12/01/2015">Castle</show>
@@ -14,6 +15,7 @@
   <show date="19/01/2015">Gotham</show>
   <show date="TBA">Hannibal</show>
   <show date="16/01/2015">Helix</show>
+  <show date="TBA">Fargo</show>
   <show date="TBA">Homeland</show>
   <show date="11/01/2015">Librarians_2014</show>
   <show date="22/01/2015">Reign</show>

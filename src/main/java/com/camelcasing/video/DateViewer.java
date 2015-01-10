@@ -33,6 +33,10 @@ public class DateViewer {
 		}
 	}
 	
+	public void removeShow(int index){
+		pane.getChildren().remove(index);
+	}
+	
 	public String getDate(int index){
 		return ((ShowAndDate)pane.getChildren().get(index)).getDate();
 	}

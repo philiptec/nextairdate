@@ -11,22 +11,13 @@ public class AirDates implements ChangeController{
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
-		private  boolean isUpdating = false;
+		private  boolean threadIsUpdating = false;
 		private LocalDate compareToDate = LocalDate.now();
-		private String lastShow;
 		private boolean updated;
-		
-	public AirDates(){
-		logger.debug("final show is " + lastShow);
-	}
 	
 	public void generateShowData(boolean updateTBA, boolean updateAll, List<String> shows, List<String> dates){
 		Thread t = new Thread(() -> {
-			isUpdating = true;
-			logger.debug("updating");
-			String lastShow = shows.get(shows.size() -1);
-			
-			if(shows.size() > 0) lastShow = shows.get(shows.size() -1);
+			threadIsUpdating = true;
 				for(int i = 0; i < shows.size(); i++){
 					String show = shows.get(i);
 					String d  = dates.get(i);
@@ -39,14 +30,12 @@ public class AirDates implements ChangeController{
 						logger.debug("updateing " + show);
 						updated = true;
 						String date = updateShow(show);
-						boolean isLastShow = show.equals(lastShow);
-						updateListeners(show, date, isLastShow);
+						updateListeners(show, date, false);
 						logger.debug("update -> " + show + " " + date);
 					}
 				}
-			isUpdating = false;
-			if(updated) for(ChangeListener l : listeners) l.saveDates();
-			updated = false;
+			for(ChangeListener l : listeners) l.saveDates();
+			threadIsUpdating = false;
 			logger.debug("finished updating");
 		});
 		t.start();
@@ -77,16 +66,16 @@ public class AirDates implements ChangeController{
 		return false;
 	}
 	
-	public boolean isUpdateing(){
-		return isUpdating;
+	public boolean threadIsUpdateing(){
+		return threadIsUpdating;
 	}
 	
-	public void setUpdatingStatus(boolean updating){
-		isUpdating = updating;
+	public void setThreadUpdatingStatus(boolean updating){
+		threadIsUpdating = updating;
 	}
 	
-	public void signialUpdated(){
-		updated = true;
+	public void setUpdated(boolean b){
+		updated = b;
 	}
 	
 	public boolean hasUpdated(){

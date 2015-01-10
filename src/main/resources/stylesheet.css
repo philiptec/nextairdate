@@ -14,9 +14,9 @@
 /* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
 /* } */
 
-/* .viewport{ */
-/* 	-fx-background-color: transparent; */
-/* } */
+.viewport{
+	-fx-background-color: transparent;
+}
 
 /* #rightC{  */
 /*  	-fx-background-color: linear-gradient(#6B2706, #AB6746);  */

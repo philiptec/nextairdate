@@ -2,7 +2,6 @@ package com.camelcasing.video;
 
 /*TODO
  * - drag and drop shows and dates to reorganise
- * - after first load will not save new dates?
  */
 
 import java.io.*;
@@ -18,7 +17,7 @@ import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
-public class MasterControl implements ChangeListener, FileChooserListener{
+public class MasterControl implements ChangeListener, FileChooserListener, AddRemoveListener{
 
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
@@ -32,6 +31,8 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 		private Progress progressPane;
 		private MenuBar menuBar;
 		private UpdateXMLFile udXML;
+		
+		private boolean overrideSave = false;
 		
 		protected static boolean isConnectedToInternet;
 		protected static String testURL = "http://www.epguides.com";
@@ -64,15 +65,14 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 		options.setMenuBar(menuBar);
 		options.init();
 		options.getGoButton().setOnAction(e -> {
-			if(!airDates.isUpdateing()){
+			if(!airDates.threadIsUpdateing()){
 				if(!isConnectedToInternet){
 					if(!testInternetConnection())return;
 				}
 				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), shows, dates);
 				progressPane.addProgressBar();
-				logger.debug(airDates.isUpdateing());
 			}else{
-				logger.debug("isUpdating");
+				logger.debug("threadIsUpdating");
 			}
 		});
 		
@@ -100,44 +100,59 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 			ShowAndDate sad;
 			String show = shows.get(i);
 			if(dates.get(i) != null){
-				sad = new ShowAndDate(show, dates.get(i));
+				sad = createShowAndDate(show, dates.get(i));
 			}else{
-				sad = new ShowAndDate(show, "TBA");
+				sad = createShowAndDate(show, "TBA");
 			}
-			MenuItem rightClickMenuItem = new MenuItem("Update " + show);
-			rightClickMenuItem.setOnAction(e -> {
-				if(!isConnectedToInternet){
-					if(!testInternetConnection())return;
-				}
-				AirDateParser ap = new AirDateParser().parse(sad.getShowName());
-				String newDate;
-				if(ap.isAiring()){
-					newDate = "TODAY!";
-				}else{
-					newDate = AirDateUtils.englishDate(ap.getNextAirDate());
-				}
-				if(newDate != sad.getDate() && !newDate.equals("01/01/1970")){
-					logger.debug("rightClick updating date");
-					airDates.signialUpdated();
-					updateDate(sad.getShowName(), newDate, true);
-				}
-			});
-			sad.setRightClickMenuItem(rightClickMenuItem);
 			view.addShowAndDate(sad);
 		}
+	}
+	
+	public ShowAndDate createShowAndDate(String show, String date){
+		ShowAndDate sad = new ShowAndDate(show, date);
+		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
+		rightClickMenuItem.setOnAction(e -> {
+			if(!isConnectedToInternet){
+				if(!testInternetConnection())return;
+			}
+			AirDateParser ap = new AirDateParser().parse(sad.getShowName());
+			String newDate;
+			if(ap.isAiring()){
+				newDate = "TODAY!";
+			}else{
+				newDate = AirDateUtils.englishDate(ap.getNextAirDate());
+			}
+			if(newDate != sad.getDate() && !newDate.equals("01/01/1970")){
+				logger.debug("rightClick updating date");
+				overrideSave = true;
+				updateDate(sad.getShowName(), newDate, true);
+			}
+		});
+		sad.setRightClickMenuItem(rightClickMenuItem);
+		return sad;
 	}
 	
 	public void createMenuBar(){
 		menuBar = new MenuBar();
 		Menu fileItem = new Menu("File");
+		
 		MenuItem setXmlFile = new MenuItem("Set Xml File");
-		setXmlFile.setOnAction(e -> {
-			setXmlFileLocationAndReset();
-		});
+		setXmlFile.setOnAction(e -> setXmlFileLocationAndReset());
+		
 		MenuItem exit = new MenuItem("Close");
 		exit.setOnAction(e -> Platform.exit());
-		fileItem.getItems().addAll(setXmlFile, exit);
+		
+		MenuItem addRemove = new MenuItem("Add and Remove");
+		addRemove.setOnAction(e -> newAddRemoveDialog());
+		
+		fileItem.getItems().addAll(setXmlFile, addRemove, exit);
 		menuBar.getMenus().add(fileItem);
+	}
+	
+	public void newAddRemoveDialog(){
+		AddRemoveDialog ard = AddRemoveDialog.getInstance();
+		ard.setAddRemoveListener(this);
+		ard.show(shows);
 	}
 	
 	public void setXmlFileLocationAndReset(){
@@ -202,7 +217,6 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 		});
 	}
 
-	
 	private void removeProgressBar(){
 		Platform.runLater(() -> {
 			if(progressPane.hasProgressBar()){
@@ -213,14 +227,17 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 	
 	@Override
 	public void saveDates(){
-		if(!airDates.hasUpdated()){
+		if(!airDates.hasUpdated() && !overrideSave){
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
 			showList.setDateList(dates);
+			showList.setShowList(shows);
 			showList.writeNewAirDates();
 			removeProgressBar();
 		}
+		overrideSave = false;
+		airDates.setUpdated(false);
 	}
 
 	@Override
@@ -231,9 +248,31 @@ public class MasterControl implements ChangeListener, FileChooserListener{
 			view.removeAll();
 			showList.createShowList();
 			getShowsAndDates();
-			if(shows.size() > 0) airDates.setUpdatingStatus(false);
+			if(shows.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
 		}
 		udXML = null;
+	}
+
+	@Override
+	public void executeAddRemoveQuery(List<String> add, List<String> remove){
+		if(remove.size() > 0){
+			for(String s : remove){
+				int index = shows.indexOf(s);
+				view.removeShow(index);
+				showList.removeShow(s);
+			}
+		}
+		if(add.size() > 0){
+			for(String s : add){
+				shows.add(s);
+				view.addShowAndDate(createShowAndDate(s, "01/01/1970"));
+				dates.add("01/01/1970");
+			}
+		}
+		if(add.size() > 0 || remove.size() > 0){
+			overrideSave = true;
+			saveDates();
+		}
 	}
 }

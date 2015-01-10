@@ -42,8 +42,10 @@ public class UpdateXMLFile implements FileChooserController{
 		fileChooser.setOnAction(e -> {
 			File f = null;
 			f = new FileChooser().showOpenDialog(stage);
-			if(f != null) newXmlLocation = f;
-			textField.setText(f.getAbsolutePath());
+			if(f != null){
+				newXmlLocation = f;
+				textField.setText(f.getAbsolutePath());
+			}
 		});
 		
 		updateButton.setOnAction(e -> {

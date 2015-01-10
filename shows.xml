@@ -2,7 +2,6 @@
 <shows>
   <show date="03/03/2015">AgentsofSHIELD</show>
   <show date="15/01/2015">Elementary</show>
-  <show date="12/01/2015">Castle</show>
   <show date="12/04/2015">GameofThrones</show>
   <show date="TBA">HaltandCatchFire</show>
   <show date="TBA">Constantine</show>
@@ -21,4 +20,12 @@
   <show date="08/02/2015">WalkingDead</show>
   <show date="21/01/2015">100</show>
   <show date="TBA">TrueBlood</show>
+  <show date="19/02/2015">Vikings</show>
+  <show date="TBA">FallingSkies</show>
+  <show date="TBA">Continuum</show>
+  <show date="TBA">DaVincisDemons</show>
+  <show date="TBA">UnderTheDome</show>
+  <show date="12/01/2015">Castle</show>
+  <show date="28/01/2015">Suits</show>
+  <show date="21/01/2015">Arrow</show>
 </shows>

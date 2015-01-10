@@ -64,17 +64,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		options = new OptionsPane();
 		options.setMenuBar(menuBar);
 		options.init();
-		options.getGoButton().setOnAction(e -> {
-			if(!airDates.threadIsUpdateing()){
-				if(!isConnectedToInternet){
-					if(!testInternetConnection())return;
-				}
-				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), shows, dates);
-				progressPane.addProgressBar();
-			}else{
-				logger.debug("threadIsUpdating");
-			}
-		});
+		options.getGoButton().setOnAction(e -> standardUpdateIfInternetConnection());
 		
 		view = new DateViewer();
 		addShowsAndDatesToView();
@@ -84,6 +74,19 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		root.setBottom(progressPane.getProgressPane());
 		
 		testInternetConnectionAndUpdate();
+	}
+	
+	public boolean standardUpdateIfInternetConnection(){
+		if(!airDates.threadIsUpdateing()){
+			if(!isConnectedToInternet){
+				if(!testInternetConnection()) return isConnectedToInternet;
+			}
+			airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), shows, dates);
+			progressPane.addProgressBar();
+		}else{
+			logger.debug("threadIsUpdating");
+		}
+		return isConnectedToInternet;
 	}
 	
 	public void getShowsAndDates(){
@@ -270,9 +273,14 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 				dates.add("01/01/1970");
 			}
 		}
-		if(add.size() > 0 || remove.size() > 0){
+		if(add.size() == 0 || remove.size() > 0){
 			overrideSave = true;
 			saveDates();
+		}else{
+			if(!standardUpdateIfInternetConnection()){
+				overrideSave = true;
+				saveDates();
+			}
 		}
 	}
 }

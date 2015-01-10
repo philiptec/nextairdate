@@ -157,7 +157,6 @@ public class AddRemoveDialog implements AddRemoveController{
 			populateComboBox();
 			stage.show();
 		}
-
 	}
 	
 	public static AddRemoveDialog getInstance(){

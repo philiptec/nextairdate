@@ -1,34 +1,40 @@
 package com.camelcasing.video;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 
 public class OptionsPane {
 
 		private CheckBox updateTBA, updateAll;
 		private BorderPane pane;
 		private Button getResults;
+		private MenuBar menuBar;
 		
 	public OptionsPane(){
+
+	}
+	
+	public void init(){
 		pane = new BorderPane();
-		pane.setPadding(new Insets(20, 20, 20, 20));
 		
 		updateTBA = new CheckBox("Update TBA");
 		updateAll = new CheckBox("Update All");
-		
 		getResults = new Button("Get Air Dates");
 		
 		FlowPane options = new FlowPane();
 		options.setHgap(10);
-		options.getChildren().addAll(updateTBA, updateAll);
+		options.setPadding(new Insets(0, 20, 10, 20));
+		options.getChildren().addAll(updateTBA, updateAll, getResults);
 		
 		pane.setCenter(options);
-		BorderPane.setAlignment(getResults, Pos.CENTER);
-		pane.setRight(getResults);
+		if(menuBar != null){
+			StackPane r = new StackPane(menuBar);
+			r.setPadding(new Insets(0, 0, 10, 0));
+			pane.setTop(r);
+		}
 	}
 	
 	public Button getGoButton(){
@@ -37,6 +43,10 @@ public class OptionsPane {
 	
 	public boolean isUpdateTBA(){
 		return updateTBA.isSelected();
+	}
+	
+	public void setMenuBar(MenuBar menuBar){
+		this.menuBar = menuBar;
 	}
 	
 	public boolean isUpdateAll(){

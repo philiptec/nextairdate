@@ -26,6 +26,13 @@ public class DateViewer {
 		pane.getChildren().add(sad);
 	}
 	
+	public void removeAll(){
+		int size = pane.getChildren().size();
+		for(int i = 0; i < size - 1; i++){
+			pane.getChildren().remove(i);
+		}
+	}
+	
 	public String getDate(int index){
 		return ((ShowAndDate)pane.getChildren().get(index)).getDate();
 	}

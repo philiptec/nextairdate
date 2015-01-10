@@ -3,6 +3,7 @@ package com.camelcasing.video;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.prefs.Preferences;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,17 +28,22 @@ public class ShowList{
 		private final Logger logger = LogManager.getLogger(getClass());
 
 		private List<String> shows, dates;
-		private File showsFile = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/shows.xml");
+		private File showsFile;// = new File("/media/camelcasing/ExtraDrive/Java_Files/AirDate/shows.xml");
 		private boolean writing;
 		
 	public ShowList(){
-		createShowList();
-	}
-	
-	private void createShowList(){
+		retrieveXmlFileFromPreferences();
 		shows = new ArrayList<String>(20);
 		dates = new ArrayList<String>(20);
+		if(showsFile != null){
+			createShowList();
+		}
+	}
+	
+	protected void createShowList(){
 		try {
+			shows = new ArrayList<String>(20);
+			dates = new ArrayList<String>(20);
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
 			NodeList results = doc.getElementsByTagName("show");
@@ -52,7 +58,6 @@ public class ShowList{
 			shows.add("Problem reading shows.xml file");
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
-			shows.add("Problem reading shows.xml file");
 		}
 	}
 	
@@ -100,8 +105,35 @@ public class ShowList{
 		return true;
 	}
 	
+	public void retrieveXmlFileFromPreferences(){
+		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		String fileName = prefs.get("xmlFile", "notFound");
+		if(fileName.equals("notFound")){
+			logger.info("xmlFile location not found in preferences");
+			return;
+		}
+		File xmlFile = new File(fileName);
+		if(xmlFile.exists()){
+			this.showsFile = xmlFile;
+		}else{
+			logger.error("XML file found in preferences but no longer exists");
+		}
+	}
+	
+	public void setXmlFileInPreferences(File xmlFile){
+		if(!xmlFile.exists()){
+			logger.error("Trying to set xmlFile to preferences but file does not exists");
+			return;
+		}
+		String filePath = xmlFile.getAbsolutePath();
+		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		logger.debug("setting \"" + filePath + "\" to preferences");
+		prefs.put("xmlFile", filePath);
+	}
+	
 	public void setXmlFile(File newFile){
 		showsFile = newFile;
+		setXmlFileInPreferences(newFile);
 	}
 	
 	public boolean isWriting(){

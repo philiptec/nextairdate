@@ -1,13 +1,11 @@
 package com.camelcasing.video;
 
 /*TODO
- * - no signal to save all if changed
- * - Exception if right click update a second time
- * - right click add "updated" even if nothing changes
  * - drag and drop shows and dates to reorganise
+ * - after first load will not save new dates?
  */
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.List;
 
@@ -17,10 +15,10 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 
 import javafx.application.Platform;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
-public class MasterControl implements ChangeListener{
+public class MasterControl implements ChangeListener, FileChooserListener{
 
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
@@ -31,8 +29,9 @@ public class MasterControl implements ChangeListener{
 		private ShowList showList;
 		private AirDates airDates;
 		private OptionsPane options;
-		private boolean changed = false;
 		private Progress progressPane;
+		private MenuBar menuBar;
+		private UpdateXMLFile udXML;
 		
 		protected static boolean isConnectedToInternet;
 		protected static String testURL = "http://www.epguides.com";
@@ -54,17 +53,22 @@ public class MasterControl implements ChangeListener{
 		progressPane = new Progress();
 		
 		showList = new ShowList();
-		shows = showList.getShowList();
-		logger.debug("shows.size() = " + shows.size());
-		dates = showList.getDateList();
+		getShowsAndDates();
 		
-		airDates = new AirDates(shows, dates);
+		airDates = new AirDates();
 		airDates.addChangeListener(this);
 		
+		createMenuBar();
+		
 		options = new OptionsPane();
+		options.setMenuBar(menuBar);
+		options.init();
 		options.getGoButton().setOnAction(e -> {
 			if(!airDates.isUpdateing()){
-				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll());
+				if(!isConnectedToInternet){
+					if(!testInternetConnection())return;
+				}
+				airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), shows, dates);
 				progressPane.addProgressBar();
 				logger.debug(airDates.isUpdateing());
 			}else{
@@ -73,7 +77,23 @@ public class MasterControl implements ChangeListener{
 		});
 		
 		view = new DateViewer();
-		if(shows.get(0).equals("Problem reading shows.xml file")){
+		addShowsAndDatesToView();
+		
+		root.setTop(options.getPanel());
+		root.setCenter(view.getDisplayPane());
+		root.setBottom(progressPane.getProgressPane());
+		
+		testInternetConnectionAndUpdate();
+	}
+	
+	public void getShowsAndDates(){
+		shows = showList.getShowList();
+		logger.debug("shows.size() = " + shows.size());
+		dates = showList.getDateList();
+	}
+	
+	public void addShowsAndDatesToView(){
+		if(shows.size() == 0 || shows.get(0).equals("Problem reading shows.xml file")){
 			view.addShowAndDate(new ShowAndDate("Problem reading shows.xml file", "01/01/1970"));
 		}
 		for(int i = 0; i < dates.size(); i++){
@@ -86,6 +106,9 @@ public class MasterControl implements ChangeListener{
 			}
 			MenuItem rightClickMenuItem = new MenuItem("Update " + show);
 			rightClickMenuItem.setOnAction(e -> {
+				if(!isConnectedToInternet){
+					if(!testInternetConnection())return;
+				}
 				AirDateParser ap = new AirDateParser().parse(sad.getShowName());
 				String newDate;
 				if(ap.isAiring()){
@@ -95,18 +118,41 @@ public class MasterControl implements ChangeListener{
 				}
 				if(newDate != sad.getDate() && !newDate.equals("01/01/1970")){
 					logger.debug("rightClick updating date");
+					airDates.signialUpdated();
 					updateDate(sad.getShowName(), newDate, true);
 				}
 			});
 			sad.setRightClickMenuItem(rightClickMenuItem);
 			view.addShowAndDate(sad);
 		}
+	}
+	
+	public void createMenuBar(){
+		menuBar = new MenuBar();
+		Menu fileItem = new Menu("File");
+		MenuItem setXmlFile = new MenuItem("Set Xml File");
+		setXmlFile.setOnAction(e -> {
+			setXmlFileLocationAndReset();
+		});
+		MenuItem exit = new MenuItem("Close");
+		exit.setOnAction(e -> Platform.exit());
+		fileItem.getItems().addAll(setXmlFile, exit);
+		menuBar.getMenus().add(fileItem);
+	}
+	
+	public void setXmlFileLocationAndReset(){
+		udXML = UpdateXMLFile.getInstance();
+		udXML.setFileChooserListener(this);
+		udXML.show();
 		
-		root.setTop(options.getPanel());
-		root.setCenter(view.getDisplayPane());
-		root.setBottom(progressPane.getProgressPane());
-		
+	}
+	
+	public boolean testInternetConnectionAndUpdate(){
 		testInternetConnection();
+		if(isConnectedToInternet){
+			airDates.generateShowData(false, false, shows, dates);
+		}
+		return isConnectedToInternet;
 	}
 	
 	public boolean testInternetConnection(){
@@ -119,7 +165,6 @@ public class MasterControl implements ChangeListener{
 		}
 		isConnectedToInternet = true;
 		logger.info("is connected to Internet");
-		airDates.generateShowData(false, false);
 		return true;
 	}
 	
@@ -128,11 +173,11 @@ public class MasterControl implements ChangeListener{
 	}
 
 	@Override
-	public void updateDate(String show, String date, boolean lastShow){
+	public void updateDate(String show, String date, boolean save){
 		if(isConnectedToInternet == false){
 			removeProgressBar();
 			logger.error("failed to update as not connected to the Internet!\n"
-					+ "Check Connection and tru again");
+				+ "Check Connection and try again");
 			return;
 		}
 		Platform.runLater(() ->{
@@ -148,9 +193,8 @@ public class MasterControl implements ChangeListener{
 				};
 				if(!date.equals("FAIL")){
 					dates.set(index, da);
-					changed = true;
 				}
-				if(lastShow && changed) saveDates();
+				if(save) saveDates();
 				logger.debug("finished updating Date");
 			}else{
 				logger.debug("not updating (updateDate()) as shows are the same");
@@ -169,14 +213,27 @@ public class MasterControl implements ChangeListener{
 	
 	@Override
 	public void saveDates(){
-		if(!changed){
+		if(!airDates.hasUpdated()){
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
 			showList.setDateList(dates);
-			changed = false;
 			showList.writeNewAirDates();
 			removeProgressBar();
 		}
+	}
+
+	@Override
+	public void submitPressed(){
+		File newXmlFile = udXML.getNewXmlLocation();
+		if(newXmlFile.exists()){
+			showList.setXmlFile(newXmlFile);
+			view.removeAll();
+			showList.createShowList();
+			getShowsAndDates();
+			if(shows.size() > 0) airDates.setUpdatingStatus(false);
+			addShowsAndDatesToView();
+		}
+		udXML = null;
 	}
 }

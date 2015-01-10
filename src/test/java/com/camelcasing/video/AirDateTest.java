@@ -14,4 +14,12 @@ public class AirDateTest {
 		String time = AirDateUtils.englishDate(date);
 		assertEquals("25/12/2015", time);
 	}
+	
+	@Test
+	public void datesAreDifferentText(){
+		AirDates ad = new AirDates();
+		assertEquals(false, ad.datesAreDifferent("01/01/2015", "01/01/2015"));
+		assertEquals(false, ad.datesAreDifferent("01/01/2015", "FAIL"));
+		assertEquals(true, ad.datesAreDifferent("01/01/2015", "01/02/2015"));
+	}
 }

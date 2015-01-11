@@ -32,6 +32,8 @@ public class ShowList{
 		private File showsFile;
 		private boolean writing;
 		
+		private final String PREFS_NAME = "com/camelcasing/video";
+		
 	public ShowList(){
 		retrieveXmlFileFromPreferences();
 		shows = new ArrayList<String>(20);
@@ -111,7 +113,7 @@ public class ShowList{
 	}
 	
 	public void retrieveXmlFileFromPreferences(){
-		Preferences prefs = Preferences.userRoot().node(getClass().getName());
+		Preferences prefs = Preferences.userRoot().node(PREFS_NAME);
 		String fileName = prefs.get("xmlFile", "notFound");
 		if(fileName.equals("notFound")){
 			logger.info("xmlFile location not found in preferences");
@@ -132,7 +134,7 @@ public class ShowList{
 			return;
 		}
 		String filePath = xmlFile.getAbsolutePath();
-		Preferences prefs = Preferences.userRoot().node(getClass().getName());
+		Preferences prefs = Preferences.userRoot().node(PREFS_NAME);
 		logger.debug("setting \"" + filePath + "\" to preferences");
 		prefs.put("xmlFile", filePath);
 	}

@@ -1,8 +1,9 @@
 package com.camelcasing.video;
 
 /*TODO
+ * - add load shows oneOff checkBox to XML dialog (remember selection)
  * - drag and drop shows and dates to reorganise
- * - Themes MenuItem
+ * - themes MenuItem
  */
 
 import java.io.*;
@@ -76,7 +77,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
 		
-		testInternetConnectionAndUpdate();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){

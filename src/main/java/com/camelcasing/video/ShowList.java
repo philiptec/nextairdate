@@ -111,7 +111,7 @@ public class ShowList{
 	}
 	
 	public void retrieveXmlFileFromPreferences(){
-		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		Preferences prefs = Preferences.userRoot().node(getClass().getName());
 		String fileName = prefs.get("xmlFile", "notFound");
 		if(fileName.equals("notFound")){
 			logger.info("xmlFile location not found in preferences");
@@ -132,7 +132,7 @@ public class ShowList{
 			return;
 		}
 		String filePath = xmlFile.getAbsolutePath();
-		Preferences prefs = Preferences.userNodeForPackage(getClass());
+		Preferences prefs = Preferences.userRoot().node(getClass().getName());
 		logger.debug("setting \"" + filePath + "\" to preferences");
 		prefs.put("xmlFile", filePath);
 	}

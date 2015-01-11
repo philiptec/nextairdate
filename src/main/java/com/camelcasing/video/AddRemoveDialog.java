@@ -40,6 +40,11 @@ public class AddRemoveDialog implements AddRemoveController{
 		
 		stage = new Stage();
 		stage.setResizable(false);
+		stage.setOnCloseRequest(we -> {
+			active = false;
+			stage.close();
+		});
+
 		GridPane backPane = new GridPane();
 		backPane.setPadding(new Insets(0, 10, 10, 0));
 		

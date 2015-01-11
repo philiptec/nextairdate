@@ -14,18 +14,18 @@ public class UpdateXMLFile implements FileChooserController{
 		private File newXmlLocation;
 		private FileChooserListener fcl;
 		private Stage stage;
-		private Button updateButton, cancelButton, fileChooser;
+		private Button updateButton, cancelButton, fileChooser, createNewFile;
 		private TextField textField;
 		private final Label topText = new Label("Enter or select new XML file location");
 		private static UpdateXMLFile updateXMLFile;
 		
 	private UpdateXMLFile(){
 		stage = new Stage();
-		
 		topText.setPadding(new Insets(10,10,10,10));
 		
 		updateButton = new Button("Update");
 		cancelButton = new Button("Cancel");
+		createNewFile = new Button("Create New");
 		
 		fileChooser = new Button();
 		ImageView chooserImage = new ImageView(new Image("filesearch.png"));
@@ -42,6 +42,15 @@ public class UpdateXMLFile implements FileChooserController{
 		fileChooser.setOnAction(e -> {
 			File f = null;
 			f = new FileChooser().showOpenDialog(stage);
+			if(f != null){
+				newXmlLocation = f;
+				textField.setText(f.getAbsolutePath());
+			}
+		});
+		
+		createNewFile.setOnAction(e -> {
+			File f = null;
+			f = new FileChooser().showSaveDialog(stage);
 			if(f != null){
 				newXmlLocation = f;
 				textField.setText(f.getAbsolutePath());
@@ -73,7 +82,7 @@ public class UpdateXMLFile implements FileChooserController{
 		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonLayout.setPadding(new Insets(10,10,10,10));
 		buttonLayout.setSpacing(20);
-		buttonLayout.getChildren().addAll(cancelButton, updateButton);
+		buttonLayout.getChildren().addAll(cancelButton, createNewFile, updateButton);
 		pane.setCenter(chooserLayout);
 		pane.setBottom(buttonLayout);
 		pane.setTop(topText);

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <shows>
-  <show date="16/01/2015">Constantine</show>
   <show date="03/03/2015">AgentsofSHIELD</show>
   <show date="15/01/2015">Elementary</show>
-  <show date="12/01/2015">Castle</show>
   <show date="12/04/2015">GameofThrones</show>
   <show date="TBA">HaltandCatchFire</show>
   <show date="TBA">Constantine</show>
@@ -15,7 +13,6 @@
   <show date="19/01/2015">Gotham</show>
   <show date="TBA">Hannibal</show>
   <show date="16/01/2015">Helix</show>
-  <show date="TBA">Fargo</show>
   <show date="TBA">Homeland</show>
   <show date="11/01/2015">Librarians_2014</show>
   <show date="22/01/2015">Reign</show>
@@ -23,4 +20,13 @@
   <show date="08/02/2015">WalkingDead</show>
   <show date="21/01/2015">100</show>
   <show date="TBA">TrueBlood</show>
+  <show date="19/02/2015">Vikings</show>
+  <show date="TBA">FallingSkies</show>
+  <show date="TBA">Continuum</show>
+  <show date="TBA">DaVincisDemons</show>
+  <show date="TBA">UnderTheDome</show>
+  <show date="12/01/2015">Castle</show>
+  <show date="28/01/2015">Suits</show>
+  <show date="21/01/2015">Arrow</show>
+  <show date="TBA">TrueDetective</show>
 </shows>

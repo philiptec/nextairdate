@@ -27,10 +27,7 @@ public class DateViewer {
 	}
 	
 	public void removeAll(){
-		int size = pane.getChildren().size();
-		for(int i = 0; i < size - 1; i++){
-			pane.getChildren().remove(i);
-		}
+		pane.getChildren().clear();
 	}
 	
 	public void removeShow(int index){

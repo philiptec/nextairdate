@@ -96,9 +96,9 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void addShowsAndDatesToView(){
-		if(shows.size() == 0 || shows.get(0).equals("Problem reading shows.xml file")){
-			view.addShowAndDate(new ShowAndDate("Problem reading shows.xml file", "01/01/1970"));
-		}
+//		if(shows.size() == 0 || shows.get(0).equals("Problem reading shows.xml file")){
+//			view.addShowAndDate(new ShowAndDate("Problem reading shows.xml file", "01/01/1970"));
+//		}
 		for(int i = 0; i < dates.size(); i++){
 			ShowAndDate sad;
 			String show = shows.get(i);
@@ -246,14 +246,19 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	@Override
 	public void submitPressed(){
 		File newXmlFile = udXML.getNewXmlLocation();
-		if(newXmlFile.exists()){
+		if(!newXmlFile.exists()){
+			try {
+				if(!newXmlFile.createNewFile()) return;
+			} catch (IOException e) {
+				logger.error("Failed to create new XML file");
+			}
+		}
 			showList.setXmlFile(newXmlFile);
 			view.removeAll();
 			showList.createShowList();
 			getShowsAndDates();
 			if(shows.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
-		}
 		udXML = null;
 	}
 

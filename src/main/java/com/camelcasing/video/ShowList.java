@@ -56,7 +56,6 @@ public class ShowList{
 				}
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file " + e.getMessage());
-			shows.add("Problem reading shows.xml file");
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
 		}
@@ -121,6 +120,7 @@ public class ShowList{
 		File xmlFile = new File(fileName);
 		if(xmlFile.exists()){
 			this.showsFile = xmlFile;
+			logger.info("XML file is " + xmlFile.getAbsolutePath());
 		}else{
 			logger.error("XML file found in preferences but no longer exists");
 		}

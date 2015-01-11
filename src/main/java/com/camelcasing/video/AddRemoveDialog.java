@@ -22,13 +22,11 @@ public class AddRemoveDialog implements AddRemoveController{
 		private static List<String> shows;
 		private AddRemoveListener addRemoveListener;
 		private Stage stage;
-		private BorderPane pane, centrePane;
 		private Button execute, cancel, add;
 		private ComboBox<String> showSelectionBox;
 		private TextField addShowField;
-		private ScrollPane updatesPane;
-		private VBox leftPane, updatesBox;
-		private HBox addBox, removeBox;
+		private ScrollPane proposedUpdatesScrollPane;
+		private VBox proposedUpdatesContainer;
 		private Label addLabel, removeLabel;
 		private List<String> addShows, deleteShows;
 		
@@ -41,24 +39,12 @@ public class AddRemoveDialog implements AddRemoveController{
 		theme.bind(AirDate.theme);
 		
 		stage = new Stage();
-		pane = new BorderPane();
-		pane.setPrefSize(600, 400);
-		centrePane = new BorderPane();
-		leftPane = new VBox();
-		leftPane.setAlignment(Pos.CENTER);
-		leftPane.setSpacing(40);
-		
-		updatesBox = new VBox();
+		stage.setResizable(false);
+		GridPane backPane = new GridPane();
+		backPane.setPadding(new Insets(0, 10, 10, 0));
 		
 		addLabel = new Label("Add Show");
 		removeLabel = new Label("Remove Show");
-		
-		addBox = new HBox();
-		addBox.setSpacing(20);
-		addBox.setPadding(new Insets(10, 10, 10, 10));
-		removeBox = new HBox();
-		removeBox.setSpacing(20);
-		removeBox.setPadding(new Insets(10, 10, 10, 10));
 		
 		add = new Button("Add");
 		add.setOnAction(e -> addAddItem());
@@ -66,11 +52,14 @@ public class AddRemoveDialog implements AddRemoveController{
 		addShowField = new TextField();
 		addShowField.setOnAction(e -> addAddItem());
 		
-		updatesPane = new ScrollPane(updatesBox);
-		updatesPane.setId("addRemoveScrollPane");
+		proposedUpdatesContainer = new VBox();
+		proposedUpdatesScrollPane = new ScrollPane(proposedUpdatesContainer);
+		proposedUpdatesScrollPane.setId("addRemoveScrollPane");
+		proposedUpdatesScrollPane.setPrefSize(300, 150);
 		
 		showSelectionBox = new ComboBox<String>();
 		showSelectionBox.setPromptText("SelectShow");
+		showSelectionBox.setPrefWidth(220);
 		showSelectionBox.setOnAction(e ->{
 			addDeleteItem(showSelectionBox.getValue());
 		});
@@ -89,24 +78,25 @@ public class AddRemoveDialog implements AddRemoveController{
 			stage.close();
 		});
 		
-		HBox buttonLayout = new HBox();
-		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
-		buttonLayout.setSpacing(20);
-		buttonLayout.setPadding(new Insets(10,10,10,10));
-		buttonLayout.getChildren().addAll(execute, cancel);
+		cancel.setPrefWidth(100);
+		execute.setPrefWidth(100);
 		
-		addBox.getChildren().addAll(addLabel, addShowField, add);
-		removeBox.getChildren().addAll(removeLabel, showSelectionBox);
+		backPane.setHgap(5);
+		backPane.setVgap(5);
 		
-		leftPane.getChildren().addAll(addBox, removeBox);
+		backPane.add(addLabel, 1, 4);
+		backPane.add(addShowField, 2, 4, 2, 1);
+		backPane.add(add, 5, 4);
 		
-		centrePane.setLeft(leftPane);
-		centrePane.setCenter(updatesPane);
+		backPane.add(removeLabel, 1, 6);
+		backPane.add(showSelectionBox, 2, 6, 2, 1);
 		
-		pane.setCenter(centrePane);
-		pane.setBottom(buttonLayout);
+		backPane.add(cancel, 2, 9);
+		backPane.add(execute, 3, 9);
 		
-		Scene scene = new Scene(pane);
+		backPane.add(proposedUpdatesScrollPane, 8, 1, 10, 9);
+		
+		Scene scene = new Scene(backPane);
 		scene.getStylesheets().add(theme.getValue());
 		stage.setScene(scene);
 	}
@@ -118,14 +108,14 @@ public class AddRemoveDialog implements AddRemoveController{
 	public void addAddItem(){
 		String show = addShowField.getText();
 		if(show != null && show.length() > 0){
-			updatesBox.getChildren().add(createAddItem(show));
+			proposedUpdatesContainer.getChildren().add(createAddItem(show));
 			addShowField.setText("");
 		}
 	}
 	
 	public void addDeleteItem(String show){
 		if(!deleteShows.contains(show)){
-			updatesBox.getChildren().add(createDeleteItem(show));
+			proposedUpdatesContainer.getChildren().add(createDeleteItem(show));
 		}
 	}
 	
@@ -156,7 +146,7 @@ public class AddRemoveDialog implements AddRemoveController{
 	public void reset(){
 		addShows = new ArrayList<String>();
 		deleteShows = new ArrayList<String>();
-		updatesBox.getChildren().clear();
+		proposedUpdatesContainer.getChildren().clear();
 	}
 	
 	public void show(List<String> shows){

@@ -86,7 +86,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonLayout.setSpacing(20);
 		buttonLayout.setPadding(new Insets(10,10,10,10));
-		buttonLayout.getChildren().addAll(cancel, execute);
+		buttonLayout.getChildren().addAll(execute, cancel);
 		
 		addBox.getChildren().addAll(addLabel, addShowField, add);
 		removeBox.getChildren().addAll(removeLabel, showSelectionBox);

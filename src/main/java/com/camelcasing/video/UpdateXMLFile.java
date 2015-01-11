@@ -16,7 +16,7 @@ public class UpdateXMLFile implements FileChooserController{
 		private Stage stage;
 		private Button updateButton, cancelButton, fileChooser, createNewFile;
 		private TextField textField;
-		private final Label topText = new Label("Enter or select new XML file location");
+		private final Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
 		private static UpdateXMLFile updateXMLFile;
 		
 	private UpdateXMLFile(){
@@ -82,7 +82,7 @@ public class UpdateXMLFile implements FileChooserController{
 		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonLayout.setPadding(new Insets(10,10,10,10));
 		buttonLayout.setSpacing(20);
-		buttonLayout.getChildren().addAll(cancelButton, createNewFile, updateButton);
+		buttonLayout.getChildren().addAll(createNewFile, updateButton, cancelButton);
 		pane.setCenter(chooserLayout);
 		pane.setBottom(buttonLayout);
 		pane.setTop(topText);

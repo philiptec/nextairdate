@@ -16,6 +16,7 @@ public class DateViewer {
 		pane.setSpacing(10);
 		
 		scrollPane = new ScrollPane(pane);
+		scrollPane.setId("mainScrollPane");
 	}
 	
 	public ScrollPane getDisplayPane(){

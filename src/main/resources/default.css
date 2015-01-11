@@ -2,7 +2,7 @@
 	-fx-font-size: 15;	
 }
 
-.scroll-pane{
+#mainScrollPane{
 	-fx-background-color: transparent;
 }
 
@@ -36,6 +36,8 @@
 
 /* .context-menu{ */
 /* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
+/* } *//* .root{ */
+/* 	-fx-background-color: #FFD39B; */
 /* } */
  
 /* .progress-bar .track{ */
@@ -68,11 +70,6 @@
 /* 	-fx-border-color: #ED9121; */
 /* } */
 
-/* #pane{ */
+/* .root{ */
 /* 	-fx-background-color: #FFD39B; */
 /* } */
-
-#showText{
-	-fx-font-size: 15;
-	-fx-fill: BLACK;
-}

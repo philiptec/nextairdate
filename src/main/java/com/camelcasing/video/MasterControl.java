@@ -2,6 +2,7 @@ package com.camelcasing.video;
 
 /*TODO
  * - drag and drop shows and dates to reorganise
+ * - Themes MenuItem
  */
 
 import java.io.*;
@@ -33,6 +34,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private UpdateXMLFile udXML;
 		
 		private boolean overrideSave = false;
+		
+		private String[] themes = {"default"};
 		
 		protected static boolean isConnectedToInternet;
 		protected static String testURL = "http://www.epguides.com";
@@ -73,7 +76,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
 		
-		testInternetConnectionAndUpdate();
+		//testInternetConnectionAndUpdate();
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
@@ -96,9 +99,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void addShowsAndDatesToView(){
-//		if(shows.size() == 0 || shows.get(0).equals("Problem reading shows.xml file")){
-//			view.addShowAndDate(new ShowAndDate("Problem reading shows.xml file", "01/01/1970"));
-//		}
 		for(int i = 0; i < dates.size(); i++){
 			ShowAndDate sad;
 			String show = shows.get(i);
@@ -138,18 +138,26 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void createMenuBar(){
 		menuBar = new MenuBar();
 		Menu fileItem = new Menu("File");
+		Menu themeItem = new Menu("Theme");
+		for(String s : themes) themeItem.getItems().add(createThemeMenuItem(s));
 		
 		MenuItem setXmlFile = new MenuItem("Set Xml File");
 		setXmlFile.setOnAction(e -> setXmlFileLocationAndReset());
 		
-		MenuItem exit = new MenuItem("Close");
+		MenuItem exit = new MenuItem("Exit");
 		exit.setOnAction(e -> Platform.exit());
 		
 		MenuItem addRemove = new MenuItem("Add and Remove");
 		addRemove.setOnAction(e -> newAddRemoveDialog());
 		
 		fileItem.getItems().addAll(setXmlFile, addRemove, exit);
-		menuBar.getMenus().add(fileItem);
+		menuBar.getMenus().addAll(fileItem, themeItem);
+	}
+	
+	private MenuItem createThemeMenuItem(String name){
+		MenuItem mi = new MenuItem(name);
+		mi.setOnAction(e -> AirDate.changeTheme(name + ".css"));
+		return mi;
 	}
 	
 	public void newAddRemoveDialog(){

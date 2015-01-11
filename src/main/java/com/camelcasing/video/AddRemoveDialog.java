@@ -5,6 +5,7 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -31,9 +32,14 @@ public class AddRemoveDialog implements AddRemoveController{
 		private Label addLabel, removeLabel;
 		private List<String> addShows, deleteShows;
 		
+		private SimpleStringProperty theme = new SimpleStringProperty();
+		
 		private boolean active;
 
 	private AddRemoveDialog(){
+		
+		theme.bind(AirDate.theme);
+		
 		stage = new Stage();
 		pane = new BorderPane();
 		pane.setPrefSize(600, 400);
@@ -61,6 +67,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		addShowField.setOnAction(e -> addAddItem());
 		
 		updatesPane = new ScrollPane(updatesBox);
+		updatesPane.setId("addRemoveScrollPane");
 		
 		showSelectionBox = new ComboBox<String>();
 		showSelectionBox.setPromptText("SelectShow");
@@ -98,7 +105,10 @@ public class AddRemoveDialog implements AddRemoveController{
 		
 		pane.setCenter(centrePane);
 		pane.setBottom(buttonLayout);
-		stage.setScene(new Scene(pane));
+		
+		Scene scene = new Scene(pane);
+		scene.getStylesheets().add(theme.getValue());
+		stage.setScene(scene);
 	}
 	
 	private void populateComboBox(){

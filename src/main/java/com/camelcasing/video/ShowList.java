@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 public class ShowList{
 	
-		private final Logger logger = LogManager.getLogger(getClass());
+		private Logger logger = LogManager.getLogger(getClass());
 
 		private List<String> shows, dates;
 		private File showsFile;

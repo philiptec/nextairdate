@@ -2,6 +2,7 @@ package com.camelcasing.video;
 
 import java.io.*;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.scene.Scene;
@@ -19,7 +20,12 @@ public class UpdateXMLFile implements FileChooserController{
 		private final Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
 		private static UpdateXMLFile updateXMLFile;
 		
+		private SimpleStringProperty theme = new SimpleStringProperty();
+		
 	private UpdateXMLFile(){
+		
+		theme.bind(AirDate.theme);
+		
 		stage = new Stage();
 		topText.setPadding(new Insets(10,10,10,10));
 		
@@ -87,7 +93,9 @@ public class UpdateXMLFile implements FileChooserController{
 		pane.setBottom(buttonLayout);
 		pane.setTop(topText);
 		
-		stage.setScene(new Scene(pane));
+		Scene scene = new Scene(pane);
+		scene.getStylesheets().add(theme.getValue());
+		stage.setScene(scene);
 	}
 	
 	public static UpdateXMLFile getInstance(){

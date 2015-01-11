@@ -3,14 +3,12 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 
 import javafx.scene.layout.BorderPane;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.text.Text;
 
 public class ShowAndDate extends BorderPane{
 
-		private Text show, date;
+		private Label show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
 		
@@ -49,9 +47,8 @@ public class ShowAndDate extends BorderPane{
 		}
 	}
 	
-	public Text createTextNode(String text){
-		Text t = new Text(text);
-		t.setId("showText");
+	public Label createTextNode(String text){
+		Label t = new Label(text);
 		return t;
 	}
 	

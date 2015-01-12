@@ -1,10 +1,5 @@
 package com.camelcasing.video;
 
-/*TODO
- * - on load put in chronological order
- * - themes MenuItem
- */
-
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -31,14 +26,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private OptionsPane options;
 		private Progress progressPane;
 		private MenuBar menuBar;
+		private Menu fileItem, themeItem;
 		private UpdateXMLFile udXML;
-		
 		private boolean overrideSave = false;
-		
 		private String[] themes = {"default"};
-		
 		protected static boolean isConnectedToInternet;
-		protected static String testURL = "http://www.epguides.com";
+		
+		private final static String TEST_URL = "http://www.epguides.com";
 		
 	public MasterControl(){
 		
@@ -46,20 +40,14 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			if(showList.isWriting()){
 				we.consume();
 				logger.info("Writing to disk, exit consumed");
+			}else{
+				Platform.exit();
 			}
 		});
 		
 		root = new BorderPane();
-		root.setId("pane");
 		
 		progressPane = new Progress();
-		
-		showList = new ShowList();
-		getShowsAndDates();
-		
-		airDates = new AirDates();
-		airDates.addChangeListener(this);
-		
 		createMenuBar();
 		
 		options = new OptionsPane();
@@ -68,13 +56,27 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		options.getGoButton().setOnAction(e -> standardUpdateIfInternetConnection());
 		
 		view = new DateViewer();
-		addShowsAndDatesToView();
 		
 		root.setTop(options.getPanel());
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
-		
-		testInternetConnectionAndUpdate();
+	}
+	
+	public void init(){
+		showList = new ShowList();
+		getShowsAndDates();
+		airDates = new AirDates();
+		airDates.addChangeListener(this);
+
+		addShowsAndDatesToView();
+		activateButtons();
+//		testInternetConnectionAndUpdate();
+	}
+	
+	public void activateButtons(){
+		options.enableUpdateButton();
+		fileItem.setDisable(false);
+		themeItem.setDisable(false);
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
@@ -135,15 +137,22 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	
 	public void createMenuBar(){
 		menuBar = new MenuBar();
-		Menu fileItem = new Menu("File");
-		Menu themeItem = new Menu("Theme");
+		fileItem = new Menu("File");
+		themeItem = new Menu("Theme");
+		
+		fileItem.setDisable(true);
+		themeItem.setDisable(true);
+		
 		for(String s : themes) themeItem.getItems().add(createThemeMenuItem(s));
 		
 		MenuItem setXmlFile = new MenuItem("Set Xml File");
 		setXmlFile.setOnAction(e -> setXmlFileLocationAndReset());
 		
 		MenuItem exit = new MenuItem("Exit");
-		exit.setOnAction(e -> Platform.exit());
+		exit.setOnAction(e -> {
+			if(showList.isWriting()) return;
+			Platform.exit();
+		});
 		
 		MenuItem addRemove = new MenuItem("Add and Remove");
 		addRemove.setOnAction(e -> newAddRemoveDialog());
@@ -181,7 +190,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	
 	public boolean testInternetConnection(){
 		try{
-			URLConnection urlC = new URL(testURL).openConnection();
+			URLConnection urlC = new URL(TEST_URL).openConnection();
 			urlC.getContent();
 		}catch(IOException e){
 			logger.info("not connected to Internet");

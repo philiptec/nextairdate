@@ -13,16 +13,13 @@ public class OptionsPane {
 		private Button getResults;
 		private MenuBar menuBar;
 		
-	public OptionsPane(){
-
-	}
-	
 	public void init(){
 		pane = new BorderPane();
 		
 		updateTBA = new CheckBox("Update TBA");
 		updateAll = new CheckBox("Update All");
 		getResults = new Button("Get Air Dates");
+		getResults.setDisable(true);
 		
 		FlowPane options = new FlowPane();
 		options.setHgap(10);
@@ -35,6 +32,10 @@ public class OptionsPane {
 			r.setPadding(new Insets(0, 0, 10, 0));
 			pane.setTop(r);
 		}
+	}
+	
+	public void enableUpdateButton(){
+		getResults.setDisable(false);
 	}
 	
 	public Button getGoButton(){

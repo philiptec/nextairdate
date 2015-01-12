@@ -1,7 +1,6 @@
 package com.camelcasing.video;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.prefs.Preferences;
 
@@ -28,9 +27,7 @@ public class ShowList{
 		retrieveXmlFileFromPreferences();
 		shows = new ArrayList<String>(20);
 		dates = new ArrayList<String>(20);
-		if(showsFile != null){
-			createShowList();
-		}
+		if(showsFile != null) createShowList();
 	}
 	
 	protected void createShowList(){

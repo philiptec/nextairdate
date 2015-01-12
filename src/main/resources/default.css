@@ -2,6 +2,10 @@
 	-fx-font-size: 16;	
 }
 
+.viewport{
+	-fx-background-color: transparent;
+}
+
 .list-view{
 	-fx-background-color: transparent;
 }
@@ -28,6 +32,18 @@
 	-fx-text-fill: black;	
 }
 
+.combo-box .list-cell{
+	-fx-background-color: white;
+}
+
+.combo-box .list-cell:selected{
+	-fx-text-fill: black;
+}
+
+.combo-box .list-cell:hover{
+ 	-fx-background-color: #039ED3;
+}
+
 /* .scroll-bar{ */
 /* 	-fx-background-color: #FFD39B; */
 /* } */
@@ -35,10 +51,6 @@
 /* .scroll-bar .thumb{ */
 /* 	-fx-background-color: linear-gradient(#6B2706, #AB6746); */
 /* } */
-
-.viewport{
-	-fx-background-color: transparent;
-}
 
 /* #rightC{  */
 /*  	-fx-background-color: linear-gradient(#6B2706, #AB6746);  */

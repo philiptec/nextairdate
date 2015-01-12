@@ -24,6 +24,7 @@ public class AirDate extends Application{
 		stage.setScene(scene);
 		stage.setTitle("Today's Date: " + AirDateUtils.englishDate(AirDateUtils.TODAY));
 		stage.show();
+		control.init();
 	}
 	
 	public static void main(String args[]){

@@ -50,8 +50,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		});
 		
 		root = new BorderPane();
-//		root.setMaxHeight(800);
-//		root.setMaxWidth(400);
 		root.setId("pane");
 		
 		progressPane = new Progress();
@@ -76,7 +74,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
 		
-//		testInternetConnectionAndUpdate();
+		testInternetConnectionAndUpdate();
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){

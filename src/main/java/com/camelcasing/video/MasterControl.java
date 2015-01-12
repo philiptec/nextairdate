@@ -77,7 +77,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		root.setCenter(view.getDisplayPane());
 		root.setBottom(progressPane.getProgressPane());
 		
-		testInternetConnectionAndUpdate();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){

@@ -2,7 +2,7 @@ package com.camelcasing.video;
 
 import java.io.*;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.scene.Scene;
@@ -21,8 +21,7 @@ public class UpdateXMLFile implements FileChooserController{
 		private final Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
 		private static UpdateXMLFile updateXMLFile;
 		
-		private boolean save = true;
-		
+		private SimpleBooleanProperty save = new SimpleBooleanProperty(true);	
 		private SimpleStringProperty theme = new SimpleStringProperty();
 		
 	private UpdateXMLFile(){
@@ -40,6 +39,7 @@ public class UpdateXMLFile implements FileChooserController{
 		oneShot = new CheckBox("Save Location");
 		oneShot.setSelected(true);
 		oneShot.setPadding(new Insets(0, 30, 10, 0));
+		save.bind(oneShot.selectedProperty());
 		
 		fileChooser = new Button();
 		ImageView chooserImage = new ImageView(new Image("filesearch.png"));
@@ -48,8 +48,6 @@ public class UpdateXMLFile implements FileChooserController{
 		chooserImage.setSmooth(true);
 		fileChooser.setGraphic(chooserImage);
 		textField = new TextField();
-		
-		oneShot.setOnAction(e -> save = oneShot.isSelected());
 		
 		cancelButton.setOnAction(e -> {
 			stage.close();
@@ -75,10 +73,10 @@ public class UpdateXMLFile implements FileChooserController{
 		
 		updateButton.setOnAction(e -> {
 			if(newXmlLocation != null){
-				fcl.updateXmlFile(save);
+				fcl.updateXmlFile(save.getValue());
 			}else if(textField.getText().length() > 0){
 				newXmlLocation = new File(textField.getText());
-				fcl.updateXmlFile(save);
+				fcl.updateXmlFile(save.getValue());
 			}else{
 				stage.close();
 			}

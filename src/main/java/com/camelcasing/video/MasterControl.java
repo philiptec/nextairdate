@@ -1,8 +1,7 @@
 package com.camelcasing.video;
 
 /*TODO
- * - add load shows oneOff checkBox to XML dialog (remember selection)
- * - drag and drop shows and dates to reorganise
+ * - on load put in chronological order
  * - themes MenuItem
  */
 
@@ -51,8 +50,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		});
 		
 		root = new BorderPane();
-		root.setMaxHeight(600);
-		root.setMaxWidth(400);
+//		root.setMaxHeight(800);
+//		root.setMaxWidth(400);
 		root.setId("pane");
 		
 		progressPane = new Progress();

@@ -1,27 +1,17 @@
 package com.camelcasing.video;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.prefs.Preferences;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.apache.logging.log4j.*;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class ShowList{
@@ -58,7 +48,7 @@ public class ShowList{
 					dates.add(a.getTextContent());
 				}
 		} catch (IOException | ParserConfigurationException e) {
-			logger.error("Problem reading shows.xml file " + e.getMessage());
+			logger.error("Problem reading shows.xml file");
 		} catch (SAXException e) {
 			logger.error("Problem reading shows.xml file");
 		}
@@ -98,20 +88,6 @@ public class ShowList{
 		if(date.equals("FAIL")) return "01/01/1970";
 		return date;
 	}
-
-	public String getDate(String show){
-		int index = shows.indexOf(show);
-		if(index == -1) return null;
-		return dates.get(index);
-	}
-	
-	public boolean updateDate(String show, String newDate){
-		int index = shows.indexOf(show);
-		if(index == -1) return false;
-		
-		dates.set(index, newDate);
-		return true;
-	}
 	
 	public void retrieveXmlFileFromPreferences(){
 		Preferences prefs = Preferences.userRoot().node(PREFS_NAME);
@@ -149,18 +125,16 @@ public class ShowList{
 	}
 	
 	public void addShowAndDate(String showName, String dateValue){
-		if(!shows.contains(showName)){
-			shows.add(showName);
-			dates.add(dateValue);
-		}
+		if(shows.contains(showName)) return;
+		shows.add(showName);
+		dates.add(dateValue);
 	}
 	
 	public void removeShow(String show){
-		if(shows.contains(show)){
-			int i = shows.indexOf(show);
-			shows.remove(i);
-			dates.remove(i);
-		}
+		if(!shows.contains(show)) return;
+		int i = shows.indexOf(show);
+		shows.remove(i);
+		dates.remove(i);
 	}
 	
 	public boolean isWriting(){

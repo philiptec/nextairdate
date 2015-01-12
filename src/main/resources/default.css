@@ -1,9 +1,31 @@
 .text{
-	-fx-font-size: 15;	
+	-fx-font-size: 16;	
 }
 
-#mainScrollPane{
+.list-view{
 	-fx-background-color: transparent;
+}
+
+.list-cell{
+	-fx-background-color: transparent;
+}
+
+.list-cell:odd{
+	-fx-background-color: #EEEEEE;
+}
+
+.list-cell:selected .label{
+	-fx-background-color: transparent;
+	-fx-text-fill: black;
+}
+
+.list-cell:selected:odd .label{
+	-fx-background-color: #EEEEEE;
+	-fx-text-fill: black;
+}
+
+.label{
+	-fx-text-fill: black;	
 }
 
 /* .scroll-bar{ */

@@ -1,45 +1,37 @@
 package com.camelcasing.video;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ListView;
 
 public class DateViewer {
 	
-		private VBox pane;
-		private ScrollPane scrollPane;
+		private ListView<ShowAndDate> pane;
 		
 	public DateViewer(){
-		pane = new VBox();
-		pane.prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(20));
-		pane.setPadding(new Insets(0, 10, 10, 10));
-		pane.setSpacing(10);
-		
-		scrollPane = new ScrollPane(pane);
-		scrollPane.setId("mainScrollPane");
+		pane = new ListView<ShowAndDate>();
+		pane.setPrefHeight(600);
 	}
 	
-	public ScrollPane getDisplayPane(){
-		return scrollPane;
+	public ListView<ShowAndDate> getDisplayPane(){
+		return pane;
 	}
 	
 	public void addShowAndDate(ShowAndDate sad){
-		pane.getChildren().add(sad);
+		pane.getItems().add(sad);
 	}
 	
 	public void removeAll(){
-		pane.getChildren().clear();
+		pane.getItems().clear();
 	}
 	
 	public void removeShow(int index){
-		pane.getChildren().remove(index);
+		pane.getItems().remove(index);
 	}
 	
 	public String getDate(int index){
-		return ((ShowAndDate)pane.getChildren().get(index)).getDate();
+		return ((ShowAndDate)pane.getItems().get(index)).getDate();
 	}
 	
 	public void updateDate(String date, int row){
-		((ShowAndDate)pane.getChildren().get(row)).setDate(date);
+		((ShowAndDate)pane.getItems().get(row)).setDate(date);
 	}
 }

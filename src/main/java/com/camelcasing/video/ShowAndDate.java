@@ -2,6 +2,7 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -11,6 +12,7 @@ public class ShowAndDate extends BorderPane{
 		private Label show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
+		private int listIndex;
 		
 	public ShowAndDate(String show, String date){
 		super();
@@ -18,6 +20,7 @@ public class ShowAndDate extends BorderPane{
 		this.show = createTextNode(show);
 		this.date = createTextNode(date);
 		this.showName = show;
+		this.setPadding(new Insets(2, 0, 2, 0));
 		prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(50));
 		setLeft(this.show);
 		setRight(this.date);
@@ -68,5 +71,13 @@ public class ShowAndDate extends BorderPane{
 	public void setDate(String date){
 		this.date.setText(date);
 		this.show.setText(show.getText() + " (updated)");
+	}
+	
+	public int getIndex(){
+		return listIndex;
+	}
+	
+	public void setListIndex(int li){
+		listIndex = li;
 	}
 }

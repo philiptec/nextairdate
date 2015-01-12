@@ -253,7 +253,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 
 	@Override
-	public void submitPressed(){
+	public void updateXmlFile(boolean save){
 		File newXmlFile = udXML.getNewXmlLocation();
 		if(!newXmlFile.exists()){
 			try {
@@ -263,12 +263,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			}
 		}
 			showList.setXmlFile(newXmlFile);
+			if(save) showList.setXmlFileInPreferences();
 			view.removeAll();
 			showList.createShowList();
 			getShowsAndDates();
 			if(shows.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
-		udXML = null;
+			testInternetConnectionAndUpdate();
 	}
 
 	@Override

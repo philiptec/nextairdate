@@ -17,8 +17,11 @@ public class UpdateXMLFile implements FileChooserController{
 		private Stage stage;
 		private Button updateButton, cancelButton, fileChooser, createNewFile;
 		private TextField textField;
+		private CheckBox oneShot;
 		private final Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
 		private static UpdateXMLFile updateXMLFile;
+		
+		private boolean save = true;
 		
 		private SimpleStringProperty theme = new SimpleStringProperty();
 		
@@ -27,11 +30,16 @@ public class UpdateXMLFile implements FileChooserController{
 		theme.bind(AirDate.theme);
 		
 		stage = new Stage();
+		stage.setResizable(false);
 		topText.setPadding(new Insets(10,10,10,10));
 		
 		updateButton = new Button("Update");
 		cancelButton = new Button("Cancel");
 		createNewFile = new Button("Create New");
+		
+		oneShot = new CheckBox("Save Location");
+		oneShot.setSelected(true);
+		oneShot.setPadding(new Insets(0, 30, 10, 0));
 		
 		fileChooser = new Button();
 		ImageView chooserImage = new ImageView(new Image("filesearch.png"));
@@ -40,6 +48,8 @@ public class UpdateXMLFile implements FileChooserController{
 		chooserImage.setSmooth(true);
 		fileChooser.setGraphic(chooserImage);
 		textField = new TextField();
+		
+		oneShot.setOnAction(e -> save = oneShot.isSelected());
 		
 		cancelButton.setOnAction(e -> {
 			stage.close();
@@ -65,10 +75,10 @@ public class UpdateXMLFile implements FileChooserController{
 		
 		updateButton.setOnAction(e -> {
 			if(newXmlLocation != null){
-				fcl.submitPressed();
+				fcl.updateXmlFile(save);
 			}else if(textField.getText().length() > 0){
 				newXmlLocation = new File(textField.getText());
-				fcl.submitPressed();
+				fcl.updateXmlFile(save);
 			}else{
 				stage.close();
 			}
@@ -85,9 +95,11 @@ public class UpdateXMLFile implements FileChooserController{
 		chooserLayout.getChildren().addAll(textField, fileChooser);
 		
 		HBox buttonLayout = new HBox();
-		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
+		//buttonLayout.setAlignment(Pos.BOTTOM_LEFT);
 		buttonLayout.setPadding(new Insets(10,10,10,10));
 		buttonLayout.setSpacing(20);
+		buttonLayout.getChildren().add(oneShot);
+		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
 		buttonLayout.getChildren().addAll(createNewFile, updateButton, cancelButton);
 		pane.setCenter(chooserLayout);
 		pane.setBottom(buttonLayout);

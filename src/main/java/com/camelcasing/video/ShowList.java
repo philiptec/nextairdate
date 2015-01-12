@@ -47,6 +47,7 @@ public class ShowList{
 		try {
 			shows = new ArrayList<String>(20);
 			dates = new ArrayList<String>(20);
+			logger.debug("ShowFile = " + showsFile.getAbsolutePath());
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
 			NodeList results = doc.getElementsByTagName("show");
@@ -128,12 +129,12 @@ public class ShowList{
 		}
 	}
 	
-	public void setXmlFileInPreferences(File xmlFile){
-		if(!xmlFile.exists()){
+	public void setXmlFileInPreferences(){
+		if(!showsFile.exists()){
 			logger.error("Trying to set xmlFile to preferences but file does not exists");
 			return;
 		}
-		String filePath = xmlFile.getAbsolutePath();
+		String filePath = showsFile.getAbsolutePath();
 		Preferences prefs = Preferences.userRoot().node(PREFS_NAME);
 		logger.debug("setting \"" + filePath + "\" to preferences");
 		prefs.put("xmlFile", filePath);
@@ -141,7 +142,6 @@ public class ShowList{
 	
 	public void setXmlFile(File newFile){
 		showsFile = newFile;
-		setXmlFileInPreferences(newFile);
 	}
 	
 	public void addShow(String showName){

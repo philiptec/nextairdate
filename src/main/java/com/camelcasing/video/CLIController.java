@@ -8,7 +8,7 @@ public class CLIController{
 		
 	public CLIController(String[] args){
 		
-		LocalDate compareToDate = AirDateUtils.TODAY;
+		LocalDate compareToDate = LocalDate.now();
 		int i = 0;
 		if(args[0].equals("-y")){
 			i = 1;

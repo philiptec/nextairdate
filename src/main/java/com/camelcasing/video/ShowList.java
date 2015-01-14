@@ -17,8 +17,7 @@ public class ShowList{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 
-//		private List<String> shows, dates;
-		private ShowDateList showDateList;
+		private List<String> shows, dates;
 		private File showsFile;
 		private boolean writing;
 		
@@ -26,18 +25,15 @@ public class ShowList{
 		
 	public ShowList(){
 		retrieveXmlFileFromPreferences();
-		
-		showDateList = new ShowDateList();
-		
-//		shows = new ArrayList<String>(20);
-//		dates = new ArrayList<String>(20);
+		shows = new ArrayList<String>(20);
+		dates = new ArrayList<String>(20);
 		if(showsFile != null) createShowList();
 	}
 	
 	protected void createShowList(){
 		try {
-//			shows = new ArrayList<String>(20);
-//			dates = new ArrayList<String>(20);
+			shows = new ArrayList<String>(20);
+			dates = new ArrayList<String>(20);
 			logger.debug("ShowFile = " + showsFile.getAbsolutePath());
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
@@ -45,9 +41,8 @@ public class ShowList{
 				for(int i = 0; i < results.getLength(); i++){
 					Node n = results.item(i);
 					Node a = n.getAttributes().item(0);
-//					shows.add(n.getTextContent());
-//					dates.add(a.getTextContent());
-					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()));
+					shows.add(n.getTextContent());
+					dates.add(a.getTextContent());
 				}
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");
@@ -63,16 +58,10 @@ public class ShowList{
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.newDocument();
 			Element root = doc.createElement("shows");
-//			for(int i = 0; i < shows.size(); i++){
-//				Element e = doc.createElement("show");
-//				e.setTextContent(shows.get(i));
-//				e.setAttribute("date", checkForFailCodes(dates.get(i)));
-//				root.appendChild(e);
-//			}
-			for(ShowDateListNode node : showDateList){
+			for(int i = 0; i < shows.size(); i++){
 				Element e = doc.createElement("show");
-				e.setTextContent(node.getShow());
-				e.setAttribute("date", checkForFailCodes(AirDateUtils.englishDate(node.getDate())));
+				e.setTextContent(shows.get(i));
+				e.setAttribute("date", checkForFailCodes(dates.get(i)));
 				root.appendChild(e);
 			}
 			doc.appendChild(root);
@@ -91,7 +80,7 @@ public class ShowList{
 		logger.debug("writing xml completed");
 		return true;
 	}
-
+	
 	private String checkForFailCodes(String date){
 		if(date.equals("FAIL")) return "01/01/1970";
 		return date;
@@ -133,41 +122,35 @@ public class ShowList{
 	}
 	
 	public void addShowAndDate(String showName, String dateValue){
-//		if(shows.contains(showName)) return;
-//		shows.add(showName);
-//		dates.add(dateValue);
-		showDateList.add(showName, AirDateUtils.getDateFromString(dateValue));
+		if(shows.contains(showName)) return;
+		shows.add(showName);
+		dates.add(dateValue);
 	}
 	
 	public void removeShow(String show){
-//		if(!shows.contains(show)) return;
-//		int i = shows.indexOf(show);
-//		shows.remove(i);
-//		dates.remove(i);
-		showDateList.remove(show);
+		if(!shows.contains(show)) return;
+		int i = shows.indexOf(show);
+		shows.remove(i);
+		dates.remove(i);
 	}
 	
 	public boolean isWriting(){
 		return writing;
 	}
 	
-	public ShowDateList getShowDateList(){
-		return showDateList;
+	public List<String> getShowList(){
+		return shows;
 	}
 	
-//	public List<String> getShowList(){
-//		return shows;
-//	}
-//	
-//	public List<String> getDateList(){
-//		return dates;
-//	}
-//	
-//	public void setDateList(List<String> dates){
-//		this.dates = dates;
-//	}
-//	
-//	public void setShowList(List<String> shows){
-//		this.shows = shows;
-//	}
+	public List<String> getDateList(){
+		return dates;
+	}
+	
+	public void setDateList(List<String> dates){
+		this.dates = dates;
+	}
+	
+	public void setShowList(List<String> shows){
+		this.shows = shows;
+	}
 }

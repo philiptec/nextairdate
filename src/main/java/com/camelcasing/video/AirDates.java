@@ -12,15 +12,15 @@ public class AirDates implements ChangeController{
 	
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 		private  boolean threadIsUpdating = false;
-		private LocalDate compareToDate = AirDateUtils.TODAY;
+		private LocalDate compareToDate = LocalDate.now();
 		private boolean updated;
 	
-	public void generateShowData(boolean updateTBA, boolean updateAll, ShowDateList showDateList){
+	public void generateShowData(boolean updateTBA, boolean updateAll, List<String> shows, List<String> dates){
 		Thread t = new Thread(() -> {
 			threadIsUpdating = true;
-				for(ShowDateListNode showAndDate : showDateList){
-					String show = showAndDate.getShow();
-					String d  = AirDateUtils.englishDate(showAndDate.getDate());
+				for(int i = 0; i < shows.size(); i++){
+					String show = shows.get(i);
+					String d  = dates.get(i);
 					
 					if((d.equals("TBA")) && (!updateTBA && !updateAll)){
 						logger.debug(show + " equal to null and not updateTBA");

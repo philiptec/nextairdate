@@ -80,9 +80,4 @@ public class ShowAndDate extends BorderPane{
 	public void setListIndex(int li){
 		listIndex = li;
 	}
-	
-	@Override
-	public String toString(){
-		return listIndex + " = " + show.getText() + " " + date.getText();
-	}
 }

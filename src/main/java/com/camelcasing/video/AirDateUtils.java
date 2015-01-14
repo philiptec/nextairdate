@@ -7,6 +7,8 @@ public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		public final static LocalDate TODAY = LocalDate.now();
+		public final static LocalDate ERROR_DATE = LocalDate.of(1970, 1, 1);
+		public final static LocalDate TBA_DATE = LocalDate.of(1970, 1, 2);
 
 	public static LocalDate getDateFromString(String date){
 		if(date.equals("TBA")){

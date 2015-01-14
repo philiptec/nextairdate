@@ -18,8 +18,9 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
-		private List<String> shows;
-		private List<String> dates;
+//		private List<String> shows;
+//		private List<String> dates;
+		private ShowDateList showDateList;
 		private DateViewer view;
 		private ShowList showList;
 		private AirDates airDates;
@@ -64,13 +65,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	
 	public void init(){
 		showList = new ShowList();
-		getShowsAndDates();
+//		getShowsAndDates();
 		airDates = new AirDates();
 		airDates.addChangeListener(this);
 
 		addShowsAndDatesToView();
 		activateButtons();
-//		testInternetConnectionAndUpdate();
+		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -84,7 +85,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			if(!isConnectedToInternet){
 				if(!testInternetConnection()) return isConnectedToInternet;
 			}
-			airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), shows, dates);
+			airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
 			progressPane.addProgressBar();
 		}else{
 			logger.debug("threadIsUpdating");
@@ -93,13 +94,16 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void getShowsAndDates(){
-		shows = showList.getShowList();
-		logger.debug("shows.size() = " + shows.size());
-		dates = showList.getDateList();
+//		shows = showList.getShowList();
+		showDateList = showList.getShowDateList();
+		logger.debug("shows.size() = " + showDateList.size());
+//		dates = showList.getDateList();
 	}
 	
 	public void addShowsAndDatesToView(){
-		for(int i = 0; i < dates.size(); i++){
+//		for(int i = 0; i < dates.size(); i++){
+		int count = 0;
+		for(ShowDateListNode showAndDate : )
 			ShowAndDate sad;
 			String show = shows.get(i);
 			if(dates.get(i) != null){
@@ -170,7 +174,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void newAddRemoveDialog(){
 		AddRemoveDialog ard = AddRemoveDialog.getInstance();
 		ard.setAddRemoveListener(this);
-		ard.show(shows);
+		ard.show(showDateList);
 	}
 	
 	public void setXmlFileLocationAndReset(){
@@ -183,7 +187,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public boolean testInternetConnectionAndUpdate(){
 		testInternetConnection();
 		if(isConnectedToInternet){
-			airDates.generateShowData(false, false, shows, dates);
+			airDates.generateShowData(false, false, showDateList);
 		}
 		return isConnectedToInternet;
 	}
@@ -215,14 +219,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		}
 		Platform.runLater(() ->{
 			String da = date;
-			int index = shows.indexOf(show);
+			int index = showDateList.indexOf(show);
 			String currentDate = view.getDate(index);
 			
 			if(!currentDate.equals(da)){
 				view.updateDate(date, index);
 				if(date.equals("TODAY!")){
-					LocalDate d = LocalDate.now();
-					da = AirDateUtils.englishDate(d);
+					da = AirDateUtils.englishDate(AirDateUtils.TODAY);
 				};
 				if(!date.equals("FAIL")){
 					dates.set(index, da);
@@ -249,8 +252,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
-			showList.setDateList(dates);
-			showList.setShowList(shows);
+//			showList.setDateList(dates);
+//			showList.setShowList(shows);
 			showList.writeNewAirDates();
 			removeProgressBar();
 		}
@@ -272,7 +275,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			if(save) showList.setXmlFileInPreferences();
 			view.removeAll();
 			showList.createShowList();
-			getShowsAndDates();
+//			getShowsAndDates();
 			if(shows.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
 			testInternetConnectionAndUpdate();

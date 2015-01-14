@@ -25,7 +25,7 @@ public class AirDateParser{
 		private LocalDate nextAirDate;
 		
 	public AirDateParser(){
-		this(LocalDate.now());
+		this(AirDateUtils.TODAY);
 	}
 	
 	public AirDateParser(LocalDate date){

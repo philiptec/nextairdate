@@ -5,14 +5,21 @@ import java.time.LocalDate;
 public class ShowDateListNode{
 	
 		private ShowDateListNode next, previous;
-		private String show;
-		private LocalDate date;
+		private final String show;
+		private final LocalDate date;
 	
-	public ShowDateListNode(String show, LocalDate date, ShowDateListNode previous, ShowDateListNode next){
-		this.show = show;
-		this.date = date;
-		this.next = next;
-		this.previous = previous;
+	public ShowDateListNode(String showName, LocalDate airDate, ShowDateListNode pre, ShowDateListNode nxt){
+		show = showName;
+		date = airDate;
+		next = nxt;
+		previous = pre;
+	}
+	
+	public ShowDateListNode(String shouldBeNull, LocalDate shouldAlsoBeNull){
+		show = shouldBeNull;
+		date = shouldAlsoBeNull;
+		next = this;
+		previous = this;
 	}
 	
 	public ShowDateListNode addBefore(ShowDateListNode sd){
@@ -26,7 +33,8 @@ public class ShowDateListNode{
 	public ShowDateListNode addAfter(ShowDateListNode sd){
 		sd.setNext(next);
 		sd.setPrevious(this);
-		setNext(sd);
+		next.setPrevious(sd);
+		next = sd;
 		return sd;
 	}
 	
@@ -56,10 +64,6 @@ public class ShowDateListNode{
 	
 	public String getDateAsString(){
 		return AirDateUtils.englishDate(date);
-	}
-	
-	public void setDate(LocalDate date){
-		this.date = date;
 	}
 	
 	@Override

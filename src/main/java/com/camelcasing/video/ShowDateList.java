@@ -9,43 +9,32 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 	
-		private ShowDateListNode sentinal, last;
+		private ShowDateListNode sentinal;
 		private int size;
 
 	public ShowDateList(){
-		sentinal = new ShowDateListNode(null, null, null, null);
+		sentinal = new ShowDateListNode(null, null);
 	}
 	
-	public int add(String show, LocalDate date){
+	public void add(String show, LocalDate date){
 		size++;
-		int count = 0;
-		ShowDateListNode current = sentinal.getNext();
-		while(current != null){
-			if(date.equals(AirDateUtils.TBA_DATE)){
-				break;
-			}
-			if(date.isBefore(current.getDate())){
+		ShowDateListNode current = sentinal.getPrevious();
+		while(current.getShow() != null){
+			if(date.isAfter(current.getDate())){
+				logger.debug("adding: " + show);
 				ShowDateListNode newNode = new ShowDateListNode(show, date, null, null);
-				current.addBefore(newNode);
-				return count;
+				current.addAfter(newNode);
+				return;
 			}else{
-				count++;
-				current = current.getNext();
+				current = current.getPrevious();
 			}
 		}
-		if(last == null){
-			last = sentinal.addAfter(new ShowDateListNode(show, date, last, null));
-		}else{
-			ShowDateListNode newLast = new ShowDateListNode(show, date, last, null);
-			last.setNext(newLast);
-			last = newLast;
-		}
-		return(count);
+		logger.debug("adding first: " + show);
+		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
 	}
 	
 	public void clear(){
 		sentinal = new ShowDateListNode(null, null, null, null);
-		last = null;
 		size = 0;
 	}
 	
@@ -117,7 +106,7 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 
 		@Override
 		public boolean hasNext() {
-			return current.getNext() != null;
+			return current.getNext().getShow() != null;
 		}
 
 		@Override

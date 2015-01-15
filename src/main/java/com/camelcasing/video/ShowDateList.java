@@ -3,11 +3,11 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 import java.util.Iterator;
 
-//import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.*;
 
 public class ShowDateList implements Iterable<ShowDateListNode>{
 	
-		//private Logger logger = LogManager.getLogger(getClass());
+		private Logger logger = LogManager.getLogger(getClass());
 	
 		private ShowDateListNode sentinal, last;
 		private int size;
@@ -50,6 +50,7 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 	}
 	
 	public int remove(String show){
+		logger.debug("removing: " + show);
 		int count = 0;
 		if(sentinal.getNext() == null) return -1;
 		ShowDateListNode current = sentinal.getNext();

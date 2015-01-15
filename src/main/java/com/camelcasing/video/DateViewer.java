@@ -1,10 +1,12 @@
 package com.camelcasing.video;
 
 import javafx.scene.control.ListView;
+import org.apache.logging.log4j.*;
 
 public class DateViewer {
 	
 		private ListView<ShowAndDate> pane;
+		private Logger logger = LogManager.getLogger(getClass());
 		
 	public DateViewer(){
 		pane = new ListView<ShowAndDate>();
@@ -16,6 +18,7 @@ public class DateViewer {
 	}
 	
 	public void reorganise(ShowDateList showDateList){
+		logger.debug("DateViewer reorganising");
 		ShowDateListNode node = showDateList.getFirst();
 		for(int i = 0; i < showDateList.size(); i++){
 			ShowAndDate current = ((ShowAndDate)pane.getItems().get(i));
@@ -44,7 +47,10 @@ public class DateViewer {
 		return ((ShowAndDate)pane.getItems().get(index)).getDate();
 	}
 	
-	public void updateDate(String date, int row){
-		((ShowAndDate)pane.getItems().get(row)).setDate(date);
+	public void updateDate(String date, int row, int newIndex){
+		ShowAndDate sad = ((ShowAndDate)pane.getItems().get(row));
+		pane.getItems().remove(row);
+		sad.setDate(date);
+		pane.getItems().add(newIndex, sad);
 	}
 }

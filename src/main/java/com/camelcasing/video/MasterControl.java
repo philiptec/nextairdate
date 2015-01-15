@@ -217,18 +217,22 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		}
 		Platform.runLater(() ->{
 			String da = date;
-			int index = showDateList.indexOf(show);
-			String currentDate = view.getDate(index);
+			int oldIndex = showDateList.indexOf(show);
+			String currentDate = view.getDate(oldIndex);
 			
 			if(!currentDate.equals(da)){
-				view.updateDate(date, index);
 				if(date.equals("TODAY!")){
 					da = AirDateUtils.englishDate(AirDateUtils.TODAY);
 				};
 				if(!date.equals("FAIL")){
-					showDateList.get(show).setDate(AirDateUtils.getDateFromString(da));
+					showDateList.remove(show);
+					showDateList.add(show, AirDateUtils.getDateFromString(da));
 				}
-				if(save) saveDates();
+				int newIndex = showDateList.indexOf(show);
+				view.updateDate(date, oldIndex, newIndex);
+				if(save){
+					saveDates();
+				}
 				logger.debug("finished updating Date");
 			}else{
 				logger.debug("not updating (updateDate()) as shows are the same");
@@ -250,6 +254,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
+			Platform.runLater(() -> view.reorganise(showDateList));
 			showList.setShowDateList(showDateList);
 			showList.writeNewAirDates();
 			removeProgressBar();
@@ -298,7 +303,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 					view.addShowAndDate(createShowAndDate(s, "01/01/2170"), showDateList.size() - 1);
 				}
 			}
-			view.reorganise(showDateList);
 		}
 		if(add.size() != 0 || remove.size() != 0){
 			overrideSave = true;

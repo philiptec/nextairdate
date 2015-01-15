@@ -18,8 +18,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
-//		private List<String> shows;
-//		private List<String> dates;
 		private ShowDateList showDateList;
 		private DateViewer view;
 		private ShowList showList;
@@ -65,13 +63,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	
 	public void init(){
 		showList = new ShowList();
-//		getShowsAndDates();
+		getShowsAndDates();
 		airDates = new AirDates();
 		airDates.addChangeListener(this);
 
 		addShowsAndDatesToView();
 		activateButtons();
-		testInternetConnectionAndUpdate();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -94,20 +92,17 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void getShowsAndDates(){
-//		shows = showList.getShowList();
 		showDateList = showList.getShowDateList();
 		logger.debug("shows.size() = " + showDateList.size());
-//		dates = showList.getDateList();
 	}
 	
 	public void addShowsAndDatesToView(){
-//		for(int i = 0; i < dates.size(); i++){
-		int count = 0;
-		for(ShowDateListNode showAndDate : )
+		for(ShowDateListNode showAndDate : showDateList){
 			ShowAndDate sad;
-			String show = shows.get(i);
-			if(dates.get(i) != null){
-				sad = createShowAndDate(show, dates.get(i));
+			String show = showAndDate.getShow();
+			String date = showAndDate.getDateAsString();
+			if(!date.equals("01/01/2170")){
+				sad = createShowAndDate(show, date);
 			}else{
 				sad = createShowAndDate(show, "TBA");
 			}
@@ -129,7 +124,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			}else{
 				newDate = AirDateUtils.englishDate(ap.getNextAirDate());
 			}
-			if(newDate != sad.getDate() && !newDate.equals("01/01/1970")){
+			if(newDate != sad.getDate() && !newDate.equals("01/01/2170")){
 				logger.debug("rightClick updating date");
 				overrideSave = true;
 				updateDate(sad.getShowName(), newDate, true);
@@ -228,7 +223,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 					da = AirDateUtils.englishDate(AirDateUtils.TODAY);
 				};
 				if(!date.equals("FAIL")){
-					dates.set(index, da);
+					showDateList.get(show).setDate(AirDateUtils.getDateFromString(da));
 				}
 				if(save) saveDates();
 				logger.debug("finished updating Date");
@@ -275,8 +270,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			if(save) showList.setXmlFileInPreferences();
 			view.removeAll();
 			showList.createShowList();
-//			getShowsAndDates();
-			if(shows.size() > 0) airDates.setThreadUpdatingStatus(false);
+			getShowsAndDates();
+			if(showDateList.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
 			testInternetConnectionAndUpdate();
 	}
@@ -285,16 +280,15 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void executeAddRemoveQuery(List<String> add, List<String> remove){
 		if(remove.size() > 0){
 			for(String s : remove){
-				int index = shows.indexOf(s);
+				int index = showDateList.indexOf(s);
 				view.removeShow(index);
 				showList.removeShow(s);
 			}
 		}
 		if(add.size() > 0){
 			for(String s : add){
-				shows.add(s);
-				view.addShowAndDate(createShowAndDate(s, "01/01/1970"));
-				dates.add("01/01/1970");
+				showDateList.add(s, LocalDate.of(1970, 01, 01));
+				view.addShowAndDate(createShowAndDate(s, "01/01/2170"));
 			}
 		}
 		if(add.size() == 0 || remove.size() > 0){

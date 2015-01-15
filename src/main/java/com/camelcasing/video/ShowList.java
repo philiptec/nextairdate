@@ -1,7 +1,6 @@
 package com.camelcasing.video;
 
 import java.io.*;
-import java.util.*;
 import java.util.prefs.Preferences;
 
 import javax.xml.parsers.*;
@@ -17,7 +16,6 @@ public class ShowList{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 
-//		private List<String> shows, dates;
 		private ShowDateList showDateList;
 		private File showsFile;
 		private boolean writing;
@@ -28,16 +26,11 @@ public class ShowList{
 		retrieveXmlFileFromPreferences();
 		
 		showDateList = new ShowDateList();
-		
-//		shows = new ArrayList<String>(20);
-//		dates = new ArrayList<String>(20);
 		if(showsFile != null) createShowList();
 	}
 	
 	protected void createShowList(){
 		try {
-//			shows = new ArrayList<String>(20);
-//			dates = new ArrayList<String>(20);
 			logger.debug("ShowFile = " + showsFile.getAbsolutePath());
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
@@ -45,10 +38,9 @@ public class ShowList{
 				for(int i = 0; i < results.getLength(); i++){
 					Node n = results.item(i);
 					Node a = n.getAttributes().item(0);
-//					shows.add(n.getTextContent());
-//					dates.add(a.getTextContent());
 					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()));
 				}
+			logger.debug(showDateList.size() + " shows after reading xmlFile" );
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");
 		} catch (SAXException e) {
@@ -63,12 +55,6 @@ public class ShowList{
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.newDocument();
 			Element root = doc.createElement("shows");
-//			for(int i = 0; i < shows.size(); i++){
-//				Element e = doc.createElement("show");
-//				e.setTextContent(shows.get(i));
-//				e.setAttribute("date", checkForFailCodes(dates.get(i)));
-//				root.appendChild(e);
-//			}
 			for(ShowDateListNode node : showDateList){
 				Element e = doc.createElement("show");
 				e.setTextContent(node.getShow());
@@ -93,7 +79,7 @@ public class ShowList{
 	}
 
 	private String checkForFailCodes(String date){
-		if(date.equals("FAIL")) return "01/01/1970";
+		if(date.equals("FAIL")) return "01/01/2170";
 		return date;
 	}
 	
@@ -133,17 +119,10 @@ public class ShowList{
 	}
 	
 	public void addShowAndDate(String showName, String dateValue){
-//		if(shows.contains(showName)) return;
-//		shows.add(showName);
-//		dates.add(dateValue);
 		showDateList.add(showName, AirDateUtils.getDateFromString(dateValue));
 	}
 	
 	public void removeShow(String show){
-//		if(!shows.contains(show)) return;
-//		int i = shows.indexOf(show);
-//		shows.remove(i);
-//		dates.remove(i);
 		showDateList.remove(show);
 	}
 	
@@ -154,20 +133,4 @@ public class ShowList{
 	public ShowDateList getShowDateList(){
 		return showDateList;
 	}
-	
-//	public List<String> getShowList(){
-//		return shows;
-//	}
-//	
-//	public List<String> getDateList(){
-//		return dates;
-//	}
-//	
-//	public void setDateList(List<String> dates){
-//		this.dates = dates;
-//	}
-//	
-//	public void setShowList(List<String> shows){
-//		this.shows = shows;
-//	}
 }

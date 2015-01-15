@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class ShowDateListNode{
 	
-	private ShowDateListNode next, previous;
-	private String show;
-	private LocalDate date;
+		private ShowDateListNode next, previous;
+		private String show;
+		private LocalDate date;
 	
 	public ShowDateListNode(String show, LocalDate date, ShowDateListNode previous, ShowDateListNode next){
 		this.show = show;
@@ -15,16 +15,19 @@ public class ShowDateListNode{
 		this.previous = previous;
 	}
 	
-	public void addBefore(ShowDateListNode sd){
+	public ShowDateListNode addBefore(ShowDateListNode sd){
 		sd.setNext(this);
-		sd.setPrevious(getPrevious());
-		setPrevious(sd);
+		sd.setPrevious(previous);
+		previous.setNext(sd);
+		previous = sd;
+		return sd;
 	}
 	
-	public void addAfter(ShowDateListNode sd){
-		sd.setNext(getNext());
+	public ShowDateListNode addAfter(ShowDateListNode sd){
+		sd.setNext(next);
 		sd.setPrevious(this);
 		setNext(sd);
+		return sd;
 	}
 	
 	public ShowDateListNode getNext(){
@@ -57,5 +60,10 @@ public class ShowDateListNode{
 	
 	public void setDate(LocalDate date){
 		this.date = date;
+	}
+	
+	@Override
+	public String toString(){
+		return show + " " + date;
 	}
 }

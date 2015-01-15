@@ -17,17 +17,21 @@ public class DateViewer {
 		return pane;
 	}
 	
+	//causing problems
 	public void reorganise(ShowDateList showDateList){
 		logger.debug("DateViewer reorganising");
-		ShowDateListNode node = showDateList.getFirst();
-		for(int i = 0; i < showDateList.size(); i++){
-			ShowAndDate current = ((ShowAndDate)pane.getItems().get(i));
+//		ShowDateListNode node = showDateList.getFirst();
+		int index = 0;
+//		for(int i = 0; i < showDateList.size(); i++){
+		for(ShowDateListNode node : showDateList){
+			ShowAndDate current = ((ShowAndDate)pane.getItems().get(index));
 			String showName = node.getShow();
 			if(!node.getShow().equals(current.getShowName())){
-				removeShow(i);
+				removeShow(index);
 				addShowAndDate(current, showDateList.indexOf(showName));
 			}
-			node = node.getNext();
+			index++;
+//			node = node.getNext();
 		}
 	}
 	

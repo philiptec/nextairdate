@@ -68,7 +68,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-//		testInternetConnectionAndUpdate();
+		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -203,29 +203,32 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 				+ "Check Connection and try again");
 			return;
 		}
-		Platform.runLater(() ->{
-			String da = date;
-			int oldIndex = showDateList.indexOf(show);
-			String currentDate = view.getDate(oldIndex);
+//		Platform.runLater(() ->{
+		String da = date;
+		int oldIndex = showDateList.indexOf(show);
+		String currentDate = view.getDate(oldIndex);
 			
-			if(!currentDate.equals(da)){
-				if(date.equals("TODAY!")){
-					da = AirDateUtils.englishDate(AirDateUtils.TODAY);
-				};
-				if(!date.equals("FAIL")){
-					showDateList.remove(show);
-					showDateList.add(show, AirDateUtils.getDateFromString(da));
-				}
+		if(!currentDate.equals(da)){
+			if(date.equals("TODAY!")){
+				da = AirDateUtils.englishDate(AirDateUtils.TODAY);
+			};
+			if(!date.equals("FAIL")){
+				showDateList.remove(show);
+				showDateList.add(show, AirDateUtils.getDateFromString(da));
 				int newIndex = showDateList.indexOf(show);
-				view.updateDate(date, oldIndex, newIndex);
-				if(save){
-					saveDates();
-				}
+				Platform.runLater(() -> {
+					logger.debug("oldIndex = " + oldIndex + " newIndex = " + newIndex);
+					view.updateDate(date, oldIndex, newIndex);
+				});
+			}
+			if(save){
+				saveDates();
+			}
 				logger.debug("finished updating Date");
 			}else{
 				logger.debug("not updating (updateDate()) as shows are the same");
 			}
-		});
+//		});
 	}
 
 	private void removeProgressBar(){

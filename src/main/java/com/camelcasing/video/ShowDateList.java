@@ -21,7 +21,6 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 		ShowDateListNode current = sentinal.getPrevious();
 		while(current.getShow() != null){
 			if(date.equals(current.getDate()) || date.isAfter(current.getDate())){
-				logger.debug("adding: " + show);
 				ShowDateListNode newNode = new ShowDateListNode(show, date, null, null);
 				current.addAfter(newNode);
 				return;
@@ -29,11 +28,11 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 				current = current.getPrevious();
 			}
 		}
-		logger.debug("adding first: " + show);
 		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
 	}
 	
 	public void clear(){
+		logger.debug("ShowDateList reset");
 		sentinal = new ShowDateListNode(null, null);
 		size = 0;
 	}
@@ -41,12 +40,11 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 	public int remove(String show){
 		logger.debug("removing: " + show);
 		int count = 0;
-		if(sentinal.getNext() == null) return -1;
 		ShowDateListNode current = sentinal.getNext();
 		do{
 			if(current.getShow().equals(show)){
 				current.getPrevious().setNext(current.getNext());
-				current = null;
+				current.getNext().setPrevious(current.getPrevious());
 				size--;
 				return count;
 			}else{
@@ -68,6 +66,7 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 				current = current.getNext();
 			}
 		}
+		logger.debug(show + " not found");
 		return -1;
 	}
 	

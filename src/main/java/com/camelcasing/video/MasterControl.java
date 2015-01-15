@@ -203,7 +203,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 				+ "Check Connection and try again");
 			return;
 		}
-//		Platform.runLater(() ->{
 		String da = date;
 		int oldIndex = showDateList.indexOf(show);
 		String currentDate = view.getDate(oldIndex);
@@ -228,7 +227,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			}else{
 				logger.debug("not updating (updateDate()) as shows are the same");
 			}
-//		});
 	}
 
 	private void removeProgressBar(){

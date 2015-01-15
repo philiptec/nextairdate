@@ -5,7 +5,6 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -30,13 +29,9 @@ public class AddRemoveDialog implements AddRemoveController{
 		private Label addLabel, removeLabel;
 		private List<String> addShows, deleteShows;
 		
-		private SimpleStringProperty theme = new SimpleStringProperty();
-		
 		private boolean active;
 
 	private AddRemoveDialog(){
-		
-		theme.bind(AirDate.theme);
 		
 		stage = new Stage();
 		stage.setResizable(false);
@@ -102,7 +97,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		backPane.add(proposedUpdatesScrollPane, 8, 1, 10, 9);
 		
 		Scene scene = new Scene(backPane);
-		scene.getStylesheets().add(theme.getValue());
+		scene.getStylesheets().add("default.css");
 		stage.setScene(scene);
 	}
 	

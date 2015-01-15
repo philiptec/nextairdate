@@ -17,12 +17,9 @@ public class DateViewer {
 		return pane;
 	}
 	
-	//causing problems
 	public void reorganise(ShowDateList showDateList){
 		logger.debug("DateViewer reorganising");
-//		ShowDateListNode node = showDateList.getFirst();
 		int index = 0;
-//		for(int i = 0; i < showDateList.size(); i++){
 		for(ShowDateListNode node : showDateList){
 			ShowAndDate current = ((ShowAndDate)pane.getItems().get(index));
 			String showName = node.getShow();
@@ -31,7 +28,6 @@ public class DateViewer {
 				addShowAndDate(current, showDateList.indexOf(showName));
 			}
 			index++;
-//			node = node.getNext();
 		}
 	}
 	

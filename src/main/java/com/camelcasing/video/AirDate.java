@@ -34,10 +34,4 @@ public class AirDate extends Application{
 			Application.launch(args);
 		}
 	}
-	
-	public static void changeTheme(String themeName){
-		scene.getStylesheets().clear();
-		scene.getStylesheets().add(themeName);
-		theme.set(themeName);
-	}
 }

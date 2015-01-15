@@ -25,10 +25,9 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private OptionsPane options;
 		private Progress progressPane;
 		private MenuBar menuBar;
-		private Menu fileItem, themeItem;
+		private Menu fileItem;
 		private UpdateXMLFile udXML;
 		private boolean overrideSave = false;
-		private String[] themes = {"default"};
 		protected static boolean isConnectedToInternet;
 		
 		private final static String TEST_URL = "http://www.epguides.com";
@@ -69,13 +68,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-		testInternetConnectionAndUpdate();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
 		options.enableUpdateButton();
 		fileItem.setDisable(false);
-		themeItem.setDisable(false);
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
@@ -139,12 +137,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void createMenuBar(){
 		menuBar = new MenuBar();
 		fileItem = new Menu("File");
-		themeItem = new Menu("Theme");
 		
 		fileItem.setDisable(true);
-		themeItem.setDisable(true);
-		
-		for(String s : themes) themeItem.getItems().add(createThemeMenuItem(s));
 		
 		MenuItem setXmlFile = new MenuItem("Set Xml File");
 		setXmlFile.setOnAction(e -> setXmlFileLocationAndReset());
@@ -159,13 +153,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		addRemove.setOnAction(e -> newAddRemoveDialog());
 		
 		fileItem.getItems().addAll(setXmlFile, addRemove, exit);
-		menuBar.getMenus().addAll(fileItem, themeItem);
-	}
-	
-	private MenuItem createThemeMenuItem(String name){
-		MenuItem mi = new MenuItem(name);
-		mi.setOnAction(e -> AirDate.changeTheme(name + ".css"));
-		return mi;
+		menuBar.getMenus().addAll(fileItem);
 	}
 	
 	public void newAddRemoveDialog(){

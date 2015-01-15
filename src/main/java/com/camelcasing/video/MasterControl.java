@@ -69,7 +69,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-//		testInternetConnectionAndUpdate();
+		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -97,16 +97,18 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void addShowsAndDatesToView(){
-		for(ShowDateListNode showAndDate : showDateList){
+		ShowDateListNode node = showDateList.getFirst();
+		for(int i = 0; i < showDateList.size(); i++){
 			ShowAndDate sad;
-			String show = showAndDate.getShow();
-			String date = showAndDate.getDateAsString();
+			String show = node.getShow();
+			String date = node.getDateAsString();
 			if(!date.equals("01/01/2170")){
 				sad = createShowAndDate(show, date);
 			}else{
 				sad = createShowAndDate(show, "TBA");
 			}
-			view.addShowAndDate(sad);
+			view.addShowAndDate(sad, i);
+			node = node.getNext();
 		}
 	}
 	
@@ -188,6 +190,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public boolean testInternetConnection(){
+		if(isConnectedToInternet) return true;
 		try{
 			URLConnection urlC = new URL(TEST_URL).openConnection();
 			urlC.getContent();
@@ -247,8 +250,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
-//			showList.setDateList(dates);
-//			showList.setShowList(shows);
+			showList.setShowDateList(showDateList);
 			showList.writeNewAirDates();
 			removeProgressBar();
 		}
@@ -287,18 +289,20 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		}
 		if(add.size() > 0){
 			for(String s : add){
-				showDateList.add(s, LocalDate.of(1970, 01, 01));
-				view.addShowAndDate(createShowAndDate(s, "01/01/2170"));
+				if(testInternetConnection()){
+					LocalDate date = airDates.getShowAirDate(s);
+					showDateList.add(s, date);
+					view.addShowAndDate(createShowAndDate(s, AirDateUtils.englishDate(date)), showDateList.indexOf(s));
+				}else{
+					showDateList.add(s, LocalDate.of(1970, 01, 01));
+					view.addShowAndDate(createShowAndDate(s, "01/01/2170"), showDateList.size() - 1);
+				}
 			}
+			view.reorganise(showDateList);
 		}
-		if(add.size() == 0 || remove.size() > 0){
+		if(add.size() != 0 || remove.size() != 0){
 			overrideSave = true;
 			saveDates();
-		}else{
-			if(!standardUpdateIfInternetConnection()){
-				overrideSave = true;
-				saveDates();
-			}
 		}
 	}
 }

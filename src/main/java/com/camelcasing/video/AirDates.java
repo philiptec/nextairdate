@@ -57,6 +57,11 @@ public class AirDates implements ChangeController{
 		return date;
 	}
 	
+	public LocalDate getShowAirDate(String show){
+		AirDateParser parser = new AirDateParser(compareToDate);
+		return parser.parse(show).getNextAirDate();
+	}
+	
 	public boolean datesAreDifferent(String oldDate, String newDate){
 		if(!newDate.equals("FAIL")){
 			boolean change = !oldDate.equals(newDate);

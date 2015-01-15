@@ -69,7 +69,7 @@ public class AirDateParser{
 				
 					int day = Integer.parseInt(date.substring(0, 2));
 					int month = monthList.indexOf(date.substring(3, 6)) + 1;
-					int year = Integer.parseInt(date.substring(7)) + 2000;
+					int year = getYear(Integer.parseInt(date.substring(7)));
 						
 					LocalDate airDate = LocalDate.of(year, month, day);
 					if(airDate.compareTo(compareToDate) == 0){
@@ -83,6 +83,13 @@ public class AirDateParser{
 				}
 			}
 		}
+	}
+	
+	// Any show who started airing before 1970 will appear as 20 + year started 
+	// i.e 1968 = 2068
+	private int getYear(int year){
+		if(year > 70) return year + 1900;
+		return year + 2000;
 	}
 	
 	private void createXMLReader(String showName){

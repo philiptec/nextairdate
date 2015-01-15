@@ -3,11 +3,11 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 import java.util.Iterator;
 
-import org.apache.logging.log4j.*;
+//import org.apache.logging.log4j.*;
 
 public class ShowDateList implements Iterable<ShowDateListNode>{
 	
-		private Logger logger = LogManager.getLogger(getClass());
+		//private Logger logger = LogManager.getLogger(getClass());
 	
 		private ShowDateListNode sentinal, last;
 		private int size;
@@ -20,11 +20,9 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 		size++;
 		int count = 0;
 		ShowDateListNode current = sentinal.getNext();
-		lookingForTBA:
 		while(current != null){
-			if(date == AirDateUtils.TBA_DATE){
-				logger.debug("TBA found " + date);
-				break lookingForTBA;
+			if(date.equals(AirDateUtils.TBA_DATE)){
+				break;
 			}
 			if(date.isBefore(current.getDate())){
 				ShowDateListNode newNode = new ShowDateListNode(show, date, null, null);
@@ -43,6 +41,12 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 			last = newLast;
 		}
 		return(count);
+	}
+	
+	public void clear(){
+		sentinal = new ShowDateListNode(null, null, null, null);
+		last = null;
+		size = 0;
 	}
 	
 	public int remove(String show){
@@ -117,9 +121,8 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 
 		@Override
 		public ShowDateListNode next(){
-			ShowDateListNode r = current.getNext();
-			current = r;
-			return r;
+			current = current.getNext();
+			return current;
 		}
 	}
 }

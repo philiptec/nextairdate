@@ -24,12 +24,15 @@ public class ShowList{
 		
 	public ShowList(){
 		retrieveXmlFileFromPreferences();
-		
-		showDateList = new ShowDateList();
 		if(showsFile != null) createShowList();
 	}
 	
 	protected void createShowList(){
+		if(showDateList == null){
+			showDateList = new ShowDateList();
+		}else{
+			showDateList.clear();
+		}
 		try {
 			logger.debug("ShowFile = " + showsFile.getAbsolutePath());
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -132,5 +135,9 @@ public class ShowList{
 	
 	public ShowDateList getShowDateList(){
 		return showDateList;
+	}
+	
+	public void setShowDateList(ShowDateList showDateList){
+		this.showDateList = showDateList;
 	}
 }

@@ -15,8 +15,21 @@ public class DateViewer {
 		return pane;
 	}
 	
-	public void addShowAndDate(ShowAndDate sad){
-		pane.getItems().add(sad);
+	public void reorganise(ShowDateList showDateList){
+		ShowDateListNode node = showDateList.getFirst();
+		for(int i = 0; i < showDateList.size(); i++){
+			ShowAndDate current = ((ShowAndDate)pane.getItems().get(i));
+			String showName = node.getShow();
+			if(!node.getShow().equals(current.getShowName())){
+				removeShow(i);
+				addShowAndDate(current, showDateList.indexOf(showName));
+			}
+			node = node.getNext();
+		}
+	}
+	
+	public void addShowAndDate(ShowAndDate sad, int index){
+		pane.getItems().add(index, sad);
 	}
 	
 	public void removeAll(){

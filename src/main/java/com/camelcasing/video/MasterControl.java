@@ -68,7 +68,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-		testInternetConnectionAndUpdate();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -259,7 +259,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			for(String s : remove){
 				int index = showDateList.indexOf(s);
 				view.removeShow(index);
-				showList.removeShow(s);
+				showDateList.remove(s);
 			}
 		}
 		if(add.size() > 0){

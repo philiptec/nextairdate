@@ -43,7 +43,7 @@ public class AirDateParser{
 				int year = getYear(Integer.parseInt(date.substring(7)));
 						
 				LocalDate airDate = LocalDate.of(year, month, day);
-				if(airDate.isEqual(AirDateUtils.TODAY) || airDate.isAfter(AirDateUtils.TODAY)){
+				if(AirDateUtils.todayOrAfter(airDate)){
 					return airDate;
 				}
 			}

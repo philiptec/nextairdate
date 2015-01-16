@@ -61,7 +61,7 @@ public class ShowList{
 			for(ShowDateListNode node : showDateList){
 				Element e = doc.createElement("show");
 				e.setTextContent(node.getShow());
-				e.setAttribute("date", checkForFailCodes(AirDateUtils.englishDate(node.getDate())));
+				e.setAttribute("date", node.getDateAsString());
 				root.appendChild(e);
 			}
 			doc.appendChild(root);
@@ -79,11 +79,6 @@ public class ShowList{
 		}
 		logger.debug("writing xml completed");
 		return true;
-	}
-
-	private String checkForFailCodes(String date){
-		if(date.equals("FAIL")) return "01/01/2170";
-		return date;
 	}
 	
 	public void retrieveXmlFileFromPreferences(){
@@ -115,18 +110,6 @@ public class ShowList{
 	
 	public void setXmlFile(File newFile){
 		showsFile = newFile;
-	}
-	
-	public void addShow(String showName){
-		addShowAndDate(showName, "01/01/1970");
-	}
-	
-	public void addShowAndDate(String showName, String dateValue){
-		showDateList.add(showName, AirDateUtils.getDateFromString(dateValue));
-	}
-	
-	public void removeShow(String show){
-		showDateList.remove(show);
 	}
 	
 	public boolean isWriting(){

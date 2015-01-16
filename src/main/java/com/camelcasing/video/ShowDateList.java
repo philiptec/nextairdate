@@ -20,16 +20,18 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 		int count = size;
 		size++;
 		ShowDateListNode current = sentinal.getPrevious();
-		while(current.getShow() != null){
-			if(date.equals(current.getDate()) || date.isAfter(current.getDate())){
-				ShowDateListNode newNode = new ShowDateListNode(show, date, null, null);
-				current.addAfter(newNode);
+		while(current.getDate() != null){
+			if(AirDateUtils.todayOrAfter(date, current.getDate())){
+				logger.debug(show + " added after" + current.getShow());
+				current.addAfter(new ShowDateListNode(show, date, null, null));
 				return count;
 			}else{
 				count--;
+				logger.debug(show + " skipping " + current.getShow());
 				current = current.getPrevious();
 			}
 		}
+		logger.debug(show + " added to end");
 		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
 		return count;
 	}

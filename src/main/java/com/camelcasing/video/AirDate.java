@@ -1,7 +1,5 @@
 package com.camelcasing.video;
 
-import java.time.LocalDate;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

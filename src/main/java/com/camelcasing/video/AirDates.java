@@ -19,18 +19,18 @@ public class AirDates implements ChangeController{
 			threadIsUpdating = true;
 				for(ShowDateListNode showAndDate : showDateList){
 					String show = showAndDate.getShow();
-					String d  = AirDateUtils.englishDate(showAndDate.getDate());
+					LocalDate date = showAndDate.getDate();
 					
-					if((d.equals("TBA")) && (!updateTBA && !updateAll)){
+					if((date.equals(AirDateUtils.TBA_DATE)) && (!updateTBA && !updateAll)){
 						logger.debug(show + " equal to null and not updateTBA");
-					}else if(AirDateUtils.getDateFromString(d).compareTo(AirDateUtils.TODAY) >= 0 && !updateAll){
+					}else if(AirDateUtils.todayOrAfter(date) && !updateAll){
 						logger.debug(show + " date greater and not updateAll");
 					}else{
 						logger.debug("updateing " + show);
 						updated = true;
-						LocalDate date = updateShow(show);
-						updateListeners(show, date, false);
-						logger.debug("update -> " + show + " " + date);
+						LocalDate newDate = updateShow(show);
+						updateListeners(show, newDate, false);
+						logger.debug("update -> " + show + " " + newDate);
 					}
 				}
 			for(ChangeListener l : listeners) l.saveDates();
@@ -48,15 +48,6 @@ public class AirDates implements ChangeController{
 	public LocalDate getShowAirDate(String show){
 		AirDateParser parser = new AirDateParser();
 		return parser.parse(show);
-	}
-	
-	public boolean datesAreDifferent(String oldDate, String newDate){
-		if(!newDate.equals("FAIL")){
-			boolean change = !oldDate.equals(newDate);
-			if(change) updated = true;
-			return change;
-		}
-		return false;
 	}
 	
 	public boolean threadIsUpdateing(){

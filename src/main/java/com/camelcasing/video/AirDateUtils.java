@@ -12,9 +12,6 @@ public class AirDateUtils {
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
 
 	public static LocalDate getDateFromString(String date){
-		if(date.equals("TBA")){
-			return TBA_DATE;
-		}
 		String[] dates = date.split("/");
 		int day = Integer.valueOf(dates[0]);
 		int month = Integer.valueOf(dates[1]);
@@ -25,5 +22,13 @@ public class AirDateUtils {
 	public static String englishDate(LocalDate date){
 		if(date == null) return "TBA";
 		return DATE_FORMATTER.format(date);
+	}
+	
+	public static boolean todayOrAfter(LocalDate date, LocalDate compareToDate){
+		return(date.equals(compareToDate) || date.isAfter(compareToDate));
+	}
+	
+	public static boolean todayOrAfter(LocalDate date){
+		return todayOrAfter(date, TODAY);
 	}
 }

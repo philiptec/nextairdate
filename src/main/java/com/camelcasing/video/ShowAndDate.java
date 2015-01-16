@@ -12,7 +12,6 @@ public class ShowAndDate extends BorderPane{
 		private Label show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
-		private int listIndex;
 		
 	public ShowAndDate(String show, LocalDate date){
 		super();
@@ -37,7 +36,7 @@ public class ShowAndDate extends BorderPane{
 	}
 	
 	public String checkForSpecial(LocalDate date){
-		if(date == null) return "FAIL";
+		if(date.equals(AirDateUtils.ERROR_DATE) || date == null) return "FAIL";
 		if(date.equals(AirDateUtils.TBA_DATE)) return "TBA"; 
 		int diff = date.compareTo(AirDateUtils.TODAY);
 		if(diff == 0){
@@ -74,16 +73,8 @@ public class ShowAndDate extends BorderPane{
 		this.show.setText(show.getText() + " (updated)");
 	}
 	
-	public int getIndex(){
-		return listIndex;
-	}
-	
-	public void setListIndex(int li){
-		listIndex = li;
-	}
-	
 	@Override
 	public String toString(){
-		return listIndex + " = " + show.getText() + " " + date.getText();
+		return show.getText() + " " + date.getText();
 	}
 }

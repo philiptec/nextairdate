@@ -15,78 +15,42 @@ public class AirDateParser{
 	
 		private final Logger logger = LogManager.getLogger(AirDateParser.class);
 		private final String BASE_URL = "http://www.epguides.com/";
-		private final String DATE_STRING = "[0-9]{2}/[A-Z]{1}[a-z]{2}/[0-9]{2}";
-		
-		private boolean airing = false;
+		private final String DATE_PATTERN = "[0-9]{2}/[A-Z]{1}[a-z]{2}/[0-9]{2}";
 
 		private ArrayList<String> monthList;
 		private Document htmlPage;
-		private LocalDate compareToDate;
-		private LocalDate nextAirDate;
-		
+
 	public AirDateParser(){
-		this(AirDateUtils.TODAY);
-	}
-	
-	public AirDateParser(LocalDate date){
 		createMonthArrayList();
-		compareToDate = date;
 	}
 	
-	public AirDateParser parse(String show, LocalDate date){
-		compareToDate = date;
-		parse(show);
-		return this;
-	}
-	
-	public AirDateParser parse(String show){
+	public LocalDate parse(String show){
 		reset();
 		createXMLReader(show);
-		parseSite();
-		return this;
+		return parseSite();
 	}
 	
-	public AirDateParser setCompareToDate(LocalDate date){
-		this.compareToDate = date;
-		return this;
-	}
-	
-	public boolean isAiring(){
-		return airing;
-	}
-	
-	public LocalDate getNextAirDate(){
-		return nextAirDate;
-	}
-	
-	private void parseSite(){
-		if(htmlPage != null){
-			Element el = htmlPage.getElementsByTag("pre").get(0);
-			String[] words = el.text().split(" ");
-			for(int i = 0; i < words.length; i++){	
-				if(words[i].matches(DATE_STRING)){
-					String date = words[i];
+	private LocalDate parseSite(){
+		if(htmlPage == null) return AirDateUtils.ERROR_DATE;
+		Element el = htmlPage.getElementsByTag("pre").get(0);
+		String[] words = el.text().split(" ");
+		for(int i = 0; i < words.length; i++){	
+			if(words[i].matches(DATE_PATTERN)){
+				String date = words[i];
 				
-					int day = Integer.parseInt(date.substring(0, 2));
-					int month = monthList.indexOf(date.substring(3, 6)) + 1;
-					int year = getYear(Integer.parseInt(date.substring(7)));
+				int day = Integer.parseInt(date.substring(0, 2));
+				int month = monthList.indexOf(date.substring(3, 6)) + 1;
+				int year = getYear(Integer.parseInt(date.substring(7)));
 						
-					LocalDate airDate = LocalDate.of(year, month, day);
-					if(airDate.compareTo(compareToDate) == 0){
-						airing = true;
-					}else if(airDate.compareTo(compareToDate) > 0){
-						if(nextAirDate == null){
-							nextAirDate = airDate;
-							return;
-						}
-					}
+				LocalDate airDate = LocalDate.of(year, month, day);
+				if(airDate.isEqual(AirDateUtils.TODAY) || airDate.isAfter(AirDateUtils.TODAY)){
+					return airDate;
 				}
 			}
 		}
+		return AirDateUtils.TBA_DATE;
 	}
 	
-	// Any show who started airing before 1970 will appear as 20 + year started 
-	// i.e 1968 = 2068
 	private int getYear(int year){
 		if(year > 70) return year + 1900;
 		return year + 2000;
@@ -96,7 +60,6 @@ public class AirDateParser{
 		try{
 			htmlPage = Jsoup.connect(BASE_URL + showName).get();
 		}catch(IOException e){
-			nextAirDate = LocalDate.of(1970, 1, 1);
 			logger.error("problem with " + showName);
 			if(!MasterControl.isConnectedToInternet){
 				logger.error("Not Connected to Internet");
@@ -105,8 +68,6 @@ public class AirDateParser{
 	}
 	
 	private void reset(){
-		airing = false;
-		nextAirDate = null;
 		htmlPage = null;
 	}
 	

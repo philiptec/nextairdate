@@ -1,6 +1,9 @@
 package com.camelcasing.video;
 
+import java.time.LocalDate;
+
 import javafx.scene.control.ListView;
+
 import org.apache.logging.log4j.*;
 
 public class DateViewer {
@@ -32,6 +35,7 @@ public class DateViewer {
 	}
 	
 	public void addShowAndDate(ShowAndDate sad, int index){
+		logger.debug("adding " + sad.getShowName()  + " to index " + index);
 		pane.getItems().add(index, sad);
 	}
 	
@@ -43,11 +47,11 @@ public class DateViewer {
 		pane.getItems().remove(index);
 	}
 	
-	public String getDate(int index){
+	public LocalDate getDate(int index){
 		return ((ShowAndDate)pane.getItems().get(index)).getDate();
 	}
 	
-	public void updateDate(String date, int row, int newIndex){
+	public void updateDate(LocalDate date, int row, int newIndex){
 		ShowAndDate sad = ((ShowAndDate)pane.getItems().get(row));
 		pane.getItems().remove(row);
 		sad.setDate(date);

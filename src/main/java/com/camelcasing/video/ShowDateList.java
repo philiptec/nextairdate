@@ -16,19 +16,22 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 		sentinal = new ShowDateListNode(null, null);
 	}
 	
-	public void add(String show, LocalDate date){
+	public int add(String show, LocalDate date){
+		int count = size;
 		size++;
 		ShowDateListNode current = sentinal.getPrevious();
 		while(current.getShow() != null){
 			if(date.equals(current.getDate()) || date.isAfter(current.getDate())){
 				ShowDateListNode newNode = new ShowDateListNode(show, date, null, null);
 				current.addAfter(newNode);
-				return;
+				return count;
 			}else{
+				count--;
 				current = current.getPrevious();
 			}
 		}
 		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
+		return count;
 	}
 	
 	public void clear(){

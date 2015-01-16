@@ -99,32 +99,23 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		for(int i = 0; i < showDateList.size(); i++){
 			ShowAndDate sad;
 			String show = node.getShow();
-			String date = node.getDateAsString();
-			if(!date.equals("01/01/2170")){
-				sad = createShowAndDate(show, date);
-			}else{
-				sad = createShowAndDate(show, "TBA");
-			}
+			LocalDate date = node.getDate();
+			sad = createShowAndDate(show, date);
 			view.addShowAndDate(sad, i);
 			node = node.getNext();
 		}
 	}
 	
-	public ShowAndDate createShowAndDate(String show, String date){
+	public ShowAndDate createShowAndDate(String show, LocalDate date){
 		ShowAndDate sad = new ShowAndDate(show, date);
 		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
 		rightClickMenuItem.setOnAction(e -> {
 			if(!isConnectedToInternet){
 				if(!testInternetConnection())return;
 			}
-			AirDateParser ap = new AirDateParser().parse(sad.getShowName());
-			String newDate;
-			if(ap.isAiring()){
-				newDate = "TODAY!";
-			}else{
-				newDate = AirDateUtils.englishDate(ap.getNextAirDate());
-			}
-			if(newDate != sad.getDate() && !newDate.equals("01/01/2170")){
+			LocalDate newDate = new AirDateParser().parse(sad.getShowName());
+
+			if(!newDate.equals(sad.getDate())){
 				logger.debug("rightClick updating date");
 				overrideSave = true;
 				updateDate(sad.getShowName(), newDate, true);
@@ -196,37 +187,27 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 
 	@Override
-	public void updateDate(String show, String date, boolean save){
+	public void updateDate(String show, LocalDate newDate, boolean save){
 		if(isConnectedToInternet == false){
 			removeProgressBar();
 			logger.error("failed to update as not connected to the Internet!\n"
 				+ "Check Connection and try again");
 			return;
 		}
-		String da = date;
 		int oldIndex = showDateList.indexOf(show);
-		String currentDate = view.getDate(oldIndex);
+		LocalDate oldDate = view.getDate(oldIndex);
 			
-		if(!currentDate.equals(da)){
-			if(date.equals("TODAY!")){
-				da = AirDateUtils.englishDate(AirDateUtils.TODAY);
-			};
-			if(!date.equals("FAIL")){
+		if(!newDate.equals(oldDate)){
 				showDateList.remove(show);
-				showDateList.add(show, AirDateUtils.getDateFromString(da));
-				int newIndex = showDateList.indexOf(show);
+				int newIndex =  showDateList.add(show, newDate);
+				logger.debug("new index = " + newIndex);
+				
 				Platform.runLater(() -> {
-					logger.debug("oldIndex = " + oldIndex + " newIndex = " + newIndex);
-					view.updateDate(date, oldIndex, newIndex);
-				});
-			}
-			if(save){
-				saveDates();
-			}
-				logger.debug("finished updating Date");
-			}else{
-				logger.debug("not updating (updateDate()) as shows are the same");
-			}
+					logger.debug("date updated for " + show);
+					view.updateDate(newDate, oldIndex, newIndex);
+				});	
+		}
+		if(save) saveDates();
 	}
 
 	private void removeProgressBar(){
@@ -282,14 +263,14 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			}
 		}
 		if(add.size() > 0){
-			for(String s : add){
+			for(String show : add){
 				if(testInternetConnection()){
-					LocalDate date = airDates.getShowAirDate(s);
-					showDateList.add(s, (date == null ? AirDateUtils.TBA_DATE : date));
-					view.addShowAndDate(createShowAndDate(s, airDates.getViewDateVersion(date)), showDateList.indexOf(s));
+					LocalDate date = airDates.getShowAirDate(show);
+					int index = showDateList.add(show, date);
+					view.addShowAndDate(createShowAndDate(show, date), index);
 				}else{
-					showDateList.add(s, LocalDate.of(1970, 01, 01));
-					view.addShowAndDate(createShowAndDate(s, "01/01/2170"), showDateList.size() - 1);
+					showDateList.add(show, AirDateUtils.ERROR_DATE);
+					view.addShowAndDate(createShowAndDate(show, AirDateUtils.ERROR_DATE), showDateList.size() - 1);
 				}
 			}
 		}

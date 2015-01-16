@@ -12,7 +12,6 @@ public class AirDates implements ChangeController{
 	
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 		private  boolean threadIsUpdating = false;
-		private LocalDate compareToDate = AirDateUtils.TODAY;
 		private boolean updated;
 	
 	public void generateShowData(boolean updateTBA, boolean updateAll, ShowDateList showDateList){
@@ -24,12 +23,12 @@ public class AirDates implements ChangeController{
 					
 					if((d.equals("TBA")) && (!updateTBA && !updateAll)){
 						logger.debug(show + " equal to null and not updateTBA");
-					}else if(AirDateUtils.getDateFromString(d).compareTo(compareToDate) >= 0 && !updateAll){
+					}else if(AirDateUtils.getDateFromString(d).compareTo(AirDateUtils.TODAY) >= 0 && !updateAll){
 						logger.debug(show + " date greater and not updateAll");
 					}else{
 						logger.debug("updateing " + show);
 						updated = true;
-						String date = updateShow(show);
+						LocalDate date = updateShow(show);
 						updateListeners(show, date, false);
 						logger.debug("update -> " + show + " " + date);
 					}
@@ -41,22 +40,14 @@ public class AirDates implements ChangeController{
 		t.start();
 	}
 	
-	public String updateShow(String showName){
-		AirDateParser parser = new AirDateParser(compareToDate);
-		LocalDate next = parser.parse(showName).getNextAirDate();
-		return getViewDateVersion(next);
-	}
-	
-	public String getViewDateVersion(LocalDate date){
-		if(date == null) return "TBA";
-		if(date.equals(AirDateUtils.TODAY)) return "TODAY!";
-		if(date.equals(AirDateUtils.ERROR_DATE)) return "FAIL";
-		return AirDateUtils.englishDate(date);
+	public LocalDate updateShow(String showName){
+		AirDateParser parser = new AirDateParser();
+		return parser.parse(showName);
 	}
 	
 	public LocalDate getShowAirDate(String show){
-		AirDateParser parser = new AirDateParser(compareToDate);
-		return parser.parse(show).getNextAirDate();
+		AirDateParser parser = new AirDateParser();
+		return parser.parse(show);
 	}
 	
 	public boolean datesAreDifferent(String oldDate, String newDate){
@@ -90,7 +81,7 @@ public class AirDates implements ChangeController{
 	}
 
 	@Override
-	public void updateListeners(String show, String date, boolean save){
+	public void updateListeners(String show, LocalDate date, boolean save){
 		for(ChangeListener l : listeners) l.updateDate(show, date, save);
 	}
 }

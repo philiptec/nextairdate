@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 public class AirDate extends Application{
 	
-		protected static final LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public static Stage stage;
 		public static Scene scene;
 	

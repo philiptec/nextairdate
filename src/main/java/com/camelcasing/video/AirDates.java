@@ -44,17 +44,14 @@ public class AirDates implements ChangeController{
 	public String updateShow(String showName){
 		AirDateParser parser = new AirDateParser(compareToDate);
 		LocalDate next = parser.parse(showName).getNextAirDate();
-		String date;
-			if(parser.isAiring()){
-				date = "TODAY!";
-			}else if(next == null){
-				date = "TBA";
-			}else if(next.compareTo(AirDate.ERROR_DATE) == 0){
-				date = "FAIL";
-			}else{
-				date = AirDateUtils.englishDate(next);
-			}
-		return date;
+		return getViewDateVersion(next);
+	}
+	
+	public String getViewDateVersion(LocalDate date){
+		if(date == null) return "TBA";
+		if(date.equals(AirDateUtils.TODAY)) return "TODAY!";
+		if(date.equals(AirDateUtils.ERROR_DATE)) return "FAIL";
+		return AirDateUtils.englishDate(date);
 	}
 	
 	public LocalDate getShowAirDate(String show){

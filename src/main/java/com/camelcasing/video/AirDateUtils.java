@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		public static final LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
 

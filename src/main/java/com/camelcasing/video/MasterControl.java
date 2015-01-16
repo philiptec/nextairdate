@@ -285,8 +285,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			for(String s : add){
 				if(testInternetConnection()){
 					LocalDate date = airDates.getShowAirDate(s);
-					showDateList.add(s, date);
-					view.addShowAndDate(createShowAndDate(s, AirDateUtils.englishDate(date)), showDateList.indexOf(s));
+					showDateList.add(s, (date == null ? AirDateUtils.TBA_DATE : date));
+					view.addShowAndDate(createShowAndDate(s, airDates.getViewDateVersion(date)), showDateList.indexOf(s));
 				}else{
 					showDateList.add(s, LocalDate.of(1970, 01, 01));
 					view.addShowAndDate(createShowAndDate(s, "01/01/2170"), showDateList.size() - 1);

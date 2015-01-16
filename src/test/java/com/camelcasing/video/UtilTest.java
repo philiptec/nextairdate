@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-public class UtilTests{
+public class UtilTest{
 
 	@Test
 	public void dateFormatTest(){

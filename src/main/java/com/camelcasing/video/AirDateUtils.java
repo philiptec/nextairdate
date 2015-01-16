@@ -1,16 +1,20 @@
 package com.camelcasing.video;
 
+import java.io.IOException;
+import java.net.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
+		private final static String TEST_URL = "http://www.epguides.com";
 		public final static LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
 
+		public static boolean isConnectedToInternet;
+		
 	public static LocalDate getDateFromString(String date){
 		String[] dates = date.split("/");
 		int day = Integer.valueOf(dates[0]);
@@ -30,5 +34,17 @@ public class AirDateUtils {
 	
 	public static boolean todayOrAfter(LocalDate date){
 		return todayOrAfter(date, TODAY);
+	}
+	
+	public static boolean testInternetConnection(){
+		if(isConnectedToInternet) return true;
+		try{
+			URLConnection urlC = new URL(TEST_URL).openConnection();
+			urlC.getContent();
+		}catch(IOException e){
+			return false;
+		}
+		isConnectedToInternet = true;
+		return true;
 	}
 }

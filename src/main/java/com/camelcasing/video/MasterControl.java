@@ -1,7 +1,6 @@
 package com.camelcasing.video;
 
 import java.io.*;
-import java.net.*;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,10 +26,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private MenuBar menuBar;
 		private Menu fileItem;
 		private UpdateXMLFile udXML;
-		private boolean overrideSave = false;
-		protected static boolean isConnectedToInternet;
 		
-		private final static String TEST_URL = "http://www.epguides.com";
+		private boolean overrideSave = false;
 		
 	public MasterControl(){
 		
@@ -77,16 +74,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
-		if(!airDates.threadIsUpdateing()){
-			if(!isConnectedToInternet){
-				if(!testInternetConnection()) return isConnectedToInternet;
-			}
-			airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
-			progressPane.addProgressBar();
-		}else{
-			logger.debug("threadIsUpdating");
+		if(!AirDateUtils.isConnectedToInternet){
+			if(!AirDateUtils.testInternetConnection()) return AirDateUtils.isConnectedToInternet;
 		}
-		return isConnectedToInternet;
+		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
+		progressPane.addProgressBar();
+		return AirDateUtils.isConnectedToInternet;
 	}
 	
 	public void getShowsAndDates(){
@@ -97,32 +90,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void addShowsAndDatesToView(){
 		ShowDateListNode node = showDateList.getFirst();
 		for(int i = 0; i < showDateList.size(); i++){
-			ShowAndDate sad;
 			String show = node.getShow();
 			LocalDate date = node.getDate();
-			sad = createShowAndDate(show, date);
+			ShowAndDate sad = new ShowAndDate(show, date, this);
 			view.addShowAndDate(sad, i);
 			node = node.getNext();
 		}
-	}
-	
-	public ShowAndDate createShowAndDate(String show, LocalDate date){
-		ShowAndDate sad = new ShowAndDate(show, date);
-		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
-		rightClickMenuItem.setOnAction(e -> {
-			if(!isConnectedToInternet){
-				if(!testInternetConnection())return;
-			}
-			LocalDate newDate = new AirDateParser().parse(sad.getShowName());
-
-			if(!newDate.equals(sad.getDate())){
-				logger.debug("rightClick updating date");
-				overrideSave = true;
-				updateDate(sad.getShowName(), newDate, true);
-			}
-		});
-		sad.setRightClickMenuItem(rightClickMenuItem);
-		return sad;
 	}
 	
 	public void createMenuBar(){
@@ -161,25 +134,11 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public boolean testInternetConnectionAndUpdate(){
-		testInternetConnection();
-		if(isConnectedToInternet){
+		AirDateUtils.testInternetConnection();
+		if(AirDateUtils.isConnectedToInternet){
 			airDates.generateShowData(false, false, showDateList);
 		}
-		return isConnectedToInternet;
-	}
-	
-	public boolean testInternetConnection(){
-		if(isConnectedToInternet) return true;
-		try{
-			URLConnection urlC = new URL(TEST_URL).openConnection();
-			urlC.getContent();
-		}catch(IOException e){
-			logger.info("not connected to Internet");
-			return false;
-		}
-		isConnectedToInternet = true;
-		logger.info("is connected to Internet");
-		return true;
+		return AirDateUtils.isConnectedToInternet;
 	}
 	
 	public BorderPane getRootPane(){
@@ -188,7 +147,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 	@Override
 	public void updateDate(String show, LocalDate newDate, boolean save){
-		if(isConnectedToInternet == false){
+		if(AirDateUtils.isConnectedToInternet == false){
 			removeProgressBar();
 			logger.error("failed to update as not connected to the Internet!\n"
 				+ "Check Connection and try again");
@@ -198,14 +157,15 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		LocalDate oldDate = view.getDate(oldIndex);
 			
 		if(!newDate.equals(oldDate)){
-				showDateList.remove(show);
-				int newIndex =  showDateList.add(show, newDate);
-				logger.debug("new index = " + newIndex);
+			overrideSave = true;
+			showDateList.remove(show);
+			int newIndex =  showDateList.add(show, newDate);
+			logger.debug("new index = " + newIndex);
 				
-				Platform.runLater(() -> {
-					logger.debug("date updated for " + show);
-					view.updateDate(newDate, oldIndex, newIndex);
-				});	
+			Platform.runLater(() -> {
+				logger.debug("date updated for " + show);
+				view.updateDate(newDate, oldIndex, newIndex);
+			});	
 		}
 		if(save) saveDates();
 	}
@@ -248,7 +208,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			view.removeAll();
 			showList.createShowList();
 			getShowsAndDates();
-			if(showDateList.size() > 0) airDates.setThreadUpdatingStatus(false);
 			addShowsAndDatesToView();
 			testInternetConnectionAndUpdate();
 	}
@@ -264,13 +223,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		}
 		if(add.size() > 0){
 			for(String show : add){
-				if(testInternetConnection()){
+				if(AirDateUtils.testInternetConnection()){
 					LocalDate date = airDates.getShowAirDate(show);
 					int index = showDateList.add(show, date);
-					view.addShowAndDate(createShowAndDate(show, date), index);
+					view.addShowAndDate(new ShowAndDate(show, date, this), index);
 				}else{
 					showDateList.add(show, AirDateUtils.ERROR_DATE);
-					view.addShowAndDate(createShowAndDate(show, AirDateUtils.ERROR_DATE), showDateList.size() - 1);
+					view.addShowAndDate(new ShowAndDate(show, AirDateUtils.ERROR_DATE, this), showDateList.size() - 1);
 				}
 			}
 		}

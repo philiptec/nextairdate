@@ -61,7 +61,7 @@ public class AirDateParser{
 			htmlPage = Jsoup.connect(BASE_URL + showName).get();
 		}catch(IOException e){
 			logger.error("problem with " + showName);
-			if(!MasterControl.isConnectedToInternet){
+			if(!AirDateUtils.isConnectedToInternet){
 				logger.error("Not Connected to Internet");
 			}
 		}

@@ -12,12 +12,14 @@ public class ShowAndDate extends BorderPane{
 		private Label show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
+		private ChangeListener changeListener;
 		
-	public ShowAndDate(String show, LocalDate date){
+	public ShowAndDate(String show, LocalDate date, ChangeListener changeListener){
 		super();
 		this.show = createTextNode(show);
 		this.date = createTextNode(checkForSpecial(date));
 		this.showName = show;
+		this.changeListener = changeListener;
 		this.setPadding(new Insets(2, 0, 2, 0));
 		prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(50));
 		setLeft(this.show);
@@ -29,10 +31,15 @@ public class ShowAndDate extends BorderPane{
 				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());
 			}
 		});
-	}
-	
-	public void setRightClickMenuItem(MenuItem mi){
-		rightClickMenu.getItems().add(mi);
+		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
+		rightClickMenuItem.setOnAction(e -> {
+			if(!AirDateUtils.testInternetConnection())return;
+			LocalDate newDate = new AirDateParser().parse(showName);
+
+			if(!newDate.equals(getDate())){
+				this.changeListener.updateDate(showName, newDate, true);
+			}
+		});
 	}
 	
 	public String checkForSpecial(LocalDate date){

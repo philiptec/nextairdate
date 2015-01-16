@@ -11,12 +11,10 @@ public class AirDates implements ChangeController{
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
-		private  boolean threadIsUpdating = false;
 		private boolean updated;
 	
 	public void generateShowData(boolean updateTBA, boolean updateAll, ShowDateList showDateList){
 		Thread t = new Thread(() -> {
-			threadIsUpdating = true;
 				for(ShowDateListNode showAndDate : showDateList){
 					String show = showAndDate.getShow();
 					LocalDate date = showAndDate.getDate();
@@ -34,7 +32,6 @@ public class AirDates implements ChangeController{
 					}
 				}
 			for(ChangeListener l : listeners) l.saveDates();
-			threadIsUpdating = false;
 			logger.debug("finished updating");
 		});
 		t.start();
@@ -48,14 +45,6 @@ public class AirDates implements ChangeController{
 	public LocalDate getShowAirDate(String show){
 		AirDateParser parser = new AirDateParser();
 		return parser.parse(show);
-	}
-	
-	public boolean threadIsUpdateing(){
-		return threadIsUpdating;
-	}
-	
-	public void setThreadUpdatingStatus(boolean updating){
-		threadIsUpdating = updating;
 	}
 	
 	public void setUpdated(boolean b){

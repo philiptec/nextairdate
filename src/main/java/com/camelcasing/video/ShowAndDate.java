@@ -40,6 +40,7 @@ public class ShowAndDate extends BorderPane{
 				this.changeListener.updateDate(showName, newDate, true);
 			}
 		});
+		rightClickMenu.getItems().add(rightClickMenuItem);
 	}
 	
 	public String checkForSpecial(LocalDate date){

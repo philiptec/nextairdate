@@ -13,7 +13,7 @@ public class AirDates implements ChangeController{
 		private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 		private boolean updated;
 	
-	public void generateShowData(boolean updateTBA, boolean updateAll, ShowDateList showDateList){
+	public void generateShowData(boolean updateTBA, boolean updateAll, Data<ShowDateListNode> showDateList){
 		Thread t = new Thread(() -> {
 				for(ShowDateListNode showAndDate : showDateList){
 					String show = showAndDate.getShow();

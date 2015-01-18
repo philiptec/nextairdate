@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.*;
 
-public class ShowDateList implements Iterable<ShowDateListNode>{
+public class ShowDateList implements Data<ShowDateListNode>{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 	
@@ -75,17 +75,17 @@ public class ShowDateList implements Iterable<ShowDateListNode>{
 		return -1;
 	}
 	
-	public ShowDateListNode get(String show){
-		ShowDateListNode current = sentinal.getNext();
-		while(current.getShow() != null){
-			if(current.getShow().equals(show)){
-				return current;
-			}else{
-				current = current.getNext();
-			}
-		}
-		return null;
-	}
+//	public ShowDateListNode get(String show){
+//		ShowDateListNode current = sentinal.getNext();
+//		while(current.getShow() != null){
+//			if(current.getShow().equals(show)){
+//				return current;
+//			}else{
+//				current = current.getNext();
+//			}
+//		}
+//		return null;
+//	}
 	
 	public int size(){
 		return size;

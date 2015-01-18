@@ -14,7 +14,7 @@ public class AirDateTest {
 	
 	@Test
 	public void ShowDateListIterationTest(){
-		ShowDateList list = new ShowDateList();
+		Data<ShowDateListNode> list = new ShowDateList();
 		list.add("first", LocalDate.of(1974, 01, 04));
 		list.add("second", LocalDate.of(1970, 02, 01));
 		list.add("third", LocalDate.of(1972, 01, 02));

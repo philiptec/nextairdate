@@ -13,14 +13,12 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 
-import javafx.scene.control.*;
-
 public class AddRemoveDialog implements AddRemoveController{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private static AddRemoveDialog instance;
-		private static ShowDateList showDateList;
+		private static Data<ShowDateListNode> showDateList;
 		private AddRemoveListener addRemoveListener;
 		private Stage stage;
 		private Button execute, cancel, add;
@@ -151,7 +149,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		proposedUpdatesContainer.getChildren().clear();
 	}
 	
-	public void show(ShowDateList showDateList){
+	public void show(Data<ShowDateListNode> showDateList){
 		if(!active){
 			active = true;
 			reset();

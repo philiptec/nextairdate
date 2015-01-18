@@ -20,7 +20,7 @@ public class DateViewer {
 		return pane;
 	}
 	
-	public void reorganise(ShowDateList showDateList){
+	public void reorganise(Data<ShowDateListNode> showDateList){
 		logger.debug("DateViewer reorganising");
 		int index = 0;
 		for(ShowDateListNode node : showDateList){

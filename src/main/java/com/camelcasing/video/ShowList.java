@@ -16,7 +16,7 @@ public class ShowList{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 
-		private ShowDateList showDateList;
+		private Data<ShowDateListNode> showDateList;
 		private File showsFile;
 		private boolean writing;
 		
@@ -24,7 +24,11 @@ public class ShowList{
 		
 	public ShowList(){
 		retrieveXmlFileFromPreferences();
-		if(showsFile != null) createShowList();
+		if(showsFile != null){
+			createShowList();
+		}else{
+			showDateList = new ShowDateList();
+		}
 	}
 	
 	protected void createShowList(){
@@ -116,11 +120,11 @@ public class ShowList{
 		return writing;
 	}
 	
-	public ShowDateList getShowDateList(){
+	public Data<ShowDateListNode> getShowDateList(){
 		return showDateList;
 	}
 	
-	public void setShowDateList(ShowDateList showDateList){
+	public void setShowDateList(Data<ShowDateListNode> showDateList){
 		this.showDateList = showDateList;
 	}
 }

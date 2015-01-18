@@ -17,7 +17,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
-		private ShowDateList showDateList;
+		private Data<ShowDateListNode> showDateList;
 		private DateViewer view;
 		private ShowList showList;
 		private AirDates airDates;

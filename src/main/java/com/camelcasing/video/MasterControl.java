@@ -30,7 +30,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private boolean overrideSave = false;
 		
 	public MasterControl(){
-		
 		AirDate.stage.setOnCloseRequest(we -> {
 			if(showList.isWriting()){
 				we.consume();
@@ -74,7 +73,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
-
 		if(!AirDateUtils.isConnectedToInternet){
 			if(!AirDateUtils.testInternetConnection()) return AirDateUtils.isConnectedToInternet;
 		}
@@ -91,9 +89,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void addShowsAndDatesToView(){
 		ShowDateListNode node = showDateList.getFirst();
 		for(int i = 0; i < showDateList.size(); i++){
-			String show = node.getShow();
-			LocalDate date = node.getDate();
-			ShowAndDate sad = new ShowAndDate(show, date, this);
+			ShowAndDate sad = new ShowAndDate(node.getShow(), node.getDate(), this);
 			view.addShowAndDate(sad, i);
 			node = node.getNext();
 		}
@@ -185,7 +181,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			logger.debug("Lists are the same"); 
 			removeProgressBar();
 		}else{
-			Platform.runLater(() -> view.reorganise(showDateList));
 			showList.setShowDateList(showDateList);
 			showList.writeNewAirDates();
 			removeProgressBar();

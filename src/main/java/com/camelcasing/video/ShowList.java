@@ -57,6 +57,7 @@ public class ShowList{
 	
 	public boolean writeNewAirDates(){
 		try {
+			if(!checkXmlFile(showsFile)) return false;
 			writing = true;
 			logger.debug("Writing to xml started");
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -85,6 +86,10 @@ public class ShowList{
 		return true;
 	}
 	
+	private boolean checkXmlFile(File showsFile){
+		return(showsFile != null && showsFile.exists());
+	}
+	
 	public void retrieveXmlFileFromPreferences(){
 		Preferences prefs = Preferences.userRoot().node(PREFS_NAME);
 		String fileName = prefs.get("xmlFile", "notFound");
@@ -93,7 +98,7 @@ public class ShowList{
 			return;
 		}
 		File xmlFile = new File(fileName);
-		if(xmlFile.exists()){
+		if(checkXmlFile(xmlFile)){
 			this.showsFile = xmlFile;
 			logger.info("XML file is " + xmlFile.getAbsolutePath());
 		}else{

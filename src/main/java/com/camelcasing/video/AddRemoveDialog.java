@@ -147,6 +147,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		addShows = new ArrayList<String>();
 		deleteShows = new ArrayList<String>();
 		proposedUpdatesContainer.getChildren().clear();
+		showSelectionBox.getItems().clear();
 	}
 	
 	public void show(Data<ShowDateListNode> showDateList){

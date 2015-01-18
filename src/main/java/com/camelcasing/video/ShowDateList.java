@@ -26,6 +26,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 				current.addAfter(new ShowDateListNode(show, date, null, null));
 				return count;
 			}else{
+				if(date.isBefore(AirDateUtils.TODAY)) break;
 				count--;
 				logger.debug(show + " skipping " + current.getShow());
 				current = current.getPrevious();
@@ -33,7 +34,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		}
 		logger.debug(show + " added to end");
 		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
-		return count;
+		return 0;
 	}
 	
 	public void clear(){
@@ -74,18 +75,6 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		logger.debug(show + " not found");
 		return -1;
 	}
-	
-//	public ShowDateListNode get(String show){
-//		ShowDateListNode current = sentinal.getNext();
-//		while(current.getShow() != null){
-//			if(current.getShow().equals(show)){
-//				return current;
-//			}else{
-//				current = current.getNext();
-//			}
-//		}
-//		return null;
-//	}
 	
 	public int size(){
 		return size;

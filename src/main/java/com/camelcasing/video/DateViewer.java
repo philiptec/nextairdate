@@ -20,20 +20,6 @@ public class DateViewer {
 		return pane;
 	}
 	
-	public void reorganise(Data<ShowDateListNode> showDateList){
-		logger.debug("DateViewer reorganising");
-		int index = 0;
-		for(ShowDateListNode node : showDateList){
-			ShowAndDate current = ((ShowAndDate)pane.getItems().get(index));
-			String showName = node.getShow();
-			if(!node.getShow().equals(current.getShowName())){
-				removeShow(index);
-				addShowAndDate(current, showDateList.indexOf(showName));
-			}
-			index++;
-		}
-	}
-	
 	public void addShowAndDate(ShowAndDate sad, int index){
 		logger.debug("adding " + sad.getShowName()  + " to index " + index);
 		pane.getItems().add(index, sad);

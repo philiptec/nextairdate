@@ -1,16 +1,11 @@
 package com.camelcasing.video;
 
-import java.time.LocalDate;
-
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class AirDate extends Application{
 	
-		protected static final LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
-		public static SimpleStringProperty theme = new SimpleStringProperty("default.css"); 
 		public static Stage stage;
 		public static Scene scene;
 	
@@ -20,7 +15,7 @@ public class AirDate extends Application{
 		AirDate.stage = stage;
 		MasterControl control = new MasterControl();
 		scene = new Scene(control.getRootPane());
-		scene.getStylesheets().add(theme.getValue());
+		scene.getStylesheets().add("default.css");
 		stage.setScene(scene);
 		stage.setTitle("Today's Date: " + AirDateUtils.englishDate(AirDateUtils.TODAY));
 		stage.show();
@@ -33,11 +28,5 @@ public class AirDate extends Application{
 		}else{
 			Application.launch(args);
 		}
-	}
-	
-	public static void changeTheme(String themeName){
-		scene.getStylesheets().clear();
-		scene.getStylesheets().add(themeName);
-		theme.set(themeName);
 	}
 }

@@ -25,14 +25,14 @@ public class CLIController{
 		
 		for(; i < args.length; i++){
 			String showName = args[i];
-			AirDateParser parser = new AirDateParser(compareToDate);
-			LocalDate next = parser.parse(showName).getNextAirDate();
+			AirDateParser parser = new AirDateParser();
+			LocalDate next = parser.parse(showName);
 			String date;
-				if(parser.isAiring()){
-					date = "TODAY!";
-				}else if(next == null){
+				if(next == null){
 					date = "TBA";
-				}else if(next.compareTo(AirDate.ERROR_DATE) == 0){
+				}else if(next.equals(AirDateUtils.TODAY)){
+					date = "TODAY!";
+				}else if(next.compareTo(AirDateUtils.ERROR_DATE) == 0) {
 					date = "Probelm connecting to site";
 				}else{
 					date = AirDateUtils.englishDate(next);

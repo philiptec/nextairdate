@@ -12,14 +12,14 @@ public class ShowAndDate extends BorderPane{
 		private Label show, date;
 		private String showName;
 		private ContextMenu rightClickMenu;
-		private int listIndex;
+		private ChangeListener changeListener;
 		
-	public ShowAndDate(String show, String date){
+	public ShowAndDate(String show, LocalDate date, ChangeListener changeListener){
 		super();
-		date = checkForToday(date);
 		this.show = createTextNode(show);
-		this.date = createTextNode(date);
+		this.date = createTextNode(checkForSpecial(date));
 		this.showName = show;
+		this.changeListener = changeListener;
 		this.setPadding(new Insets(2, 0, 2, 0));
 		prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(50));
 		setLeft(this.show);
@@ -31,23 +31,26 @@ public class ShowAndDate extends BorderPane{
 				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());
 			}
 		});
+		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
+		rightClickMenuItem.setOnAction(e -> {
+			if(!AirDateUtils.testInternetConnection())return;
+			LocalDate newDate = new AirDateParser().parse(showName);
+
+			if(!newDate.equals(getDate())){
+				this.changeListener.updateDate(showName, newDate, true);
+			}
+		});
+		rightClickMenu.getItems().add(rightClickMenuItem);
 	}
 	
-	public void setRightClickMenuItem(MenuItem mi){
-		rightClickMenu.getItems().add(mi);
-	}
-	
-	public String checkForToday(String date){
-		if(date.equals("TBA")) return date; 
-		LocalDate ld = AirDateUtils.getDateFromString(date);
-		int diff = ld.compareTo(AirDateUtils.TODAY);
+	public String checkForSpecial(LocalDate date){
+		if(date.equals(AirDateUtils.ERROR_DATE) || date == null) return "FAIL";
+		if(date.equals(AirDateUtils.TBA_DATE)) return "TBA"; 
+		int diff = date.compareTo(AirDateUtils.TODAY);
 		if(diff == 0){
 			return "TODAY!";
-		}else if(diff < 0){
-			return "";
-		}else{
-			return date;
-		}
+		}else if(diff < 0) return "";
+		return AirDateUtils.englishDate(date);
 	}
 	
 	public Label createTextNode(String text){
@@ -55,8 +58,13 @@ public class ShowAndDate extends BorderPane{
 		return t;
 	}
 	
-	public String getDate(){
-		return this.date.getText();
+	public LocalDate getDate(){
+		String oldDate = date.getText();
+		if(oldDate.equals("")) return AirDateUtils.ERROR_DATE;
+		if(oldDate.equals("TBA")) return AirDateUtils.TBA_DATE;
+		if(oldDate.equals("FAIL")) return AirDateUtils.ERROR_DATE;
+		if(oldDate.equals("TODAY!")) return AirDateUtils.TODAY;
+		return(AirDateUtils.getDateFromString(oldDate));
 	}
 	
 	public String getShowName(){
@@ -68,16 +76,13 @@ public class ShowAndDate extends BorderPane{
 		this.showName = show;
 	}
 	
-	public void setDate(String date){
-		this.date.setText(date);
+	public void setDate(LocalDate date){
+		this.date.setText(checkForSpecial(date));
 		this.show.setText(show.getText() + " (updated)");
 	}
 	
-	public int getIndex(){
-		return listIndex;
-	}
-	
-	public void setListIndex(int li){
-		listIndex = li;
+	@Override
+	public String toString(){
+		return show.getText() + " " + date.getText();
 	}
 }

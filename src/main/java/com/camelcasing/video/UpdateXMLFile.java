@@ -22,11 +22,8 @@ public class UpdateXMLFile implements FileChooserController{
 		private static UpdateXMLFile updateXMLFile;
 		
 		private SimpleBooleanProperty save = new SimpleBooleanProperty(true);	
-		private SimpleStringProperty theme = new SimpleStringProperty();
 		
 	private UpdateXMLFile(){
-		
-		theme.bind(AirDate.theme);
 		
 		stage = new Stage();
 		stage.setResizable(false);
@@ -93,7 +90,6 @@ public class UpdateXMLFile implements FileChooserController{
 		chooserLayout.getChildren().addAll(textField, fileChooser);
 		
 		HBox buttonLayout = new HBox();
-		//buttonLayout.setAlignment(Pos.BOTTOM_LEFT);
 		buttonLayout.setPadding(new Insets(10,10,10,10));
 		buttonLayout.setSpacing(20);
 		buttonLayout.getChildren().add(oneShot);
@@ -104,7 +100,7 @@ public class UpdateXMLFile implements FileChooserController{
 		pane.setTop(topText);
 		
 		Scene scene = new Scene(pane);
-		scene.getStylesheets().add(theme.getValue());
+		scene.getStylesheets().add("default.css");
 		stage.setScene(scene);
 	}
 	

@@ -24,22 +24,29 @@ public class AirDates implements ChangeController{
 					String show = showAndDate.getShow();
 					LocalDate date = showAndDate.getDate();
 					
-					if((date.equals(AirDateUtils.TBA_DATE)) && (!updateTBA && !updateAll)){
-						logger.debug(show + " equal to null and not updateTBA");
-					}else if(AirDateUtils.todayOrAfter(date) && !updateAll){
-						logger.debug(show + " date greater and not updateAll");
+					if((date.equals(AirDateUtils.TBA_DATE)) && (updateTBA)){
+						updateShow(show);
+						continue;
+					}else if(AirDateUtils.todayOrAfter(date) && updateAll){
+						updateShow(show);
+						continue;
 					}else{
-						logger.debug("updateing " + show);
-						updated = true;
-						LocalDate newDate = getShowAirDate(show);
-						updateListeners(show, newDate, false);
-						logger.debug("update -> " + show + " " + newDate);
+						logger.debug(show + " skipped");
 					}
 				}
 			for(ChangeListener l : listeners) l.saveDates();
 			logger.debug("finished updating");
 		});
+		t.setDaemon(true);
 		t.start();
+	}
+	
+	public void updateShow(String show){
+		logger.debug("updateing " + show);
+		updated = true;
+		LocalDate newDate = getShowAirDate(show);
+		updateListeners(show, newDate, false);
+		logger.debug("update -> " + show + " " + newDate);
 	}
 	
 	public LocalDate getShowAirDate(String show){

@@ -18,7 +18,7 @@ public class UpdateXMLFile implements FileChooserController{
 		private Button updateButton, cancelButton, fileChooser, createNewFile;
 		private TextField textField;
 		private CheckBox oneShot;
-		private final Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
+		private Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
 		private static UpdateXMLFile updateXMLFile;
 		
 		private SimpleBooleanProperty save = new SimpleBooleanProperty(true);	
@@ -122,5 +122,9 @@ public class UpdateXMLFile implements FileChooserController{
 	@Override
 	public void setFileChooserListener(FileChooserListener fcl) {
 		this.fcl = fcl;
+	}
+	
+	public void setTopTextMessage(String message){
+		topText.setText(message);
 	}
 }

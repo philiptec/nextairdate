@@ -3,11 +3,12 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 
 import org.apache.logging.log4j.*;
-
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class AirDateTest {
 	
 		private final static Logger logger = LogManager.getLogger(AirDateTest.class);

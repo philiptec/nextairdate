@@ -64,7 +64,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-//		testInternetConnectionAndUpdate();
+		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){

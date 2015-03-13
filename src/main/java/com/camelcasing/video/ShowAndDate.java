@@ -9,15 +9,15 @@ import javafx.scene.input.MouseButton;
 
 public class ShowAndDate extends BorderPane{
 
-		private Label show, date;
+		private Label show, date, episode;
 		private String showName;
 		private ContextMenu rightClickMenu;
 		private ChangeListener changeListener;
 		
 	public ShowAndDate(String show, LocalDate date, ChangeListener changeListener){
 		super();
-		this.show = createTextNode(show);
-		this.date = createTextNode(checkForSpecial(date));
+		this.show = new Label(show);
+		this.date = new Label(checkForSpecial(date));
 		this.showName = show;
 		this.changeListener = changeListener;
 		this.setPadding(new Insets(2, 0, 2, 0));
@@ -53,11 +53,6 @@ public class ShowAndDate extends BorderPane{
 		return AirDateUtils.englishDate(date);
 	}
 	
-	public Label createTextNode(String text){
-		Label t = new Label(text);
-		return t;
-	}
-	
 	public LocalDate getDate(){
 		String oldDate = date.getText();
 		if(oldDate.equals("")) return AirDateUtils.ERROR_DATE;
@@ -74,6 +69,10 @@ public class ShowAndDate extends BorderPane{
 	public void setShow(String show){
 		this.show.setText(show);
 		this.showName = show;
+	}
+	
+	public void setEpisode(String episode){
+		this.episode.setText(episode);
 	}
 	
 	public void setDate(LocalDate date){

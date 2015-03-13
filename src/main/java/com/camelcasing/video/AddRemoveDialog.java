@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import javafx.geometry.*;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
@@ -54,7 +55,6 @@ public class AddRemoveDialog implements AddRemoveController{
 		
 		proposedUpdatesContainer = new VBox();
 		proposedUpdatesScrollPane = new ScrollPane(proposedUpdatesContainer);
-		proposedUpdatesScrollPane.setId("addRemoveScrollPane");
 		proposedUpdatesScrollPane.setPrefSize(300, 150);
 		
 		showSelectionBox = new ComboBox<String>();
@@ -108,39 +108,14 @@ public class AddRemoveDialog implements AddRemoveController{
 	public void addAddItem(){
 		String show = addShowField.getText();
 		if(show != null && show.length() > 0){
-			proposedUpdatesContainer.getChildren().add(createAddItem(show));
-			addShowField.setText("");
+			proposedUpdatesContainer.getChildren().add(new AddRemoveMenuItem(show, true));
 		}
 	}
 	
 	public void addDeleteItem(String show){
 		if(!deleteShows.contains(show)){
-			proposedUpdatesContainer.getChildren().add(createDeleteItem(show));
+			proposedUpdatesContainer.getChildren().add(new AddRemoveMenuItem(show, false));
 		}
-	}
-	
-	public HBox createAddItem(String show){
-		addShows.add(show);
-		HBox b = new HBox();
-		b.setPadding(new Insets(2, 5, 2, 5));
-		b.setSpacing(10);
-		Text t = new Text("+");
-		t.setFont(new Font(16));
-		t.setFill(Color.GREEN);
-		b.getChildren().addAll(t, new Label(show));
-		return b;
-	}
-	
-	public HBox createDeleteItem(String show){
-		deleteShows.add(show);
-		HBox b = new HBox();
-		b.setPadding(new Insets(2, 5, 2, 5));
-		b.setSpacing(10);
-		Text t = new Text(" -");
-		t.setFont(new Font(16));
-		t.setFill(Color.RED);
-		b.getChildren().addAll(t, new Label(show));
-		return b;
 	}
 	
 	public void reset(){
@@ -148,6 +123,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		deleteShows = new ArrayList<String>();
 		proposedUpdatesContainer.getChildren().clear();
 		showSelectionBox.getItems().clear();
+		addShowField.setText("");
 	}
 	
 	public void show(Data<ShowDateListNode> showDateList){
@@ -170,5 +146,60 @@ public class AddRemoveDialog implements AddRemoveController{
 	@Override
 	public void setAddRemoveListener(AddRemoveListener l){
 		addRemoveListener = l;
+	}
+	
+	public class AddRemoveMenuItem extends HBox{
+		
+			private boolean add;
+			private String show;
+			private ContextMenu menu;
+		
+		public AddRemoveMenuItem(String show, boolean add){
+			super();
+			this.add = add;
+			this.show = show;
+			
+			setPadding(new Insets(2, 5, 2, 5));
+			setSpacing(10);
+			
+			Text text = new Text();
+			text.setFont(new Font(16));
+			if(add){
+				addShows.add(show);
+				text.setFill(Color.GREEN);
+				text.setText("+");
+			}else{
+				deleteShows.add(show);
+				text.setFill(Color.RED);
+				text.setText(" -");
+			}
+			menu = new ContextMenu();
+			MenuItem mi = new MenuItem("delete " + show);
+			mi.setOnAction(e1 -> {
+				proposedUpdatesContainer.getChildren().remove(this);
+				if(add){
+					addShows.remove(show);
+				}else{
+					deleteShows.remove(show);
+				}
+			});
+			menu.getItems().add(mi);
+			
+			this.setOnMouseClicked(e -> {
+				if(e.getButton().equals(MouseButton.SECONDARY)){
+					menu.show(this, e.getScreenX(), e.getScreenY());
+				}
+			});
+			
+			getChildren().addAll(text, new Label(show));
+		}
+		
+		public String getShow(){
+			return show;
+		}
+		
+		public boolean isAdd(){
+			return add;
+		}
 	}
 }

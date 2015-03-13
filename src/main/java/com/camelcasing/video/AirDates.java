@@ -41,7 +41,7 @@ public class AirDates implements ChangeController{
 		t.start();
 	}
 	
-	public void updateShow(String show){
+	private void updateShow(String show){
 		logger.debug("updateing " + show);
 		updated = true;
 		LocalDate newDate = getShowAirDate(show);

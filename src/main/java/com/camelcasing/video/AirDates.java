@@ -22,17 +22,18 @@ public class AirDates implements ChangeController{
 		Thread t = new Thread(() -> {
 				for(ShowDateListNode showAndDate : showDateList){
 					String show = showAndDate.getShow();
+					
+					if(updateAll){
+						updateShow(show);
+						continue;
+					}
+					
 					LocalDate date = showAndDate.getDate();
 					
-					if((date.equals(AirDateUtils.TBA_DATE)) && (updateTBA)){
-						updateShow(show);
-						continue;
-					}else if(AirDateUtils.todayOrAfter(date) && updateAll){
-						updateShow(show);
-						continue;
-					}else{
-						logger.debug(show + " skipped");
-					}
+					if(AirDateUtils.todayOrAfter(date)) continue;
+					if((date.equals(AirDateUtils.TBA_DATE)) && !updateTBA) continue;
+					
+					updateShow(show);
 				}
 			for(ChangeListener l : listeners) l.saveDates();
 			logger.debug("finished updating");

@@ -33,6 +33,7 @@ public class AirDateUtils {
 	}
 	
 	public static boolean todayOrAfter(LocalDate date){
+		if(date.equals(TBA_DATE)) return false;
 		return todayOrAfter(date, TODAY);
 	}
 	

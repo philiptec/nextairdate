@@ -214,7 +214,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			for(String s : remove){
 				int index = showDateList.indexOf(s);
 				view.removeShow(index);
-				showDateList.remove(s);
+				int i = showDateList.remove(s);
+				logger.debug("removed: " + s + " index: " + i);
 			}
 		}
 		if(add.size() > 0){

@@ -65,7 +65,9 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 
 		addShowsAndDatesToView();
 		activateButtons();
-		testInternetConnectionAndUpdate();
+		AirDateUtils.testInternetConnection();
+		standardUpdateIfInternetConnection();
+//		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){
@@ -77,8 +79,8 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(!AirDateUtils.isConnectedToInternet){
 			if(!AirDateUtils.testInternetConnection()) return AirDateUtils.isConnectedToInternet;
 		}
-		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
 		progressPane.addProgressBar();
+		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
 		return AirDateUtils.isConnectedToInternet;
 	}
 	

@@ -2,26 +2,47 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
-import javafx.scene.control.ListView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import org.apache.logging.log4j.*;
 
 public class DateViewer {
 	
-		private ListView<ShowAndDate> pane;
+		private TableView<ShowAndDate> pane; 
 		private Logger logger = LogManager.getLogger(getClass());
+		private final double columnWidth = 200.0;
 		
+	@SuppressWarnings("unchecked")
 	public DateViewer(){
-		pane = new ListView<ShowAndDate>();
+		ObservableList<ShowAndDate> showAndDateList = FXCollections.observableArrayList();
+		pane = new TableView<ShowAndDate>(showAndDateList);
 		pane.setPrefHeight(600);
+		
+		TableColumn<ShowAndDate, String> showColumn = new TableColumn<ShowAndDate, String>("Show");
+		showColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("show"));
+		showColumn.setPrefWidth(columnWidth);
+		
+		TableColumn<ShowAndDate, String> episodeColumn = new TableColumn<ShowAndDate, String>("Episode");
+		episodeColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("episode"));
+		episodeColumn.setPrefWidth(columnWidth - 100);
+		
+		TableColumn<ShowAndDate, String> dateColumn = new TableColumn<ShowAndDate, String>("Date");
+		dateColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("date"));
+		dateColumn.setPrefWidth(columnWidth- 75);
+		
+		pane.getColumns().setAll(showColumn, episodeColumn, dateColumn);
 	}
 	
-	public ListView<ShowAndDate> getDisplayPane(){
+	public TableView<ShowAndDate> getDisplayPane(){
 		return pane;
 	}
 	
 	public void addShowAndDate(ShowAndDate sad, int index){
-		logger.debug("adding " + sad.getShowName()  + " to index " + index);
+		logger.debug("adding " + sad.getShow()  + " to index " + index);
 		pane.getItems().add(index, sad);
 	}
 	
@@ -34,13 +55,14 @@ public class DateViewer {
 	}
 	
 	public LocalDate getDate(int index){
-		return ((ShowAndDate)pane.getItems().get(index)).getDate();
+		return ((ShowAndDate)pane.getItems().get(index)).getDateAsLocalDate();
 	}
 	
-	public void updateDate(LocalDate date, int row, int newIndex){
+	public void updateDate(LocalDate date, String episode, int row, int newIndex){
 		ShowAndDate sad = ((ShowAndDate)pane.getItems().get(row));
 		pane.getItems().remove(row);
 		sad.setDate(date);
+		sad.setEpisode(episode);
 		pane.getItems().add(newIndex, sad);
 	}
 }

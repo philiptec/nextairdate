@@ -45,7 +45,8 @@ public class ShowList{
 				for(int i = 0; i < results.getLength(); i++){
 					Node n = results.item(i);
 					Node a = n.getAttributes().item(0);
-					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()));
+					Node e = n.getAttributes().item(1);
+					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()), e.getTextContent());
 				}
 			logger.debug(showDateList.size() + " shows after reading xmlFile" );
 		} catch (IOException | ParserConfigurationException e) {
@@ -67,6 +68,7 @@ public class ShowList{
 				Element e = doc.createElement("show");
 				e.setTextContent(node.getShow());
 				e.setAttribute("date", node.getDateAsString());
+				e.setAttribute("episode", node.getEpisode());
 				root.appendChild(e);
 			}
 			doc.appendChild(root);

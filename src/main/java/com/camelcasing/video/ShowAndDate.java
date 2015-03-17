@@ -2,45 +2,23 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
-import javafx.geometry.Insets;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-public class ShowAndDate extends BorderPane{
+public class ShowAndDate{
 
-		private Label show, date, episode;
-		private String showName;
-		private ContextMenu rightClickMenu;
-		private ChangeListener changeListener;
+		private LocalDate d; 
+		private StringProperty show;
+		private StringProperty date;
+		private StringProperty episode;
 		
-	public ShowAndDate(String show, LocalDate date, ChangeListener changeListener){
+	public ShowAndDate(String show, LocalDate date, String episode){
 		super();
-		this.show = new Label(show);
-		this.date = new Label(checkForSpecial(date));
-		this.showName = show;
-		this.changeListener = changeListener;
-		this.setPadding(new Insets(2, 0, 2, 0));
-		prefWidthProperty().bind(AirDate.stage.widthProperty().subtract(50));
-		setLeft(this.show);
-		setRight(this.date);
 		
-		rightClickMenu = new ContextMenu();
-		this.setOnMouseClicked(e -> {
-			if(e.getButton().equals(MouseButton.SECONDARY)){
-				rightClickMenu.show(this, e.getScreenX(), e.getScreenY());
-			}
-		});
-		MenuItem rightClickMenuItem = new MenuItem("Update " + show);
-		rightClickMenuItem.setOnAction(e -> {
-			if(!AirDateUtils.testInternetConnection())return;
-			LocalDate newDate = new AirDateParser().parse(showName);
-
-			if(!newDate.equals(getDate())){
-				this.changeListener.updateDate(showName, newDate, true);
-			}
-		});
-		rightClickMenu.getItems().add(rightClickMenuItem);
+		this.d = date;
+		this.episode = new SimpleStringProperty(episode);
+		this.show = new SimpleStringProperty(show);
+		this.date = new SimpleStringProperty(checkForSpecial(date));
 	}
 	
 	public String checkForSpecial(LocalDate date){
@@ -53,35 +31,33 @@ public class ShowAndDate extends BorderPane{
 		return AirDateUtils.englishDate(date);
 	}
 	
-	public LocalDate getDate(){
-		String oldDate = date.getText();
-		if(oldDate.equals("")) return AirDateUtils.ERROR_DATE;
-		if(oldDate.equals("TBA")) return AirDateUtils.TBA_DATE;
-		if(oldDate.equals("FAIL")) return AirDateUtils.ERROR_DATE;
-		if(oldDate.equals("TODAY!")) return AirDateUtils.TODAY;
-		return(AirDateUtils.getDateFromString(oldDate));
+	public String getShow(){
+		return show.getValue();
 	}
 	
-	public String getShowName(){
-		return showName;
+	public String getDate(){
+		return date.getValue();
 	}
 	
-	public void setShow(String show){
-		this.show.setText(show);
-		this.showName = show;
+	public String getEpisode(){
+		return episode.getValue();
+	}
+	
+	public LocalDate getDateAsLocalDate(){
+		return d;
 	}
 	
 	public void setEpisode(String episode){
-		this.episode.setText(episode);
+		this.episode.setValue(episode);
 	}
-	
+
 	public void setDate(LocalDate date){
-		this.date.setText(checkForSpecial(date));
-		this.show.setText(show.getText() + " (updated)");
+		this.date.setValue(checkForSpecial(date));
+		this.show.setValue(show.getValue() + " (updated)");
 	}
 	
 	@Override
 	public String toString(){
-		return show.getText() + " " + date.getText();
+		return show + " " + date;
 	}
 }

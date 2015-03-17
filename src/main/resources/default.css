@@ -6,26 +6,26 @@
 	-fx-background-color: transparent;
 }
 
-.list-view{
+.table-view{
 	-fx-background-color: transparent;
 }
 
-.list-cell{
-	-fx-background-color: transparent;
+.cell{
+	-fx-background-color: #FFFFFF;
 }
 
-.list-cell:odd{
+.cell:odd{
 	-fx-background-color: #EEEEEE;
 }
 
-.list-cell:selected .label{
-	-fx-background-color: transparent;
-	-fx-text-fill: black;
+.table-row-cell:filled:selected { 
+  -fx-background: -fx-control-inner-background ;
+  -fx-background-color: -fx-table-cell-border-color, -fx-background ;
+  -fx-background-insets: 0, 0 0 1 0 ;
+  -fx-table-cell-border-color: derive(-fx-color, 5%);
 }
-
-.list-cell:selected:odd .label{
-	-fx-background-color: #EEEEEE;
-	-fx-text-fill: black;
+.table-row-cell:odd:filled:selected {
+  -fx-background-color: #EEEEEE;
 }
 
 .label{

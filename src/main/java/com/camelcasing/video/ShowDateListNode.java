@@ -6,18 +6,21 @@ public class ShowDateListNode{
 	
 		private ShowDateListNode next, previous;
 		private final String show;
+		private final String episode;
 		private final LocalDate date;
 	
-	public ShowDateListNode(String showName, LocalDate airDate, ShowDateListNode pre, ShowDateListNode nxt){
+	public ShowDateListNode(String showName, LocalDate airDate, String epi, ShowDateListNode pre, ShowDateListNode nxt){
 		show = showName;
 		date = airDate;
 		next = nxt;
+		episode = epi;
 		previous = pre;
 	}
 	
-	public ShowDateListNode(String shouldBeNull, LocalDate shouldAlsoBeNull){
+	public ShowDateListNode(String shouldBeNull, LocalDate shouldAlsoBeNull, String shouldAswellBeNull){
 		show = shouldBeNull;
 		date = shouldAlsoBeNull;
+		episode = shouldAswellBeNull;
 		next = this;
 		previous = this;
 	}
@@ -62,12 +65,16 @@ public class ShowDateListNode{
 		return date;
 	}
 	
+	public String getEpisode(){
+		return episode;
+	}
+	
 	public String getDateAsString(){
 		return AirDateUtils.englishDate(date);
 	}
 	
 	@Override
 	public String toString(){
-		return show + " " + date;
+		return show + " " + date + " " + episode;
 	}
 }

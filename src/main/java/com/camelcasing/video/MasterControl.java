@@ -59,6 +59,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void init(){
 		showList = new ShowList();
 		getShowsAndDates();
+		root.setCenter(view.getDisplayPane());
 		airDates = new AirDates();
 		airDates.addChangeListener(this);
 
@@ -89,7 +90,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void addShowsAndDatesToView(){
 		ShowDateListNode node = showDateList.getFirst();
 		for(int i = 0; i < showDateList.size(); i++){
-			ShowAndDate sad = new ShowAndDate(node.getShow(), node.getDate(), this);
+			ShowAndDate sad = new ShowAndDate(node.getShow(), node.getDate(), node.getEpisode());
 			view.addShowAndDate(sad, i);
 			node = node.getNext();
 		}
@@ -101,7 +102,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		
 		fileItem.setDisable(true);
 		
-		MenuItem setXmlFile = new MenuItem("Set Xml File");
+		MenuItem setXmlFile = new MenuItem("Set Save File");
 		setXmlFile.setOnAction(e -> setXmlFileLocationAndReset());
 		
 		MenuItem exit = new MenuItem("Exit");
@@ -143,7 +144,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 
 	@Override
-	public void updateDate(String show, LocalDate newDate, boolean save){
+	public void updateDate(String show, LocalDate newDate, String episode, boolean save){
 		if(AirDateUtils.isConnectedToInternet == false){
 			removeProgressBar();
 			logger.error("failed to update as not connected to the Internet!\n"
@@ -156,12 +157,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(!newDate.equals(oldDate)){
 			overrideSave = true;
 			showDateList.remove(show);
-			int newIndex =  showDateList.add(show, newDate);
+			int newIndex =  showDateList.add(show, newDate, episode);
 			logger.debug("new index = " + newIndex);
 				
 			Platform.runLater(() -> {
 				logger.debug("date updated for " + show);
-				view.updateDate(newDate, oldIndex, newIndex);
+				view.updateDate(newDate, episode, oldIndex, newIndex);
 			});	
 		}
 		if(save) saveDates();
@@ -204,7 +205,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			view.removeAll();
 			showList.createShowList();
 			getShowsAndDates();
-			addShowsAndDatesToView();
 			testInternetConnectionAndUpdate();
 	}
 
@@ -221,12 +221,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(add.size() > 0){
 			for(String show : add){
 				if(AirDateUtils.testInternetConnection()){
-					LocalDate date = airDates.getShowAirDate(show);
-					int index = showDateList.add(show, date);
-					view.addShowAndDate(new ShowAndDate(show, date, this), index);
+					ShowAndDate date = airDates.getShowAirDate(show);
+					int index = showDateList.add(show, date.getDateAsLocalDate(), date.getEpisode());
+					view.addShowAndDate(date, index);
 				}else{
-					showDateList.add(show, AirDateUtils.ERROR_DATE);
-					view.addShowAndDate(new ShowAndDate(show, AirDateUtils.ERROR_DATE, this), showDateList.size() - 1);
+					showDateList.add(show, AirDateUtils.ERROR_DATE, "0-0");
+					view.addShowAndDate(new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0"), showDateList.size() - 1);
 				}
 			}
 		}

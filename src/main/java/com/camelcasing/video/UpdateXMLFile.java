@@ -15,10 +15,10 @@ public class UpdateXMLFile implements FileChooserController{
 		private File newXmlLocation;
 		private FileChooserListener fcl;
 		private Stage stage;
-		private Button updateButton, cancelButton, fileChooser, createNewFile;
+		private Button updateButton, cancelButton, fileChooser, openExistingFile;
 		private TextField textField;
 		private CheckBox oneShot;
-		private Label topText = new Label("Enter existing XML file path or click \"Create New\" below");
+		private Label topText = new Label("Enter existing XML file path or click \"Use Existing\" below");
 		private static UpdateXMLFile updateXMLFile;
 		
 		private SimpleBooleanProperty save = new SimpleBooleanProperty(true);	
@@ -31,7 +31,7 @@ public class UpdateXMLFile implements FileChooserController{
 		
 		updateButton = new Button("Update");
 		cancelButton = new Button("Cancel");
-		createNewFile = new Button("Create New");
+		openExistingFile = new Button("Use Existing");
 		
 		oneShot = new CheckBox("Save Location");
 		oneShot.setSelected(true);
@@ -52,16 +52,16 @@ public class UpdateXMLFile implements FileChooserController{
 		
 		fileChooser.setOnAction(e -> {
 			File f = null;
-			f = new FileChooser().showOpenDialog(stage);
+			f = new FileChooser().showSaveDialog(stage);
 			if(f != null){
 				newXmlLocation = f;
 				textField.setText(f.getAbsolutePath());
 			}
 		});
 		
-		createNewFile.setOnAction(e -> {
+		openExistingFile.setOnAction(e -> {
 			File f = null;
-			f = new FileChooser().showSaveDialog(stage);
+			f = new FileChooser().showOpenDialog(stage);
 			if(f != null){
 				newXmlLocation = f;
 				textField.setText(f.getAbsolutePath());
@@ -94,7 +94,7 @@ public class UpdateXMLFile implements FileChooserController{
 		buttonLayout.setSpacing(20);
 		buttonLayout.getChildren().add(oneShot);
 		buttonLayout.setAlignment(Pos.BOTTOM_RIGHT);
-		buttonLayout.getChildren().addAll(createNewFile, updateButton, cancelButton);
+		buttonLayout.getChildren().addAll(openExistingFile, updateButton, cancelButton);
 		pane.setCenter(chooserLayout);
 		pane.setBottom(buttonLayout);
 		pane.setTop(topText);

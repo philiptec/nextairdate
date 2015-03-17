@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public interface Data<E> extends Iterable<E>{
 
-	int add(String show, LocalDate date);
+	int add(String show, LocalDate date, String episode);
 	void clear();
 	int indexOf(String show);
 	int remove(String show);

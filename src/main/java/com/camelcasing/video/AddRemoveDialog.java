@@ -107,8 +107,9 @@ public class AddRemoveDialog implements AddRemoveController{
 	
 	public void addAddItem(){
 		String show = addShowField.getText();
-		if(show != null && show.length() > 0){
+		if(show != null && show.length() > 0 && !addShows.contains(show)){
 			proposedUpdatesContainer.getChildren().add(new AddRemoveMenuItem(show, true));
+			addShowField.selectAll();
 		}
 	}
 	
@@ -125,6 +126,10 @@ public class AddRemoveDialog implements AddRemoveController{
 		showSelectionBox.getItems().clear();
 		addShowField.setText("");
 	}
+	
+//	private boolean checkShowExists(String show){
+//		return true;
+//	}
 	
 	public void show(Data<ShowDateListNode> showDateList){
 		if(!active){
@@ -150,14 +155,10 @@ public class AddRemoveDialog implements AddRemoveController{
 	
 	public class AddRemoveMenuItem extends HBox{
 		
-			private boolean add;
-			private String show;
 			private ContextMenu menu;
 		
 		public AddRemoveMenuItem(String show, boolean add){
 			super();
-			this.add = add;
-			this.show = show;
 			
 			setPadding(new Insets(2, 5, 2, 5));
 			setSpacing(10);
@@ -192,14 +193,6 @@ public class AddRemoveDialog implements AddRemoveController{
 			});
 			
 			getChildren().addAll(text, new Label(show));
-		}
-		
-		public String getShow(){
-			return show;
-		}
-		
-		public boolean isAdd(){
-			return add;
 		}
 	}
 }

@@ -13,17 +13,17 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		private int size;
 
 	public ShowDateList(){
-		sentinal = new ShowDateListNode(null, null);
+		sentinal = new ShowDateListNode(null, null, null);
 	}
 	
-	public int add(String show, LocalDate date){
+	public int add(String show, LocalDate date, String episode){
 		int count = size;
 		size++;
 		ShowDateListNode current = sentinal.getPrevious();
 		while(current.getDate() != null){
 			if(AirDateUtils.todayOrAfter(date, current.getDate())){
 				logger.debug(show + " added after" + current.getShow());
-				current.addAfter(new ShowDateListNode(show, date, null, null));
+				current.addAfter(new ShowDateListNode(show, date, episode, null, null));
 				return count;
 			}else{
 				if(date.isBefore(AirDateUtils.TODAY)) break;
@@ -33,13 +33,13 @@ public class ShowDateList implements Data<ShowDateListNode>{
 			}
 		}
 		logger.debug(show + " added to end");
-		sentinal.addAfter(new ShowDateListNode(show, date, sentinal, sentinal));
+		sentinal.addAfter(new ShowDateListNode(show, date, episode, sentinal, sentinal));
 		return 0;
 	}
 	
 	public void clear(){
 		logger.debug("ShowDateList reset");
-		sentinal = new ShowDateListNode(null, null);
+		sentinal = new ShowDateListNode(null, null, null);
 		size = 0;
 	}
 	

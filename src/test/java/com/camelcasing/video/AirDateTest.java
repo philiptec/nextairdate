@@ -16,10 +16,10 @@ public class AirDateTest {
 	@Test
 	public void ShowDateListIterationTest(){
 		Data<ShowDateListNode> list = new ShowDateList();
-		list.add("first", LocalDate.of(2074, 01, 04));
-		list.add("second", LocalDate.of(2070, 02, 01));
-		list.add("third", LocalDate.of(2072, 01, 02));
-		list.add("fourth", LocalDate.of(2070, 01, 01));
+		list.add("first", LocalDate.of(2074, 01, 04), "1-1");
+		list.add("second", LocalDate.of(2070, 02, 01), "1-1");
+		list.add("third", LocalDate.of(2072, 01, 02), "1-1");
+		list.add("fourth", LocalDate.of(2070, 01, 01), "1-1");
 		
 		for(ShowDateListNode node : list){
 			logger.info(node.toString());

@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,14 +19,14 @@ public class AirDateParser{
 		
 		private Document htmlPage;
 	
-	public LocalDate parse(String show){
+	public ShowAndDate parse(String show){
 		reset();
 		createXMLReader(show);
-		return parseSite();
+		return parseSite(show);
 	}
 	
-	private LocalDate parseSite(){
-		if(htmlPage == null) return AirDateUtils.ERROR_DATE;
+	private ShowAndDate parseSite(String show){
+		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");;
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		String[] words = el.text().split("\\s+");
 		for(int i = 0; i < words.length; i++){	
@@ -39,12 +38,21 @@ public class AirDateParser{
 				int year = getYear(Integer.parseInt(date.substring(7)));
 						
 				LocalDate airDate = LocalDate.of(year, month, day);
+				
 				if(AirDateUtils.todayOrAfter(airDate)){
-					return airDate;
+					String epSea = "0-0";
+					if(words[i-1].contains("-")){
+						epSea = words[i-1];
+					}else if(words[i-2].contains("-")){
+						epSea = words[i-2];
+					}
+					ShowAndDate dae = new ShowAndDate(show, airDate, epSea);
+					logger.debug(dae);
+					return dae;
 				}
 			}
 		}
-		return AirDateUtils.TBA_DATE;
+		return new ShowAndDate(show, AirDateUtils.TBA_DATE, "0-0");
 	}
 	
 	private int getMonth(String month){

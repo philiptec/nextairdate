@@ -45,12 +45,12 @@ public class AirDates implements ChangeController{
 	private void updateShow(String show){
 		logger.debug("updateing " + show);
 		updated = true;
-		LocalDate newDate = getShowAirDate(show);
-		updateListeners(show, newDate, false);
-		logger.debug("update -> " + show + " " + newDate);
+		ShowAndDate newDate = getShowAirDate(show);
+		updateListeners(show, newDate.getDateAsLocalDate(), newDate.getEpisode(), false);
+		logger.debug("update -> " + show + " " + newDate.getDate() + " " + newDate.getEpisode());
 	}
 	
-	public LocalDate getShowAirDate(String show){
+	public ShowAndDate getShowAirDate(String show){
 		return parser.parse(show);
 	}
 	
@@ -62,8 +62,8 @@ public class AirDates implements ChangeController{
 		return updated;
 	}
 
-	public void updateListeners(String show, LocalDate date, boolean save){
-		for(ChangeListener l : listeners) l.updateDate(show, date, save);
+	public void updateListeners(String show, LocalDate date, String episode, boolean save){
+		for(ChangeListener l : listeners) l.updateDate(show, date, episode, save);
 	}
 	
 	@Override

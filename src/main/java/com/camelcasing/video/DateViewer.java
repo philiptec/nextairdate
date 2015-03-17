@@ -2,7 +2,6 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,11 +14,12 @@ public class DateViewer {
 		private TableView<ShowAndDate> pane; 
 		private Logger logger = LogManager.getLogger(getClass());
 		private final double columnWidth = 200.0;
+		private ObservableList<ShowAndDate> showAndDateList;
 		
 	@SuppressWarnings("unchecked")
-	public DateViewer(){
-		ObservableList<ShowAndDate> showAndDateList = FXCollections.observableArrayList();
-		pane = new TableView<ShowAndDate>(showAndDateList);
+	public DateViewer(ObservableList<ShowAndDate> showAndDateList){
+		this.showAndDateList = showAndDateList;
+		pane = new TableView<ShowAndDate>(this.showAndDateList);
 		pane.setPrefHeight(600);
 		
 		TableColumn<ShowAndDate, String> showColumn = new TableColumn<ShowAndDate, String>("Show");

@@ -3,6 +3,8 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 import java.util.*;
 
+import javafx.collections.ObservableList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,9 +20,10 @@ public class AirDates implements ChangeController{
 		parser = new AirDateParser();
 	}
 	
-	public void generateShowData(boolean updateTBA, boolean updateAll, Data<ShowDateListNode> showDateList){
+	public void generateShowData(boolean updateTBA, boolean updateAll, ObservableList<ShowAndDate> showDateList){
 		Thread t = new Thread(() -> {
-				for(ShowDateListNode showAndDate : showDateList){
+				for(int i = 0; i < showDateList.size(); i++){
+					ShowAndDate showAndDate = showDateList.get(i);
 					String show = showAndDate.getShow();
 					
 					if(updateAll){
@@ -28,7 +31,7 @@ public class AirDates implements ChangeController{
 						continue;
 					}
 					
-					LocalDate date = showAndDate.getDate();
+					LocalDate date = showAndDate.getDateAsLocalDate();
 					
 					if(AirDateUtils.todayOrAfter(date)) continue;
 					if((date.equals(AirDateUtils.TBA_DATE)) && !updateTBA) continue;

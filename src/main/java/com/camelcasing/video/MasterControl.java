@@ -17,7 +17,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		private Logger logger = LogManager.getLogger(MasterControl.class);
 	
 		private BorderPane root;
-		private Data<ShowDateListNode> showDateList;
+		private Data<ShowAndDate> showDateList;
 		private DateViewer view;
 		private ShowList showList;
 		private AirDates airDates;
@@ -49,7 +49,13 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		options.init();
 		options.getGoButton().setOnAction(e -> standardUpdateIfInternetConnection());
 		
-		view = new DateViewer();
+		showList = new ShowList();
+		
+		getShowsAndDates();
+		view = new DateViewer(showDateList.getShowDateEpisodeList());
+		root.setCenter(view.getDisplayPane());
+		
+		
 		
 		root.setTop(options.getPanel());
 		root.setCenter(view.getDisplayPane());
@@ -57,13 +63,12 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void init(){
-		showList = new ShowList();
-		getShowsAndDates();
-		root.setCenter(view.getDisplayPane());
+//		showList = new ShowList();
+//		getShowsAndDates();
+//		root.setCenter(view.getDisplayPane());
 		airDates = new AirDates();
 		airDates.addChangeListener(this);
-
-		addShowsAndDatesToView();
+		
 		activateButtons();
 		testInternetConnectionAndUpdate();
 	}
@@ -77,7 +82,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(!AirDateUtils.isConnectedToInternet){
 			if(!AirDateUtils.testInternetConnection()) return AirDateUtils.isConnectedToInternet;
 		}
-		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());
+		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showDateList.getShowDateEpisodeList());
 		progressPane.addProgressBar();
 		return AirDateUtils.isConnectedToInternet;
 	}
@@ -85,15 +90,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public void getShowsAndDates(){
 		showDateList = showList.getShowDateList();
 		logger.debug("shows.size() = " + showDateList.size());
-	}
-	
-	public void addShowsAndDatesToView(){
-		ShowDateListNode node = showDateList.getFirst();
-		for(int i = 0; i < showDateList.size(); i++){
-			ShowAndDate sad = new ShowAndDate(node.getShow(), node.getDate(), node.getEpisode());
-			view.addShowAndDate(sad, i);
-			node = node.getNext();
-		}
 	}
 	
 	public void createMenuBar(){
@@ -134,7 +130,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	public boolean testInternetConnectionAndUpdate(){
 		AirDateUtils.testInternetConnection();
 		if(AirDateUtils.isConnectedToInternet){
-			airDates.generateShowData(false, false, showDateList);
+			airDates.generateShowData(false, false, showDateList.getShowDateEpisodeList());
 		}
 		return AirDateUtils.isConnectedToInternet;
 	}

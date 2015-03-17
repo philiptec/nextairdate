@@ -3,6 +3,8 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 import java.util.Iterator;
 
+import javafx.collections.ObservableList;
+
 import org.apache.logging.log4j.*;
 
 public class ShowDateList implements Data<ShowDateListNode>{
@@ -36,6 +38,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		sentinal.addAfter(new ShowDateListNode(show, date, episode, sentinal, sentinal));
 		return 0;
 	}
+
 	
 	public void clear(){
 		logger.debug("ShowDateList reset");
@@ -107,5 +110,11 @@ public class ShowDateList implements Data<ShowDateListNode>{
 			current = current.getNext();
 			return current;
 		}
+	}
+
+	@Override
+	public ObservableList<ShowAndDate> getShowDateEpisodeList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

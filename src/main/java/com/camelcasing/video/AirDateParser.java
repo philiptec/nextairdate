@@ -15,6 +15,7 @@ public class AirDateParser{
 		
 		private static final String BASE_URL = "http://www.epguides.com/";
 		private static final String DATE_PATTERN = "[0-9]{2}/[A-Z]{1}[a-z]{2}/[0-9]{2}";
+		private static final String EPISODE_PATTERN = "[0-9]{1,3}-[0-9]{2}";
 		private static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 		
 		private Document htmlPage;
@@ -29,7 +30,8 @@ public class AirDateParser{
 		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");;
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		String[] words = el.text().split("\\s+");
-		for(int i = 0; i < words.length; i++){	
+		int i;
+		for(i = 0; i < words.length; i++){	
 			if(words[i].matches(DATE_PATTERN)){
 				String date = words[i];
 				
@@ -41,10 +43,11 @@ public class AirDateParser{
 				
 				if(AirDateUtils.todayOrAfter(airDate)){
 					String epSea = "0-0";
-					if(words[i-1].contains("-")){
-						epSea = words[i-1];
-					}else if(words[i-2].contains("-")){
-						epSea = words[i-2];
+					for(int j = 1; j < 100; j++){
+						if(words[i-j].matches(EPISODE_PATTERN)){
+							epSea = words[i-j];
+							break;
+						}
 					}
 					ShowAndDate dae = new ShowAndDate(show, airDate, epSea);
 					logger.debug(dae);
@@ -52,7 +55,14 @@ public class AirDateParser{
 				}
 			}
 		}
-		return new ShowAndDate(show, AirDateUtils.TBA_DATE, "0-0");
+		String epSea = "0-0";
+		for(int j = 1; j < 100; j++){
+			if(words[i-j].matches(EPISODE_PATTERN)){
+				epSea = words[i-j];
+				break;
+			}
+		}
+		return new ShowAndDate(show, AirDateUtils.TBA_DATE, epSea);
 	}
 	
 	private int getMonth(String month){

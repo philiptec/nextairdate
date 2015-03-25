@@ -5,15 +5,25 @@ import java.net.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AirDateUtils {
+	
+		public static final Logger logger = LogManager.getLogger(AirDateUtils.class);
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		private final static String TEST_URL = "http://www.epguides.com";
 		public final static LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
+		public final static LocalDate ONE_WEEK_LATER = TODAY.plusDays(7);
 
 		public static boolean isConnectedToInternet;
+		
+		static{
+			logger.debug("One Week Later = " + ONE_WEEK_LATER);
+		}
 		
 	public static LocalDate getDateFromString(String date){
 		String[] dates = date.split("/");

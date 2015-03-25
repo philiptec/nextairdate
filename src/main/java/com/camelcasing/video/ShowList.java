@@ -67,7 +67,7 @@ public class ShowList{
 			for(ShowDateListNode node : showDateList){
 				Element e = doc.createElement("show");
 				e.setTextContent(node.getShow());
-				e.setAttribute("date", node.getDateAsString());
+				e.setAttribute("date", AirDateUtils.englishDate(node.getDate()));
 				e.setAttribute("episode", node.getEpisode());
 				root.appendChild(e);
 			}

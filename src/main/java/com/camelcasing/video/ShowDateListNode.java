@@ -5,22 +5,21 @@ import java.time.LocalDate;
 public class ShowDateListNode{
 	
 		private ShowDateListNode next, previous;
-		private final String show;
-		private final String episode;
-		private final LocalDate date;
+		private String show, episode;
+		private LocalDate date;
 	
 	public ShowDateListNode(String showName, LocalDate airDate, String epi, ShowDateListNode pre, ShowDateListNode nxt){
 		show = showName;
 		date = airDate;
-		next = nxt;
 		episode = epi;
+		next = nxt;
 		previous = pre;
 	}
 	
 	public ShowDateListNode(String shouldBeNull, LocalDate shouldAlsoBeNull, String shouldAswellBeNull){
-		show = shouldBeNull;
-		date = shouldAlsoBeNull;
-		episode = shouldAswellBeNull;
+		show = null;
+		date = null;
+		episode = null;
 		next = this;
 		previous = this;
 	}
@@ -61,6 +60,10 @@ public class ShowDateListNode{
 		return show;
 	}
 	
+	public void setDate(LocalDate newDate){
+		date = newDate;
+	}
+	
 	public LocalDate getDate(){
 		return date;
 	}
@@ -69,8 +72,8 @@ public class ShowDateListNode{
 		return episode;
 	}
 	
-	public String getDateAsString(){
-		return AirDateUtils.englishDate(date);
+	public void setEpisode(String newEpisode){
+		episode = newEpisode;
 	}
 	
 	@Override

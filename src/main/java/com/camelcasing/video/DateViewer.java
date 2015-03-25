@@ -34,7 +34,11 @@ public class DateViewer {
 		dateColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("date"));
 		dateColumn.setPrefWidth(columnWidth- 75);
 		
-		pane.getColumns().setAll(showColumn, episodeColumn, dateColumn);
+//		TableColumn<ShowAndDate, String> dayOfWeekColumn = new TableColumn<ShowAndDate, String>("Day");
+//		dayOfWeekColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("dayOfWeek"));
+//		dayOfWeekColumn.setPrefWidth(columnWidth - 75);
+		
+		pane.getColumns().setAll(showColumn, episodeColumn, dateColumn);//, dayOfWeekColumn);
 	}
 	
 	public TableView<ShowAndDate> getDisplayPane(){

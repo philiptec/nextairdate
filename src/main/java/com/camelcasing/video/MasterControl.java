@@ -67,7 +67,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		activateButtons();
 		AirDateUtils.testInternetConnection();
 		standardUpdateIfInternetConnection();
-//		testInternetConnectionAndUpdate();
 	}
 	
 	public void activateButtons(){

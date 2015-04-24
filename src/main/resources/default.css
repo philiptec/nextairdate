@@ -28,6 +28,10 @@
   -fx-background-color: #EEEEEE;
 }
 
+#centreColumn{
+	-fx-alignment: CENTER;
+}
+
 .label{
 	-fx-text-fill: black;	
 }

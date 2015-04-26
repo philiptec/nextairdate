@@ -11,7 +11,6 @@ public class ShowAndDate{
 		private StringProperty show;
 		private StringProperty date;
 		private StringProperty episode;
-//		private StringProperty dayOfWeek;
 		
 	public ShowAndDate(String show, LocalDate date, String episode){
 		super();
@@ -70,7 +69,6 @@ public class ShowAndDate{
 		d = date;
 		this.date.setValue(checkForSpecial(date));
 		this.show.setValue(show.getValue() + " (updated)");
-//		setDayOfWeek();
 	}
 	
 	@Override

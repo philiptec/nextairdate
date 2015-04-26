@@ -29,12 +29,10 @@ public class DateViewer {
 		TableColumn<ShowAndDate, String> episodeColumn = new TableColumn<ShowAndDate, String>("Episode");
 		episodeColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("episode"));
 		episodeColumn.setPrefWidth(columnWidth - 100);
-		episodeColumn.setId("centreColumn");
 		
 		TableColumn<ShowAndDate, String> dateColumn = new TableColumn<ShowAndDate, String>("Date");
 		dateColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("date"));
 		dateColumn.setPrefWidth(columnWidth- 75);
-		dateColumn.setId("centreColumn");
 		
 //		TableColumn<ShowAndDate, String> dayOfWeekColumn = new TableColumn<ShowAndDate, String>("Day");
 //		dayOfWeekColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("dayOfWeek"));

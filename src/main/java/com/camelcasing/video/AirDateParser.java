@@ -30,8 +30,6 @@ public class AirDateParser{
 		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");;
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		String[] words = el.text().split("\\s+");
-		String epSea = "0-0";
-		LocalDate airDate = AirDateUtils.TBA_DATE;
 		int i;
 		for(i = 0; i < words.length; i++){	
 			if(words[i].matches(DATE_PATTERN)){
@@ -41,33 +39,30 @@ public class AirDateParser{
 				int month = getMonth(date.substring(3, 6));
 				int year = getYear(Integer.parseInt(date.substring(7)));
 						
-				LocalDate airD = LocalDate.of(year, month, day);
+				LocalDate airDate = LocalDate.of(year, month, day);
 				
 				if(AirDateUtils.todayOrAfter(airDate)){
-					airDate = airD;
-					break;
+					String epSea = "0-0";
+					for(int j = 1; j < 100; j++){
+						if(words[i-j].matches(EPISODE_PATTERN)){
+							epSea = words[i-j];
+							break;
+						}
+					}
+					ShowAndDate dae = new ShowAndDate(show, airDate, epSea);
+					logger.debug(dae);
+					return dae;
 				}
-//					String epSea = "0-0";
-//					for(int j = 1; j < 100; j++){
-//						if(words[i-j].matches(EPISODE_PATTERN)){
-//							epSea = words[i-j];
-//							break;
-//						}
-//					}
-//					break;
-//					ShowAndDate dae = new ShowAndDate(show, airDate, epSea);
-//					logger.debug(dae);
-//					return dae;
-//				}
 			}
 		}
+		String epSea = "0-0";
 		for(int j = 1; j < 100; j++){
 			if(words[i-j].matches(EPISODE_PATTERN)){
 				epSea = words[i-j];
 				break;
 			}
 		}
-		return new ShowAndDate(show, airDate, epSea);
+		return new ShowAndDate(show, AirDateUtils.TBA_DATE, epSea);
 	}
 	
 	private int getMonth(String month){

@@ -19,7 +19,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private static AddRemoveDialog instance;
-		private Data<ShowAndDate> showDateList;
+		private Data<ShowDateListNode> showDateList;
 		private AddRemoveListener addRemoveListener;
 		private Stage stage;
 		private Button execute, cancel, add;
@@ -102,7 +102,7 @@ public class AddRemoveDialog implements AddRemoveController{
 	}
 	
 	private void populateComboBox(){
-		for(ShowAndDate s : showDateList) showSelectionBox.getItems().add(s.getShow());
+		for(ShowDateListNode s : showDateList) showSelectionBox.getItems().add(s.getShow());
 	}
 	
 	public void addAddItem(){
@@ -131,7 +131,7 @@ public class AddRemoveDialog implements AddRemoveController{
 //		return true;
 //	}
 	
-	public void show(Data<ShowAndDate> showDateList){
+	public void show(Data<ShowDateListNode> showDateList){
 		if(!active){
 			active = true;
 			reset();

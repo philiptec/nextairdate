@@ -19,7 +19,6 @@ public class ShowAndDate{
 		this.episode = new SimpleStringProperty(episode);
 		this.show = new SimpleStringProperty(show);
 		this.date = new SimpleStringProperty(checkForSpecial(date));
-//		setDayOfWeek();
 	}
 	
 	public String checkForSpecial(LocalDate date){
@@ -44,19 +43,6 @@ public class ShowAndDate{
 		return episode.getValue();
 	}
 	
-//	public String getDayOfWeek(){
-//		return dayOfWeek.getValue();
-//	}
-	
-//	public void setDayOfWeek(){
-//		AirDateUtils.logger.debug("d = " + d);
-//		if(d.isAfter(AirDateUtils.ONE_WEEK_LATER)){
-//			dayOfWeek = new SimpleStringProperty("");
-//			return;
-//		}
-//		dayOfWeek = new SimpleStringProperty(d.getDayOfWeek().toString());
-//	}
-	
 	public LocalDate getDateAsLocalDate(){
 		return d;
 	}
@@ -66,7 +52,6 @@ public class ShowAndDate{
 	}
 
 	public void setDate(LocalDate date){
-		d = date;
 		this.date.setValue(checkForSpecial(date));
 		this.show.setValue(show.getValue() + " (updated)");
 	}

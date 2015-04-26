@@ -16,7 +16,7 @@ public class ShowList{
 	
 		private Logger logger = LogManager.getLogger(getClass());
 
-		private Data<ShowAndDate> showDateList;
+		private Data<ShowDateListNode> showDateList;
 		private File showsFile;
 		private boolean writing;
 		
@@ -27,13 +27,13 @@ public class ShowList{
 		if(showsFile != null){
 			createShowList();
 		}else{
-			showDateList = new ShowDateEpisodeList();
+			showDateList = new ShowDateList();
 		}
 	}
 	
 	protected void createShowList(){
 		if(showDateList == null){
-			showDateList = new ShowDateEpisodeList();
+			showDateList = new ShowDateList();
 		}else{
 			showDateList.clear();
 		}
@@ -64,10 +64,10 @@ public class ShowList{
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.newDocument();
 			Element root = doc.createElement("shows");
-			for(ShowAndDate node : showDateList){
+			for(ShowDateListNode node : showDateList){
 				Element e = doc.createElement("show");
 				e.setTextContent(node.getShow());
-				e.setAttribute("date", AirDateUtils.englishDate(node.getDateAsLocalDate()));
+				e.setAttribute("date", node.getDateAsString());
 				e.setAttribute("episode", node.getEpisode());
 				root.appendChild(e);
 			}
@@ -127,11 +127,11 @@ public class ShowList{
 		return writing;
 	}
 	
-	public Data<ShowAndDate> getShowDateList(){
+	public Data<ShowDateListNode> getShowDateList(){
 		return showDateList;
 	}
 	
-	public void setShowDateList(Data<ShowAndDate> showDateList){
+	public void setShowDateList(Data<ShowDateListNode> showDateList){
 		this.showDateList = showDateList;
 	}
 }

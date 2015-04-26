@@ -3,12 +3,10 @@ package com.camelcasing.video;
 import java.time.LocalDate;
 
 import org.apache.logging.log4j.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-@Ignore
 public class AirDateTest {
 	
 		private final static Logger logger = LogManager.getLogger(AirDateTest.class);
@@ -26,15 +24,15 @@ public class AirDateTest {
 		}
 		ShowDateListNode node = list.getFirst();
 		logger.debug("index of " + node.getShow() + " = " + list.indexOf(node.getShow()));
-		assertEquals("fourth 2070-01-01", node.toString());
+		assertEquals("fourth 2070-01-01 1-1", node.toString());
 		node = node.getNext();
 		logger.debug("index of " + node.getShow() + " = " + list.indexOf(node.getShow()));
-		assertEquals("second 2070-02-01", node.toString());
+		assertEquals("second 2070-02-01 1-1", node.toString());
 		node = node.getNext();
 		logger.debug("index of " + node.getShow() + " = " + list.indexOf(node.getShow()));
-		assertEquals("third 2072-01-02", node.toString());
+		assertEquals("third 2072-01-02 1-1", node.toString());
 		node = node.getNext();
 		logger.debug("index of " + node.getShow() + " = " + list.indexOf(node.getShow()));
-		assertEquals("first 2074-01-04", node.toString());	
+		assertEquals("first 2074-01-04 1-1", node.toString());	
 	}
 }

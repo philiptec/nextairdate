@@ -13,7 +13,6 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		private int size;
 
 	public ShowDateList(){
-		logger.debug("HELLO FROM OLD CLASS");
 		sentinal = new ShowDateListNode(null, null, null);
 	}
 	

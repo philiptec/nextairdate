@@ -40,7 +40,7 @@ public class AirDateParser{
 				LocalDate airDate = LocalDate.of(year, month, day);
 				
 				if(AirDateUtils.todayOrAfter(airDate)){
-					String epSea = "0-0";
+					String epSea = AirDateUtils.BLANK_EPISODE_DATE;
 					if(words[i-1].contains("-")){
 						epSea = words[i-1];
 					}else if(words[i-2].contains("-")){

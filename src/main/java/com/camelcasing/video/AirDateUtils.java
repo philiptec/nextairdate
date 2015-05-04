@@ -12,6 +12,7 @@ public class AirDateUtils {
 		public final static LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
+		public final static String BLANK_EPISODE_DATE = "0-0";
 
 		public static boolean isConnectedToInternet;
 		

@@ -29,10 +29,12 @@ public class DateViewer {
 		TableColumn<ShowAndDate, String> episodeColumn = new TableColumn<ShowAndDate, String>("Episode");
 		episodeColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("episode"));
 		episodeColumn.setPrefWidth(columnWidth - 100);
+		episodeColumn.setId("centreText");
 		
 		TableColumn<ShowAndDate, String> dateColumn = new TableColumn<ShowAndDate, String>("Date");
 		dateColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("date"));
 		dateColumn.setPrefWidth(columnWidth- 75);
+		dateColumn.setId("centreText");
 		
 		pane.getColumns().setAll(showColumn, episodeColumn, dateColumn);
 	}
@@ -62,7 +64,9 @@ public class DateViewer {
 		ShowAndDate sad = ((ShowAndDate)pane.getItems().get(row));
 		pane.getItems().remove(row);
 		sad.setDate(date);
-		sad.setEpisode(episode);
+			if(!episode.equals(AirDateUtils.BLANK_EPISODE_DATE)){
+				sad.setEpisode(episode);
+			}
 		pane.getItems().add(newIndex, sad);
 	}
 }

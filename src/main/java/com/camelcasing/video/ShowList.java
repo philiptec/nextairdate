@@ -38,7 +38,6 @@ public class ShowList{
 			showDateList.clear();
 		}
 		try {
-			logger.debug("ShowFile = " + showsFile.getAbsolutePath());
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(showsFile);
 			NodeList results = doc.getElementsByTagName("show");
@@ -48,7 +47,6 @@ public class ShowList{
 					Node e = n.getAttributes().item(1);
 					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()), e.getTextContent());
 				}
-			logger.debug(showDateList.size() + " shows after reading xmlFile" );
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");
 		} catch (SAXException e) {
@@ -102,7 +100,6 @@ public class ShowList{
 		File xmlFile = new File(fileName);
 		if(checkXmlFile(xmlFile)){
 			this.showsFile = xmlFile;
-			logger.info("XML file is " + xmlFile.getAbsolutePath());
 		}else{
 			logger.error("XML file found in preferences but no longer exists");
 		}

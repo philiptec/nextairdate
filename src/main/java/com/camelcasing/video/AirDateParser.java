@@ -19,14 +19,14 @@ public class AirDateParser{
 		
 		private Document htmlPage;
 	
-	public ShowAndDate parse(String show){
+	public ShowAndDate parse(String show, String episode){
 		reset();
 		createXMLReader(show);
-		return parseSite(show);
+		return parseSite(show, episode);
 	}
 	
-	private ShowAndDate parseSite(String show){
-		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");;
+	private ShowAndDate parseSite(String show, String episode){
+		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		String[] words = el.text().split("\\s+");
 		for(int i = 0; i < words.length; i++){	
@@ -40,19 +40,18 @@ public class AirDateParser{
 				LocalDate airDate = LocalDate.of(year, month, day);
 				
 				if(AirDateUtils.todayOrAfter(airDate)){
-					String epSea = AirDateUtils.BLANK_EPISODE_DATE;
 					if(words[i-1].contains("-")){
-						epSea = words[i-1];
+						episode = words[i-1];
 					}else if(words[i-2].contains("-")){
-						epSea = words[i-2];
+						episode = words[i-2];
 					}
-					ShowAndDate dae = new ShowAndDate(show, airDate, epSea);
+					ShowAndDate dae = new ShowAndDate(show, airDate, episode);
 					logger.debug(dae);
 					return dae;
 				}
 			}
 		}
-		return new ShowAndDate(show, AirDateUtils.TBA_DATE, "0-0");
+		return new ShowAndDate(show, AirDateUtils.TBA_DATE, episode);
 	}
 	
 	private int getMonth(String month){

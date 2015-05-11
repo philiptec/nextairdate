@@ -22,9 +22,10 @@ public class AirDates implements ChangeController{
 		Thread t = new Thread(() -> {
 				for(ShowDateListNode showAndDate : showDateList){
 					String show = showAndDate.getShow();
+					String episode = showAndDate.getEpisode();
 					
 					if(updateAll){
-						updateShow(show);
+						updateShow(show, episode);
 						continue;
 					}
 					
@@ -33,7 +34,7 @@ public class AirDates implements ChangeController{
 					if(AirDateUtils.todayOrAfter(date)) continue;
 					if((date.equals(AirDateUtils.TBA_DATE)) && !updateTBA) continue;
 					
-					updateShow(show);
+					updateShow(show, episode);
 				}
 			for(ChangeListener l : listeners) l.saveDates();
 			logger.debug("finished updating");
@@ -42,16 +43,16 @@ public class AirDates implements ChangeController{
 		t.start();
 	}
 	
-	private void updateShow(String show){
+	private void updateShow(String show, String episode){
 		logger.debug("updateing " + show);
 		updated = true;
-		ShowAndDate newDate = getShowAirDate(show);
+		ShowAndDate newDate = getShowAirDate(show, episode);
 		updateListeners(show, newDate.getDateAsLocalDate(), newDate.getEpisode(), false);
 		logger.debug("update -> " + show + " " + newDate.getDate() + " " + newDate.getEpisode());
 	}
 	
-	public ShowAndDate getShowAirDate(String show){
-		return parser.parse(show);
+	public ShowAndDate getShowAirDate(String show, String episode){
+		return parser.parse(show, episode);
 	}
 	
 	public void setUpdated(boolean b){

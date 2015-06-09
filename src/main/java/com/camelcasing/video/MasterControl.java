@@ -127,7 +127,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public void setXmlFileLocationAndReset(){
-		udXML = UpdateXMLFile.getInstance();
+		udXML = UpdateXMLFile.getInstance(showList.getXmlFileLocation());
 		udXML.setFileChooserListener(this);
 		udXML.show();
 		

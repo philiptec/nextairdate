@@ -120,6 +120,15 @@ public class ShowList{
 		showsFile = newFile;
 	}
 	
+	public String getXmlFileLocation(){
+		try {
+			if(showsFile == null) return "";
+			return showsFile.getCanonicalPath();
+		} catch (IOException e) {
+			return("");
+		}
+	}
+	
 	public boolean isWriting(){
 		return writing;
 	}

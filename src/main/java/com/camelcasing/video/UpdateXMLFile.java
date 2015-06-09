@@ -23,7 +23,7 @@ public class UpdateXMLFile implements FileChooserController{
 		
 		private SimpleBooleanProperty save = new SimpleBooleanProperty(true);	
 		
-	private UpdateXMLFile(){
+	private UpdateXMLFile(String oldPath){
 		
 		stage = new Stage();
 		stage.setResizable(false);
@@ -44,7 +44,7 @@ public class UpdateXMLFile implements FileChooserController{
 		chooserImage.setFitHeight(30);
 		chooserImage.setSmooth(true);
 		fileChooser.setGraphic(chooserImage);
-		textField = new TextField();
+		textField = new TextField(oldPath);
 		
 		cancelButton.setOnAction(e -> {
 			stage.close();
@@ -104,9 +104,9 @@ public class UpdateXMLFile implements FileChooserController{
 		stage.setScene(scene);
 	}
 	
-	public static UpdateXMLFile getInstance(){
+	public static UpdateXMLFile getInstance(String oldPath){
 		if(updateXMLFile == null){
-			updateXMLFile = new UpdateXMLFile();
+			updateXMLFile = new UpdateXMLFile(oldPath);
 		}
 		return updateXMLFile;
 	}

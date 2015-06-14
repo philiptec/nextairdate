@@ -206,7 +206,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			if(save) showList.setXmlFileInPreferences();
 			view.removeAll();
 			showList.createShowList();
-			getShowsAndDates();
+			addShowsAndDatesToView();
 			testInternetConnectionAndUpdate();
 	}
 

@@ -76,8 +76,9 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 	}
 	
 	public boolean standardUpdateIfInternetConnection(){
-		if(!AirDateUtils.isConnectedToInternet){
-			if(!AirDateUtils.testInternetConnection()) return AirDateUtils.isConnectedToInternet;
+		if(!AirDateUtils.testInternetConnection()){
+			logger.info("not connected to internet");
+			return AirDateUtils.isConnectedToInternet;
 		}
 		progressPane.addProgressBar();
 		airDates.generateShowData(options.isUpdateTBA(), options.isUpdateAll(), showList.getShowDateList());

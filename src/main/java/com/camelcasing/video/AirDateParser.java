@@ -26,7 +26,7 @@ public class AirDateParser{
 	}
 	
 	private ShowAndDate parseSite(String show, String episode){
-		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0");
+		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, episode);
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		String[] words = el.text().split("\\s+");
 		for(int i = 0; i < words.length; i++){	

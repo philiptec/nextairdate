@@ -2,6 +2,8 @@ package com.camelcasing.video;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +16,6 @@ public class AirDateParser{
 		private final Logger logger = LogManager.getLogger(AirDateParser.class);
 		
 		private static final String BASE_URL = "http://www.epguides.com/";
-		private static final String DATE_PATTERN = "[0-9]{2}/[A-Z]{1}[a-z]{2}/[0-9]{2}";
 		private static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 		
 		private Document htmlPage;
@@ -28,30 +29,36 @@ public class AirDateParser{
 	private ShowAndDate parseSite(String show, String episode){
 		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, episode);
 		Element el = htmlPage.getElementsByTag("pre").get(0);
-		String[] words = el.text().split("\\s+");
-		for(int i = 0; i < words.length; i++){	
-			if(words[i].matches(DATE_PATTERN)){
-				String date = words[i];
-				
-				int day = Integer.parseInt(date.substring(0, 2));
-				int month = getMonth(date.substring(3, 6));
-				int year = getYear(Integer.parseInt(date.substring(7)));
+		List<String> lines = getShowAsLines(el.text());
+		
+		for(String potentialDate : lines){
+			String ep;
+			String[] line = potentialDate.split("\\s+");
+				int day = Integer.parseInt(line[2]);
+				int month = getMonth(line[3]);
+				int year = getYear(Integer.parseInt(line[4]));
 						
 				LocalDate airDate = LocalDate.of(year, month, day);
 				
 				if(AirDateUtils.todayOrAfter(airDate)){
-					if(words[i-1].contains("-")){
-						episode = words[i-1];
-					}else if(words[i-2].contains("-")){
-						episode = words[i-2];
-					}
-					ShowAndDate dae = new ShowAndDate(show, airDate, episode);
+					ep = line[1];
+					ShowAndDate dae = new ShowAndDate(show, airDate, ep);
 					logger.debug(dae);
 					return dae;
 				}
 			}
-		}
 		return new ShowAndDate(show, AirDateUtils.TBA_DATE, episode);
+	}
+	
+	private List<String> getShowAsLines(String wholeTag){
+		List<String> lines = new ArrayList<String>(30);
+		String[] pre = wholeTag.split("\n");
+		for(String s : pre){
+			if(s.matches("^[0-9]{1,3}.{1}.*$")){
+				lines.add(s);
+			}
+		}
+		return lines;
 	}
 	
 	private int getMonth(String month){

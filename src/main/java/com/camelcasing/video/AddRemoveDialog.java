@@ -5,6 +5,7 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
@@ -61,7 +62,11 @@ public class AddRemoveDialog implements AddRemoveController{
 		showSelectionBox.setPromptText("SelectShow");
 		showSelectionBox.setPrefWidth(220);
 		showSelectionBox.setOnAction(e ->{
-			addDeleteItem(showSelectionBox.getValue());
+			String deleteItem = showSelectionBox.getSelectionModel().getSelectedItem();
+			int index = showSelectionBox.getSelectionModel().getSelectedIndex();
+			System.out.println(index);
+			addDeleteItem(deleteItem);
+			removeFromSelection(index);
 		});
 		
 		execute = new Button("Update");
@@ -99,6 +104,12 @@ public class AddRemoveDialog implements AddRemoveController{
 		Scene scene = new Scene(backPane);
 		scene.getStylesheets().add("default.css");
 		stage.setScene(scene);
+	}
+	
+	private void removeFromSelection(int showIndex){
+		Platform.runLater(() -> {
+			showSelectionBox.getItems().remove(showIndex);
+		});
 	}
 	
 	private void populateComboBox(){

@@ -45,7 +45,8 @@ public class ShowList{
 					Node n = results.item(i);
 					Node a = n.getAttributes().item(0);
 					Node e = n.getAttributes().item(1);
-					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()), e.getTextContent());
+					showDateList.add(n.getTextContent(), AirDateUtils.getDateFromString(a.getTextContent()), 
+							e.getTextContent());
 				}
 		} catch (IOException | ParserConfigurationException e) {
 			logger.error("Problem reading shows.xml file");

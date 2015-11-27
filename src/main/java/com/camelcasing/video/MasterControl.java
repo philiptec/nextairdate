@@ -66,7 +66,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		addShowsAndDatesToView();
 		activateButtons();
 		AirDateUtils.testInternetConnection();
-		standardUpdateIfInternetConnection();
+//		standardUpdateIfInternetConnection();
 //		testInternetConnectionAndUpdate();
 	}
 	
@@ -134,14 +134,14 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		
 	}
 	
-	public boolean testInternetConnectionAndUpdate(){
-		AirDateUtils.testInternetConnection();
-		if(AirDateUtils.isConnectedToInternet){
-			airDates.generateShowData(false, false, showDateList);
-		}
-		return AirDateUtils.isConnectedToInternet;
-	}
-	
+//	public boolean testInternetConnectionAndUpdate(){
+//		AirDateUtils.testInternetConnection();
+//		if(AirDateUtils.isConnectedToInternet){
+//			airDates.generateShowData(false, false, showDateList);
+//		}
+//		return AirDateUtils.isConnectedToInternet;
+//	}
+//	
 	public BorderPane getRootPane(){
 		return root;
 	}
@@ -160,7 +160,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(!newDate.equals(oldDate)){
 			overrideSave = true;
 			showDateList.remove(show);
-			int newIndex =  showDateList.add(show, newDate, episode);
+			int newIndex = showDateList.add(show, newDate, episode);
 			logger.debug("new index = " + newIndex);
 				
 			Platform.runLater(() -> {
@@ -208,7 +208,7 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			view.removeAll();
 			showList.createShowList();
 			addShowsAndDatesToView();
-			testInternetConnectionAndUpdate();
+//			testInternetConnectionAndUpdate();
 	}
 
 	@Override

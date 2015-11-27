@@ -35,6 +35,10 @@ public class ShowAndDate{
 		return show.getValue();
 	}
 	
+	public StringProperty getShowProperty(){
+		return show;
+	}
+	
 	public String getDate(){
 		return date.getValue();
 	}

@@ -5,7 +5,6 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javafx.application.Platform;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
@@ -20,6 +19,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		private Logger logger = LogManager.getLogger(getClass());
 	
 		private static AddRemoveDialog instance;
+		
 		private Data<ShowDateListNode> showDateList;
 		private AddRemoveListener addRemoveListener;
 		private Stage stage;
@@ -62,11 +62,7 @@ public class AddRemoveDialog implements AddRemoveController{
 		showSelectionBox.setPromptText("SelectShow");
 		showSelectionBox.setPrefWidth(220);
 		showSelectionBox.setOnAction(e ->{
-			String deleteItem = showSelectionBox.getSelectionModel().getSelectedItem();
-			int index = showSelectionBox.getSelectionModel().getSelectedIndex();
-			System.out.println(index);
-			addDeleteItem(deleteItem);
-			removeFromSelection(index);
+			addDeleteItem(showSelectionBox.getValue());
 		});
 		
 		execute = new Button("Update");
@@ -106,12 +102,6 @@ public class AddRemoveDialog implements AddRemoveController{
 		stage.setScene(scene);
 	}
 	
-	private void removeFromSelection(int showIndex){
-		Platform.runLater(() -> {
-			showSelectionBox.getItems().remove(showIndex);
-		});
-	}
-	
 	private void populateComboBox(){
 		for(ShowDateListNode s : showDateList) showSelectionBox.getItems().add(s.getShow());
 	}
@@ -125,7 +115,7 @@ public class AddRemoveDialog implements AddRemoveController{
 	}
 	
 	public void addDeleteItem(String show){
-		if(!deleteShows.contains(show)){
+		if(show != null && !deleteShows.contains(show)){
 			proposedUpdatesContainer.getChildren().add(new AddRemoveMenuItem(show, false));
 		}
 	}
@@ -137,10 +127,6 @@ public class AddRemoveDialog implements AddRemoveController{
 		showSelectionBox.getItems().clear();
 		addShowField.setText("");
 	}
-	
-//	private boolean checkShowExists(String show){
-//		return true;
-//	}
 	
 	public void show(Data<ShowDateListNode> showDateList){
 		if(!active){
@@ -169,13 +155,11 @@ public class AddRemoveDialog implements AddRemoveController{
 			private ContextMenu menu;
 		
 		public AddRemoveMenuItem(String show, boolean add){
-			super();
-			
-			setPadding(new Insets(2, 5, 2, 5));
-			setSpacing(10);
+			super(10.0);
+			setAlignment(Pos.CENTER_LEFT);
 			
 			Text text = new Text();
-			text.setFont(new Font(16));
+			text.setFont(AirDateUtils.font);
 			if(add){
 				addShows.add(show);
 				text.setFill(Color.GREEN);

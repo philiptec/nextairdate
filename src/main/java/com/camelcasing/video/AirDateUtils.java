@@ -5,6 +5,8 @@ import java.net.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javafx.scene.text.Font;
+
 public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -13,6 +15,7 @@ public class AirDateUtils {
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
 		public final static String BLANK_EPISODE_DATE = "0-0";
+		public final static Font font = new Font(16);
 
 		public static boolean isConnectedToInternet;
 		

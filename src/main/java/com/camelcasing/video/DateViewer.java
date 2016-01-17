@@ -1,17 +1,11 @@
 package com.camelcasing.video;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.Node;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 import org.apache.logging.log4j.*;
 
@@ -27,15 +21,8 @@ public class DateViewer {
 		pane = new TableView<ShowAndDate>();
 		pane.setPrefHeight(600);
 		
-		TableColumn<ShowAndDate, String> showColumn = new TableColumn<ShowAndDate, String>("Show");
-		showColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("show"));
-//		showColumn.setCellFactory(new Callback<TableColumn<ShowAndDate, String>, TableCell<ShowAndDate, String>>(){
-//			@Override
-//			public TableCell<ShowAndDate, String> call(TableColumn<ShowAndDate, String> col) {
-//				
-//				return null;
-//			}
-//		});
+		TableColumn<ShowAndDate, Node> showColumn = new TableColumn<ShowAndDate, Node>("Show");
+		showColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, Node>("show"));
 		showColumn.setPrefWidth(columnWidth);
 		
 		TableColumn<ShowAndDate, String> episodeColumn = new TableColumn<ShowAndDate, String>("Episode");
@@ -56,7 +43,7 @@ public class DateViewer {
 	}
 	
 	public void addShowAndDate(ShowAndDate sad, int index){
-		logger.debug("adding " + sad.getShow()  + " to index " + index);
+		logger.debug("adding " + sad.getShowName()  + " to index " + index);
 		pane.getItems().add(index, sad);
 	}
 	

@@ -2,14 +2,24 @@ package com.camelcasing.video;
 
 import java.time.LocalDate;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.text.Text;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+
 
 public class ShowAndDate{
 
 		private LocalDate d; 
 		private final String showName;
-		private StringProperty show;
+		private ObjectProperty<Node> show;
 		private StringProperty date;
 		private StringProperty episode;
 		
@@ -18,7 +28,9 @@ public class ShowAndDate{
 		
 		this.d = date;
 		this.episode = new SimpleStringProperty(episode);
-		this.show = new SimpleStringProperty(show);
+		this.show = new SimpleObjectProperty<Node>(new Text(show){{
+			setFont(new Font(16));
+		}});
 		this.showName = show;
 		this.date = new SimpleStringProperty(checkForSpecial(date));
 	}
@@ -33,11 +45,15 @@ public class ShowAndDate{
 		return AirDateUtils.englishDate(date);
 	}
 	
-	public String getShow(){
+	public String getShowName(){
 		return showName;
 	}
 	
-	public StringProperty getShowProperty(){
+	public Node getShow(){
+		return show.getValue();
+	}
+	
+	public ObjectProperty<Node> getShowProperty(){
 		return show;
 	}
 	
@@ -58,12 +74,20 @@ public class ShowAndDate{
 	}
 
 	public void setDate(LocalDate date){
+		HBox node = new HBox(5.0);
+		Circle c = new Circle(5.0);
+		c.setFill(Paint.valueOf("green"));
+		Text t = new Text(getShowName());
+		t.setFont(AirDateUtils.font);
+		node.setAlignment(Pos.CENTER_LEFT);
+		node.getChildren().addAll(c, t);
+		
 		this.date.setValue(checkForSpecial(date));
-		this.show.setValue(showName + " (updated)");
+		this.show.setValue(node);
 	}
 	
 	@Override
 	public String toString(){
-		return show + " " + date;
+		return showName + " " + date;
 	}
 }

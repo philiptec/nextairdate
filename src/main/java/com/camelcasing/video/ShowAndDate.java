@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
 
 
 public class ShowAndDate{
@@ -22,17 +21,21 @@ public class ShowAndDate{
 		private ObjectProperty<Node> show;
 		private StringProperty date;
 		private StringProperty episode;
+		private final Text showText;
 		
 	public ShowAndDate(String show, LocalDate date, String episode){
 		super();
 		
 		this.d = date;
-		this.episode = new SimpleStringProperty(episode);
-		this.show = new SimpleObjectProperty<Node>(new Text(show){{
-			setFont(new Font(16));
-		}});
-		this.showName = show;
 		this.date = new SimpleStringProperty(checkForSpecial(date));
+		
+		this.episode = new SimpleStringProperty(episode);
+		
+		this.showText = new Text(show);
+		showText.setFont(AirDateUtils.font);
+		this.show = new SimpleObjectProperty<Node>(showText);
+		this.showName = show;
+		
 	}
 	
 	public String checkForSpecial(LocalDate date){
@@ -53,10 +56,6 @@ public class ShowAndDate{
 		return show.getValue();
 	}
 	
-	public ObjectProperty<Node> getShowProperty(){
-		return show;
-	}
-	
 	public String getDate(){
 		return date.getValue();
 	}
@@ -73,14 +72,16 @@ public class ShowAndDate{
 		this.episode.setValue(episode);
 	}
 
-	public void setDate(LocalDate date){
+	public void setDate(LocalDate date, String episode){
 		HBox node = new HBox(5.0);
 		Circle c = new Circle(5.0);
-		c.setFill(Paint.valueOf("green"));
-		Text t = new Text(getShowName());
-		t.setFont(AirDateUtils.font);
+		if(episode.equals(this.episode.getValue())){
+			c.setFill(Paint.valueOf("orange"));
+		}else{
+			c.setFill(Paint.valueOf("green"));
+		}
 		node.setAlignment(Pos.CENTER_LEFT);
-		node.getChildren().addAll(c, t);
+		node.getChildren().addAll(c, showText);
 		
 		this.date.setValue(checkForSpecial(date));
 		this.show.setValue(node);

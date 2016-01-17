@@ -199,7 +199,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			view.removeAll();
 			showList.createShowList();
 			addShowsAndDatesToView();
-//			testInternetConnectionAndUpdate();
 	}
 
 	@Override

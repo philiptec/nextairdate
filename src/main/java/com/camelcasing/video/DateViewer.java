@@ -62,7 +62,7 @@ public class DateViewer {
 	public void updateDate(LocalDate date, String episode, int row, int newIndex){
 		ShowAndDate sad = ((ShowAndDate)pane.getItems().get(row));
 		pane.getItems().remove(row);
-		sad.setDate(date);
+		sad.setDate(date, episode);
 			if(!episode.equals(AirDateUtils.BLANK_EPISODE_DATE)){
 				sad.setEpisode(episode);
 			}

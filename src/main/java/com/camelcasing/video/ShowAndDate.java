@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 public class ShowAndDate{
 
 		private LocalDate d; 
+		private final String showName;
 		private StringProperty show;
 		private StringProperty date;
 		private StringProperty episode;
@@ -18,6 +19,7 @@ public class ShowAndDate{
 		this.d = date;
 		this.episode = new SimpleStringProperty(episode);
 		this.show = new SimpleStringProperty(show);
+		this.showName = show;
 		this.date = new SimpleStringProperty(checkForSpecial(date));
 	}
 	
@@ -32,7 +34,7 @@ public class ShowAndDate{
 	}
 	
 	public String getShow(){
-		return show.getValue();
+		return showName;
 	}
 	
 	public StringProperty getShowProperty(){
@@ -57,7 +59,7 @@ public class ShowAndDate{
 
 	public void setDate(LocalDate date){
 		this.date.setValue(checkForSpecial(date));
-		this.show.setValue(show.getValue() + " (updated)");
+		this.show.setValue(showName + " (updated)");
 	}
 	
 	@Override

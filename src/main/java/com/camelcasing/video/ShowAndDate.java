@@ -1,6 +1,15 @@
 package com.camelcasing.video;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
+
+import javax.swing.JOptionPane;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +28,7 @@ import javafx.scene.paint.Paint;
 
 public class ShowAndDate{
 
+		private Logger logger = LogManager.getLogger(getClass());
 		private LocalDate d; 
 		private final String showName;
 		private ObjectProperty<Node> show;
@@ -29,13 +39,48 @@ public class ShowAndDate{
 	public ShowAndDate(String show, LocalDate date, String episode){
 		this.d = date;
 		this.date = new SimpleStringProperty(checkForSpecial(date));
-		
 		this.episode = new SimpleStringProperty(episode);
-		
+		this.showName = show;
 		this.showText = new Text(show);
+		createContextMenu(showText);
+		
 		showText.setFont(AirDateUtils.font);
 		this.show = new SimpleObjectProperty<Node>(showText);
-		this.showName = show;
+		
+	}
+	
+	public ContextMenu createContextMenu(Node node){
+		ContextMenu menu = new ContextMenu();
+//		MenuItem updateAirDate = new MenuItem("update");
+		MenuItem openWebsite = new MenuItem("open in browser");
+		
+		openWebsite.setOnAction(e -> {
+			try{
+				String s = AirDateUtils.BASE_URL + "/" + showName;
+				URI uri = new URI(s.trim());
+				System.out.println(uri);
+				Thread t = new Thread(() -> {
+					try{
+						Desktop.getDesktop().browse(uri);
+					}catch(IOException e2){
+						logger.error("Open in browser failed");
+						JOptionPane.showMessageDialog(null, "Could not find default browser", "Browser not found", JOptionPane.ERROR_MESSAGE);
+					}
+				});
+				t.start();
+			}catch(URISyntaxException e2){
+				logger.info("incorrect URI");
+			}
+		});
+		
+//		menu.getItems().addAll(updateAirDate, openWebsite);
+		menu.getItems().addAll(openWebsite);
+		node.setOnMouseClicked(e -> {
+			if(e.getButton().equals(MouseButton.SECONDARY)){
+				menu.show(node, e.getScreenX(), e.getScreenY());
+			}
+		});
+		return menu;
 	}
 	
 	public String checkForSpecial(LocalDate date){
@@ -78,15 +123,7 @@ public class ShowAndDate{
 
 	public void setDate(LocalDate date, String episode){
 		HBox node = new HBox(5.0);
-//		ContextMenu menu = new ContextMenu();
-//		MenuItem updateAirDate = new MenuItem("update");
-//		MenuItem openWebsite = new MenuItem("open in browser");
-//		menu.getItems().addAll(updateAirDate, openWebsite);
-//		node.setOnMouseClicked(e -> {
-//			if(e.getButton().equals(MouseButton.SECONDARY)){
-//				menu.show(node, e.getScreenX(), e.getScreenY());
-//			}
-//		});
+		createContextMenu(node);
 		node.setAlignment(Pos.CENTER_LEFT);
 		
 		int currentEpisodeNumber = Integer.valueOf(getEpisodeNumber(getEpisode()));

@@ -11,7 +11,7 @@ import javafx.scene.text.Font;
 public class AirDateUtils {
 	
 		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		private final static String TEST_URL = "http://www.epguides.com";
+		public final static String BASE_URL = "http://www.epguides.com";
 		public final static LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
 		public final static LocalDate TBA_DATE = LocalDate.of(2170, 1, 1);
@@ -57,7 +57,7 @@ public class AirDateUtils {
 	public static boolean testInternetConnection(){
 		if(isConnectedToInternet) return true;
 		try{
-			URLConnection urlC = new URL(TEST_URL).openConnection();
+			URLConnection urlC = new URL(BASE_URL).openConnection();
 			urlC.getContent();
 		}catch(IOException e){
 			return false;

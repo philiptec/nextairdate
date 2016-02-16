@@ -21,23 +21,25 @@ public class AirDates implements ChangeController{
 	public void generateShowData(boolean updateTBA, boolean updateAll, Data<ShowDateListNode> showDateList){
 		Thread t = new Thread(() -> {
 			AirDateUtils.changeUpdateNumber();
-				for(ShowDateListNode showAndDate : showDateList){
-					if(showAndDate.getUpdateNumber() == AirDateUtils.getUpdateNumber()) continue;
-					String show = showAndDate.getShow();
-					String episode = showAndDate.getEpisode();
+				for(ShowDateListNode showAndDateNode : showDateList){
+					if(showAndDateNode.getUpdateNumber() == AirDateUtils.getUpdateNumber()){
+						logger.debug("updateNumbers match: continuing");
+						continue;
+					}
+					showAndDateNode.setUpdateNumber(AirDateUtils.getUpdateNumber());
+					String show = showAndDateNode.getShow();
+					String episode = showAndDateNode.getEpisode();
 					
 					if(updateAll){
 						updateShow(show, episode);
 						continue;
 					}
 					
-					LocalDate date = showAndDate.getDate();
+					LocalDate date = showAndDateNode.getDate();
 					
 					if(AirDateUtils.todayOrAfter(date)) continue;
 					if((date.equals(AirDateUtils.TBA_DATE)) && !updateTBA) continue;
-					
 					updateShow(show, episode);
-					showAndDate.setUpdateNumber(AirDateUtils.getUpdateNumber());
 				}
 			for(ChangeListener l : listeners) l.saveDates();
 			logger.debug("finished updating");

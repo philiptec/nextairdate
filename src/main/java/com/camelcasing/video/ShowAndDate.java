@@ -27,8 +27,6 @@ public class ShowAndDate{
 		private final Text showText;
 		
 	public ShowAndDate(String show, LocalDate date, String episode){
-		super();
-		
 		this.d = date;
 		this.date = new SimpleStringProperty(checkForSpecial(date));
 		
@@ -38,7 +36,6 @@ public class ShowAndDate{
 		showText.setFont(AirDateUtils.font);
 		this.show = new SimpleObjectProperty<Node>(showText);
 		this.showName = show;
-		
 	}
 	
 	public String checkForSpecial(LocalDate date){

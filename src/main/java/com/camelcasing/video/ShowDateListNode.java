@@ -8,6 +8,8 @@ public class ShowDateListNode{
 		private final String show;
 		private final String episode;
 		private final LocalDate date;
+		
+		private int updateNumber = -1;
 	
 	public ShowDateListNode(String showName, LocalDate airDate, String epi, ShowDateListNode pre, ShowDateListNode nxt){
 		show = showName;
@@ -71,6 +73,14 @@ public class ShowDateListNode{
 	
 	public String getDateAsString(){
 		return AirDateUtils.englishDate(date);
+	}
+	
+	public void setUpdateNumber(int updateNumber){
+		this.updateNumber = updateNumber;
+	}
+	
+	public int getUpdateNumber(){
+		return updateNumber;
 	}
 	
 	@Override

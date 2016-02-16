@@ -34,9 +34,14 @@ public class AirDateParser{
 		for(String potentialDate : lines){
 			String ep;
 			String[] line = potentialDate.split("\\s+");
-				int day = Integer.parseInt(line[2]);
-				int month = getMonth(line[3]);
-				int year = getYear(Integer.parseInt(line[4]));
+				int day = 0, month = 0, year = 0;
+				try{
+					day = Integer.parseInt(line[2]);
+					month = getMonth(line[3]);
+					year = getYear(Integer.parseInt(line[4]));
+				}catch(NumberFormatException e){
+					break;
+				}
 						
 				LocalDate airDate = LocalDate.of(year, month, day);
 				

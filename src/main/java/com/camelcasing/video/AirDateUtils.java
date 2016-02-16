@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 import javafx.scene.text.Font;
 
@@ -17,6 +18,7 @@ public class AirDateUtils {
 		public final static String BLANK_EPISODE_DATE = "0-0";
 		public final static Font font = new Font(16);
 
+		private static int updateNumber;
 		public static boolean isConnectedToInternet;
 		
 	public static LocalDate getDateFromString(String date){
@@ -25,6 +27,17 @@ public class AirDateUtils {
 		int month = Integer.valueOf(dates[1]);
 		int year = Integer.valueOf(dates[2]);
 		return LocalDate.of(year, month, day);
+	}
+	
+	public static int changeUpdateNumber(){
+		int newRandomUpdateNumber = new Random().nextInt(1000);
+		if(newRandomUpdateNumber == updateNumber) changeUpdateNumber();
+		updateNumber = newRandomUpdateNumber;
+		return newRandomUpdateNumber;
+	}
+	
+	public static int getUpdateNumber(){
+		return updateNumber;
 	}
 	
 	public static String englishDate(LocalDate date){

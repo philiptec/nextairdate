@@ -9,6 +9,9 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.text.Text;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
@@ -64,6 +67,10 @@ public class ShowAndDate{
 		return episode.getValue();
 	}
 	
+	public String getEpisodeNumber(String e){
+		return e.substring(e.indexOf('-') + 1);
+	}
+	
 	public LocalDate getDateAsLocalDate(){
 		return d;
 	}
@@ -74,14 +81,34 @@ public class ShowAndDate{
 
 	public void setDate(LocalDate date, String episode){
 		HBox node = new HBox(5.0);
-		Circle c = new Circle(5.0);
-		if(episode.equals(this.episode.getValue())){
-			c.setFill(Paint.valueOf("orange"));
-		}else{
-			c.setFill(Paint.valueOf("green"));
-		}
+//		ContextMenu menu = new ContextMenu();
+//		MenuItem updateAirDate = new MenuItem("update");
+//		MenuItem openWebsite = new MenuItem("open in browser");
+//		menu.getItems().addAll(updateAirDate, openWebsite);
+//		node.setOnMouseClicked(e -> {
+//			if(e.getButton().equals(MouseButton.SECONDARY)){
+//				menu.show(node, e.getScreenX(), e.getScreenY());
+//			}
+//		});
 		node.setAlignment(Pos.CENTER_LEFT);
-		node.getChildren().addAll(c, showText);
+		
+		int currentEpisodeNumber = Integer.valueOf(getEpisodeNumber(getEpisode()));
+		int newEpisodeNumber = Integer.valueOf(getEpisodeNumber(episode));
+		int diff = newEpisodeNumber - currentEpisodeNumber;
+		
+		if(diff == 0){
+			Circle c = new Circle(5.0);
+			c.setFill(Paint.valueOf("orange"));
+			node.getChildren().add(c);
+		}else{
+			for(int i = 0; i < diff; i++){
+				Circle c = new Circle(5.0);
+				c.setFill(Paint.valueOf("green"));
+				node.getChildren().add(c);
+			}
+		}
+		
+		node.getChildren().add(showText);
 		
 		this.date.setValue(checkForSpecial(date));
 		this.show.setValue(node);

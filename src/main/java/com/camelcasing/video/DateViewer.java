@@ -47,6 +47,12 @@ public class DateViewer {
 		pane.getItems().add(index, sad);
 	}
 	
+	public void addShowAndDate(String show, LocalDate date, String episode, int index){
+		ShowAndDate sad = new ShowAndDate(show, date, episode);
+		logger.debug("adding " + show  + " to index " + index);
+		pane.getItems().add(index, sad);
+	}
+	
 	public void removeAll(){
 		pane.getItems().clear();
 	}

@@ -51,8 +51,12 @@ public class ShowAndDate{
 	
 	public ContextMenu createContextMenu(Node node){
 		ContextMenu menu = new ContextMenu();
-//		MenuItem updateAirDate = new MenuItem("update");
+		MenuItem updateAirDate = new MenuItem("update");
 		MenuItem openWebsite = new MenuItem("open in browser");
+		
+		updateAirDate.setOnAction(e -> {
+			AirDate.updateSingleShow(showName, episode.getValue());
+		});
 		
 		openWebsite.setOnAction(e -> {
 			try{
@@ -73,8 +77,7 @@ public class ShowAndDate{
 			}
 		});
 		
-//		menu.getItems().addAll(updateAirDate, openWebsite);
-		menu.getItems().addAll(openWebsite);
+		menu.getItems().addAll(updateAirDate, openWebsite);
 		node.setOnMouseClicked(e -> {
 			if(e.getButton().equals(MouseButton.SECONDARY)){
 				menu.show(node, e.getScreenX(), e.getScreenY());

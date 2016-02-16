@@ -146,20 +146,27 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			return;
 		}
 		int oldIndex = showDateList.indexOf(show);
-		LocalDate oldDate = view.getDate(oldIndex);
+		if(oldIndex > -1){
+			LocalDate oldDate = view.getDate(oldIndex);
 			
-		if(!newDate.equals(oldDate)){
-			overrideSave = true;
-			showDateList.remove(show);
-			int newIndex = showDateList.add(show, newDate, episode);
-			logger.debug("new index = " + newIndex);
+			if(!newDate.equals(oldDate)){
+				overrideSave = true;
+				showDateList.remove(show);
+				int newIndex = showDateList.add(show, newDate, episode);
+				logger.debug("new index = " + newIndex);
 				
-			Platform.runLater(() -> {
-				logger.debug("date updated for " + show);
-				view.updateDate(newDate, episode, oldIndex, newIndex);
-			});	
+				Platform.runLater(() -> {
+					logger.debug("date updated for " + show);
+					view.updateDate(newDate, episode, oldIndex, newIndex);
+				});	
+			}
+			
+			if(save) saveDates();
+		}else{
+			int index = showDateList.add(show, newDate, episode);
+			view.addShowAndDate(show, newDate, episode, index);
 		}
-		if(save) saveDates();
+		
 	}
 
 	private void removeProgressBar(){
@@ -168,6 +175,10 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 				progressPane.removeProgressBar();
 			}
 		});
+	}
+	
+	public void updateSingleShow(String show, String episode){
+		airDates.updateShow(show, episode);
 	}
 	
 	@Override
@@ -214,9 +225,10 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 		if(add.size() > 0){
 			for(String show : add){
 				if(AirDateUtils.testInternetConnection()){
-					ShowAndDate date = airDates.getShowAirDate(show, AirDateUtils.BLANK_EPISODE_DATE);
-					int index = showDateList.add(show, date.getDateAsLocalDate(), date.getEpisode());
-					view.addShowAndDate(date, index);
+					airDates.updateShow(show, AirDateUtils.BLANK_EPISODE_DATE);
+//					boolean result = airDates.getShowAirDate(show, AirDateUtils.BLANK_EPISODE_DATE);
+//					int index = showDateList.add(show, date.getDate, date.getEpisode());
+//					view.addShowAndDate(date, index);
 				}else{
 					showDateList.add(show, AirDateUtils.ERROR_DATE, "0-0");
 					view.addShowAndDate(new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0"), showDateList.size() - 1);

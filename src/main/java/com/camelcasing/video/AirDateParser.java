@@ -19,20 +19,28 @@ public class AirDateParser{
 		private static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 		
 		private Document htmlPage;
+		private LocalDate date;
+		private String episode;
+		private String show;
+		
 	
-	public ShowAndDate parse(String show, String episode){
+	public boolean parse(String show, String episode){
 		reset();
 		createXMLReader(show);
 		return parseSite(show, episode);
 	}
 	
-	private ShowAndDate parseSite(String show, String episode){
-		if(htmlPage == null) return new ShowAndDate(show, AirDateUtils.ERROR_DATE, episode);
+	private boolean parseSite(String showName, String epi){
+		this.show = showName;
+		this.episode = epi;
+		if(htmlPage == null){
+			date = AirDateUtils.ERROR_DATE;
+			return false;
+		}
 		Element el = htmlPage.getElementsByTag("pre").get(0);
 		List<String> lines = getShowAsLines(el.text());
 		
 		for(String potentialDate : lines){
-			String ep;
 			String[] line = potentialDate.split("\\s+");
 				int day = 0, month = 0, year = 0;
 				try{
@@ -43,16 +51,29 @@ public class AirDateParser{
 					break;
 				}
 						
-				LocalDate airDate = LocalDate.of(year, month, day);
+				date = LocalDate.of(year, month, day);
 				
-				if(AirDateUtils.todayOrAfter(airDate)){
-					ep = line[1];
-					ShowAndDate dae = new ShowAndDate(show, airDate, ep);
-					logger.debug(dae);
-					return dae;
+				if(AirDateUtils.todayOrAfter(date)){
+					episode = line[1];
+//					ShowAndDate dae = new ShowAndDate(show, airDate, ep);
+//					logger.debug(dae);
+					return true;
 				}
 			}
-		return new ShowAndDate(show, AirDateUtils.TBA_DATE, episode);
+		date = AirDateUtils.TBA_DATE;
+		return true;
+	}
+	
+	public String getShow(){
+		return show;
+	}
+	
+	public String getEpisode(){
+		return episode;
+	}
+	
+	public LocalDate getDate(){
+		return date;
 	}
 	
 	private List<String> getShowAsLines(String wholeTag){

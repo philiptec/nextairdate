@@ -26,7 +26,8 @@ public class CLIController{
 		for(; i < args.length; i++){
 			String showName = args[i];
 			AirDateParser parser = new AirDateParser();
-			LocalDate next = parser.parse(showName, AirDateUtils.BLANK_EPISODE_DATE).getDateAsLocalDate();
+			parser.parse(showName, AirDateUtils.BLANK_EPISODE_DATE);
+			LocalDate next = parser.getDate();
 			String date;
 				if(next == null){
 					date = "TBA";

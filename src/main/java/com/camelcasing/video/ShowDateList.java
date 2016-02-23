@@ -20,7 +20,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		int count = size;
 		size++;
 		ShowDateListNode current = sentinal.getPrevious();
-		while(current.getDate() != null){
+		while(current != sentinal){
 			if(AirDateUtils.todayOrAfter(date, current.getDate())){
 				logger.debug(show + " added after" + current.getShow());
 				current.addAfter(new ShowDateListNode(show, date, episode, null, null));
@@ -46,8 +46,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 	public int remove(String show){
 		logger.debug("removing: " + show);
 		int count = 0;
-		ShowDateListNode current = sentinal.getNext();
-		do{
+		for(ShowDateListNode current : this){
 			if(current.getShow().equals(show)){
 				current.getPrevious().setNext(current.getNext());
 				current.getNext().setPrevious(current.getPrevious());
@@ -57,7 +56,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 				count++;
 				current = current.getNext();
 			}
-		}while(current.getNext().getShow() != null);
+		}
 		return -1;
 	}
 	
@@ -89,7 +88,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 		return new ShowDateIterator();
 	}
 	
-	public class ShowDateIterator implements Iterator<ShowDateListNode>{
+	protected class ShowDateIterator implements Iterator<ShowDateListNode>{
 		
 		private ShowDateListNode current;
 		
@@ -99,7 +98,7 @@ public class ShowDateList implements Data<ShowDateListNode>{
 
 		@Override
 		public boolean hasNext() {
-			return current.getNext().getShow() != null;
+			return current.getNext() != sentinal;
 		}
 
 		@Override

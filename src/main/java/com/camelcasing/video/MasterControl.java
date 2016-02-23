@@ -226,9 +226,6 @@ public class MasterControl implements ChangeListener, FileChooserListener, AddRe
 			for(String show : add){
 				if(AirDateUtils.testInternetConnection()){
 					airDates.updateShow(show, AirDateUtils.BLANK_EPISODE_DATE);
-//					boolean result = airDates.getShowAirDate(show, AirDateUtils.BLANK_EPISODE_DATE);
-//					int index = showDateList.add(show, date.getDate, date.getEpisode());
-//					view.addShowAndDate(date, index);
 				}else{
 					showDateList.add(show, AirDateUtils.ERROR_DATE, "0-0");
 					view.addShowAndDate(new ShowAndDate(show, AirDateUtils.ERROR_DATE, "0-0"), showDateList.size() - 1);

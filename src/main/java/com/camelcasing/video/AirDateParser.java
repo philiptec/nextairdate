@@ -55,8 +55,7 @@ public class AirDateParser{
 				
 				if(AirDateUtils.todayOrAfter(date)){
 					episode = line[1];
-//					ShowAndDate dae = new ShowAndDate(show, airDate, ep);
-//					logger.debug(dae);
+					logger.debug("show = " + show + " date = " + date + "episode = " + episode);
 					return true;
 				}
 			}

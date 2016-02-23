@@ -30,14 +30,18 @@ public class AirDateUtils {
 	}
 	
 	public static int changeUpdateNumber(){
-		int newRandomUpdateNumber = new Random().nextInt(1000);
-		if(newRandomUpdateNumber == updateNumber) changeUpdateNumber();
+		int newRandomUpdateNumber = new Random().nextInt(999);
+		if(newRandomUpdateNumber == updateNumber) newRandomUpdateNumber++;
 		updateNumber = newRandomUpdateNumber;
 		return newRandomUpdateNumber;
 	}
 	
 	public static int getUpdateNumber(){
 		return updateNumber;
+	}
+	
+	public static String getShowAddress(String showName){
+		return BASE_URL + '/' + showName;
 	}
 	
 	public static String englishDate(LocalDate date){

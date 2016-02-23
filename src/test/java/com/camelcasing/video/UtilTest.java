@@ -9,14 +9,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-@Ignore
 public class UtilTest{
+	
+	@Test
+	public void changeUpdateNumberTest(){
+		int num = AirDateUtils.changeUpdateNumber();
+		int num2 = AirDateUtils.changeUpdateNumber();
+		assertTrue(num != num2);
+	}
 
 	@Test
 	public void dateFormatTest(){
 		LocalDate date = LocalDate.of(2015, 12, 25);
 		String time = AirDateUtils.englishDate(date);
 		assertEquals("25/12/2015", time);
+	}
+	
+	@Test
+	public void webAddressTest(){
+		assertEquals("http://www.epguides.com/Cheers", AirDateUtils.getShowAddress("Cheers"));
 	}
 	
 	@Test

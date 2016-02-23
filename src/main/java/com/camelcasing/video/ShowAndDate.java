@@ -60,7 +60,7 @@ public class ShowAndDate{
 		
 		openWebsite.setOnAction(e -> {
 			try{
-				String s = AirDateUtils.BASE_URL + "/" + showName;
+				String s = AirDateUtils.getShowAddress(showName);
 				URI uri = new URI(s.trim());
 				System.out.println(uri);
 				Thread t = new Thread(() -> {

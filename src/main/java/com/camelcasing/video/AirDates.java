@@ -52,17 +52,11 @@ public class AirDates implements ChangeController{
 		logger.debug("updateing " + show);
 		updated = true;
 		boolean result = parser.parse(show, episode);
-//		ShowAndDate newDate = getShowAirDate(show, episode);
-//		updateListeners(show, newDate.getDateAsLocalDate(), newDate.getEpisode(), false);
 		if(result){
 			updateListeners(show, parser.getDate(), parser.getEpisode(), false);
 			logger.debug("update -> " + show + " " + parser.getDate() + " " + parser.getEpisode());
 		}
 	}
-	
-//	public parser getShowAirDate(String show, String episode){
-//		return parser.parse(show, episode);
-//	}
 	
 	public void setUpdated(boolean b){
 		updated = b;

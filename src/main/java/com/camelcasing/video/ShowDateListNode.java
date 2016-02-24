@@ -72,7 +72,7 @@ public class ShowDateListNode{
 	}
 	
 	public String getDateAsString(){
-		return AirDateUtils.englishDate(date);
+		return AirDateUtils.formattedDate(date);
 	}
 	
 	public void setUpdateNumber(int updateNumber){

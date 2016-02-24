@@ -34,6 +34,11 @@ public class DateViewer {
 		dateColumn.setCellValueFactory(new PropertyValueFactory<ShowAndDate, String>("date"));
 		dateColumn.setPrefWidth(columnWidth- 75);
 		dateColumn.setId("centreText");
+		dateColumn.setComparator((sd1, sd2) -> {
+			LocalDate sd1Date = AirDateUtils.getViewDateFromString(sd1);
+			LocalDate sd2Date = AirDateUtils.getViewDateFromString(sd2);
+			return sd1Date.compareTo(sd2Date);
+		});
 		
 		pane.getColumns().setAll(showColumn, episodeColumn, dateColumn);
 	}

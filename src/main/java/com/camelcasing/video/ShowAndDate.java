@@ -93,7 +93,7 @@ public class ShowAndDate{
 		if(diff == 0){
 			return "TODAY!";
 		}else if(diff < 0) return "";
-		return AirDateUtils.englishDate(date);
+		return AirDateUtils.formattedDate(date);
 	}
 	
 	public String getShowName(){

@@ -9,8 +9,8 @@ import java.util.Random;
 import javafx.scene.text.Font;
 
 public class AirDateUtils {
-	
-		private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		public final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		public final static String BASE_URL = "http://www.epguides.com";
 		public final static LocalDate ERROR_DATE = LocalDate.of(1970,  1,  1);
 		public final static LocalDate TODAY = LocalDate.now();
@@ -22,11 +22,13 @@ public class AirDateUtils {
 		public static boolean isConnectedToInternet;
 		
 	public static LocalDate getDateFromString(String date){
-		String[] dates = date.split("/");
-		int day = Integer.valueOf(dates[0]);
-		int month = Integer.valueOf(dates[1]);
-		int year = Integer.valueOf(dates[2]);
-		return LocalDate.of(year, month, day);
+		return LocalDate.parse(date, DATE_FORMATTER);
+	}
+	
+	public static LocalDate getViewDateFromString(String date){
+		if("TBA".equals(date)) return AirDateUtils.TBA_DATE;
+		if("TODAY!".equals(date)) return AirDateUtils.TODAY;
+		return getDateFromString(date);
 	}
 	
 	public static int changeUpdateNumber(){
@@ -44,7 +46,7 @@ public class AirDateUtils {
 		return BASE_URL + '/' + showName;
 	}
 	
-	public static String englishDate(LocalDate date){
+	public static String formattedDate(LocalDate date){
 		if(date == null) return "TBA";
 		return DATE_FORMATTER.format(date);
 	}

@@ -21,8 +21,18 @@ public class UtilTest{
 	@Test
 	public void dateFormatTest(){
 		LocalDate date = LocalDate.of(2015, 12, 25);
-		String time = AirDateUtils.englishDate(date);
+		String time = AirDateUtils.formattedDate(date);
 		assertEquals("25/12/2015", time);
+	}
+	
+	@Test
+	public void viewDateFormatTest(){
+		String date1 = "TBA";
+		String date2 = "TODAY!";
+		String date3 = "15/02/1991";
+		assertEquals(AirDateUtils.TODAY, AirDateUtils.getViewDateFromString(date2));
+		assertEquals(LocalDate.of(2170, 01, 01), AirDateUtils.getViewDateFromString(date1));
+		assertEquals(LocalDate.of(1991, 02, 15), AirDateUtils.getViewDateFromString(date3));
 	}
 	
 	@Test
@@ -44,7 +54,7 @@ public class UtilTest{
 		LocalDate lDate1 = LocalDate.of(2012, 11, 01);
 		assertTrue(lDate1.equals(AirDateUtils.getDateFromString(date1)));
 		
-		String date2 = "1/1/2013";
+		String date2 = "01/01/2013";
 		LocalDate lDate2 = LocalDate.of(2013, 01, 01);
 		assertTrue(lDate2.equals(AirDateUtils.getDateFromString(date2)));
 		

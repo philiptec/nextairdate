@@ -36,7 +36,7 @@ public class CLIController{
 				}else if(next.compareTo(AirDateUtils.ERROR_DATE) == 0) {
 					date = "Probelm connecting to site";
 				}else{
-					date = AirDateUtils.englishDate(next);
+					date = AirDateUtils.formattedDate(next);
 				}
 			System.out.println(showName + ": " + date);
 		}
